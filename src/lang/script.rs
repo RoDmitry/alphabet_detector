@@ -265,7 +265,7 @@ const fn char_ranges_array_sorted() -> [RangeScript; LEN] {
 const CHAR_RANGES_SORTED: [RangeScript; LEN] = char_ranges_array_sorted();
 
 /* #[test]
-fn testing() {
+fn print_char_ranges_sorted() {
     panic!("{:?}", CHAR_RANGES_SORTED);
 } */
 

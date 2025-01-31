@@ -50,9 +50,5 @@ fn test_text_to_words(text: &str, expected_words: AHashSet<&str>) {
         .collect();
     let words: AHashSet<&str> = found_words.iter().map(|w| w.as_str()).collect();
 
-    assert_eq!(
-        words, expected_words,
-        "text: {}\nwords: {:?}\nexpected: {:?}",
-        text, words, expected_words
-    );
+    assert_eq!(words, expected_words, "text: {}", text);
 }

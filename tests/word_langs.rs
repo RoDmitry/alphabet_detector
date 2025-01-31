@@ -112,15 +112,15 @@ fn test_word_uniq(expected_language: Option<Language>, word: &str) {
 
     assert_eq!(
         language, expected_language,
-        "expected {:?} for word '{}', got {:?}",
-        expected_language, word, languages
+        "word '{}', got {:?}",
+        word, languages
     );
 }
 
 #[rstest(expected_language, word, expected_languages,
     case::eng_like(Slovak, "šefčovič's", ahashset!(Bosnian, Croatian, Czech, Latgalian, Latvian, Lithuanian, Silesian, Slovak, Slovene)),
     case(AlbanianTosk, "hashemidëve", ahashset!(Afrikaans, AlbanianTosk, AymaraCentral, Catalan, Dutch, French, Limburgish, Luxembourgish)),
-    case(Arabic, "والموضوع", ahashset!(AcehneseJawi, Arabic, ArabicEgyptian, ArabicMesopotamian, ArabicMoroccan, ArabicNajdi, ArabicNorthLevantine, ArabicSouthernYemeni, ArabicSouthLevantine, ArabicTunisian, AzerbaijaniSouth, BanjarJawi, Dari, KanuriCentralAjami, Kashmiri, Kurdish, KurdishCentral, Pashto, PastoSouthern, Persian, PersianWestern, Sindhi, Urdu, Uyghur)),
+    case(Arabic, "والموضوع", ahashset!(AcehneseJawi, Arabic, ArabicEgyptian, ArabicMesopotamian, ArabicMoroccan, ArabicNajdi, ArabicNorthLevantine, ArabicSouthernYemeni, ArabicSouthLevantine, ArabicTunisian, AzerbaijaniSouth, BanjarJawi, Dari, DogriPersoArabic, KanuriCentralAjami, Kashmiri, KurdishCentral, KurdishSouthern, Pashto, PastoSouthern, Persian, PersianWestern, PunjabiEasternShahmukhi, Sindhi, Urdu, Uyghur)),
     case(AzerbaijaniNorth, "məhərrəm", ahashset!(AzerbaijaniNorth, TatarCrimean)),
     case(Belarusian, "павінен", ahashset!(Belarusian, Kazakh, Ukrainian)),
     case(Belarusian, "раскрывае", ahashset!(Bashkir, Belarusian, Kazakh, Kyrgyz, MongolianHalh, Russian, Tatar)),
@@ -144,7 +144,7 @@ fn test_word_uniq(expected_language: Option<Language>, word: &str) {
     case(Danish, "direktør", ahashset!(Bokmal, Czech, Danish, Faroese, Nynorsk)),
     case(Danish, "indebærer", ahashset!(Bokmal, Danish, Faroese, French, Icelandic, Latin, Nynorsk)),
     case(Danish, "måned", ahashset!(Bokmal, Danish, Nynorsk, Swedish)),
-    case(English, "house", ahashset!(Acehnese, Afrikaans, AlbanianTosk, Asturian, AymaraCentral, AzerbaijaniNorth, Balinese, Bambara, Banjar, Basque, Bemba, Bokmal, Bosnian, Buginese, Catalan, Cebuano, Chokwe, CreoleHaitian, Croatian, Czech, Danish, Dutch, Dyula, English, Esperanto, Estonian, Ewe, Faroese, Finnish, Fon, French, Friulian, FulfuldeNigerian, GaelicScottish, Galician, Ganda, German, Guarani, Hausa, Hungarian, Icelandic, Igbo, Indonesian, Irish, Italian, Javanese, Jingpho, Kabiye, Kabuverdianu, Kabyle, Kamba, KanuriCentral, Kikongo, Kikuyu, Kimbundu, Kinyarwanda, KurdishNorthern, Latgalian, Latin, Latvian, Ligurian, Limburgish, Lingala, Lithuanian, Lombard, LubaKasai, Luo, Luxembourgish, Malay, Maltese, Minangkabau, Mizo, Mossi, Nuer, Nyanja, Nynorsk, Occitan, OromoWestCentral, Papiamento, Polish, Portuguese, Romanian, Rundi, Sango, Sardinian, Sepedi, Sesotho, Shona, Sicilian, Silesian, Slovak, Slovene, Somali, Spanish, Sundanese, Swahili, Swati, Swedish, Tagalog, Tamasheq, TatarCrimean, TokPisin, Tsonga, Tswana, Tumbuka, Turkish, Turkmen, Twi, Umbundu, UzbekNorthern, Venetian, Vietnamese, Waray, Welsh, Wolof, Xhosa, Yoruba, Zulu)),
+    case(English, "house", ahashset!(Acehnese, Afrikaans, AlbanianTosk, Asturian, AymaraCentral, AzerbaijaniNorth, Balinese, Bambara, Banjar, Basque, Bemba, Bokmal, Bosnian, Buginese, Catalan, Cebuano, Chokwe, CreoleHaitian, Croatian, Czech, Danish, Dutch, Dyula, English, Esperanto, Estonian, Ewe, Faroese, Finnish, Fon, French, Friulian, FulfuldeNigerian, GaelicScottish, Galician, Ganda, German, Guarani, Hausa, Hungarian, Icelandic, Igbo, Indonesian, Irish, Italian, Javanese, Jingpho, Kabiye, Kabuverdianu, Kabyle, Kamba, KanuriCentral, Kikongo, Kikuyu, Kimbundu, Kinyarwanda, KurdishNorthern, Latgalian, Latin, Latvian, Ligurian, Limburgish, Lingala, Lithuanian, Lombard, LubaKasai, Luo, Luxembourgish, Malay, Maltese, Minangkabau, Mizo, Mossi, Nuer, Nyanja, Nynorsk, Occitan, OromoWestCentral, Papiamento, Polish, Portuguese, Romanian, Rundi, Sango, Sardinian, Sepedi, Sesotho, Shona, Sicilian, Silesian, Slovak, Slovene, Somali, Spanish, Sundanese, Swahili, Swati, Swedish, Tagalog, TamasheqLatin, TatarCrimean, TokPisin, Tsonga, Tswana, Tumbuka, Turkish, Turkmen, Twi, Umbundu, UzbekNorthern, Venetian, Vietnamese, Waray, Welsh, Wolof, Xhosa, Yoruba, Zulu)),
     case(Estonian, "päralt", ahashset!(Afrikaans, AymaraCentral, DinkaSouthwestern, Dutch, Estonian, Finnish, German, Limburgish, Luxembourgish, Slovak, Swedish, Turkmen)),
     case(Estonian, "tõeliseks", ahashset!(Estonian, Guarani, Kabuverdianu, Portuguese, Vietnamese)),
     case(French, "contrôle", ahashset!(Acehnese, Afrikaans, Bambara, French, Friulian, Limburgish, Portuguese, Sepedi, Slovak, Vietnamese, Welsh)),
@@ -176,7 +176,7 @@ fn test_word_uniq(expected_language: Option<Language>, word: &str) {
     case(Macedonian, "набљудувач", ahashset!(Macedonian, Serbian)),
     case(Macedonian, "ректасцензија", ahashset!(Macedonian, Serbian)),
     case(Macedonian, "џамиите", ahashset!(Macedonian, Serbian)),
-    case(Marathi, "मिळते", ahashset!(Awadhi, Bhojpuri, Chhattisgarhi, Hindi, Kashmiri, Magahi, Maithili, Marathi, Nepali, Sanskrit)),
+    case(Marathi, "मिळते", ahashset!(Awadhi, Bhojpuri, Chhattisgarhi, DogriDevanagari, Hindi, KashmiriDevanagari, Magahi, Maithili, Marathi, Nepali, Sanskrit, SindhiDevanagari)),
     case(MongolianHalh, "дөхөж", ahashset!(Bashkir, Kazakh, Kyrgyz, MongolianHalh, Tatar)),
     case(MongolianHalh, "үндсэн", ahashset!(Bashkir, Kazakh, Kyrgyz, MongolianHalh, Tatar)),
     case(Polish, "kradzieżami", ahashset!(Maltese, Polish)),
@@ -216,14 +216,10 @@ fn test_word_multiple_langs(
 
     assert!(
         languages.contains(&expected_language),
-        "expected {:?} for word '{}', got {:?}",
-        expected_language,
+        "word '{}', expected {:?}, got {:?}",
         word,
+        expected_language,
         languages
     );
-    assert_eq!(
-        languages, expected_languages,
-        "expected {:?} for word '{}', got {:?}",
-        expected_languages, word, languages
-    );
+    assert_eq!(languages, expected_languages, "word '{}'", word);
 }

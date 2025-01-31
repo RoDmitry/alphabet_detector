@@ -33,7 +33,7 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter, EnumString};
 #[repr(usize)]
 pub enum Language {
     #[strum(serialize = "ace_Latn")]
-    Acehnese,
+    Acehnese, // Latin
     #[strum(serialize = "ace_Arab")]
     AcehneseJawi,
     #[strum(serialize = "afr")]
@@ -42,7 +42,8 @@ pub enum Language {
     Akkadian,
     AlbanianHistorical,
     #[strum(serialize = "als")]
-    AlbanianTosk,
+    AlbanianTosk, // Latin
+    AlbanianToskVithkuqi,
     #[strum(serialize = "amh")]
     Amharic,
     AncientGreek,
@@ -65,7 +66,12 @@ pub enum Language {
     ArabicSouthLevantine,
     #[strum(serialize = "aeb")]
     ArabicTunisian,
-    Aramaic,
+    AramaicHatran,
+    AramaicImperial,
+    AramaicMandaic,
+    AramaicNabataean,
+    AramaicPalmyrene,
+    AramaicSyriac,
     #[strum(serialize = "hye")]
     Armenian,
     #[strum(serialize = "asm")]
@@ -82,12 +88,13 @@ pub enum Language {
     #[strum(serialize = "azb")]
     AzerbaijaniSouth,
     #[strum(serialize = "ban")]
-    Balinese,
+    Balinese, // Latin
+    BalineseBalinese,
     #[strum(serialize = "bam")]
     Bambara,
     Bamum,
     #[strum(serialize = "bjn_Latn")]
-    Banjar,
+    Banjar, // Latin
     #[strum(serialize = "bjn_Arab")]
     BanjarJawi,
     Bantawa,
@@ -105,7 +112,8 @@ pub enum Language {
     Berber,
     Bhaiksuki,
     #[strum(serialize = "bho")]
-    Bhojpuri,
+    Bhojpuri, // Devanagari
+    BhojpuriKaithi,
     BishnupriyaManipuri,
     #[strum(serialize = "nob")]
     Bokmal,
@@ -114,7 +122,8 @@ pub enum Language {
     Braille, // Any language adapted to Braille
     BuddhistMarchen,
     #[strum(serialize = "bug")]
-    Buginese,
+    Buginese, // Latin
+    BugineseBuginese,
     Buhid,
     #[strum(serialize = "bul")]
     Bulgarian,
@@ -158,6 +167,9 @@ pub enum Language {
     #[strum(serialize = "dik")]
     DinkaSouthwestern,
     Dogri,
+    DogriDevanagari,
+    DogriPersoArabic,
+    DogriTakri,
     #[strum(serialize = "nld")]
     Dutch,
     #[strum(serialize = "dyu")]
@@ -206,7 +218,8 @@ pub enum Language {
     Georgian,
     #[strum(serialize = "deu")]
     German,
-    Gondi,
+    GondiGunjala,
+    GondiMasaram,
     Gothic,
     #[strum(serialize = "ell")]
     Greek,
@@ -221,8 +234,11 @@ pub enum Language {
     Hawaiian,
     #[strum(serialize = "heb")]
     Hebrew,
+    HebrewSamaritan,
     #[strum(serialize = "hin")]
-    Hindi,
+    Hindi, // Devanagari
+    HindiKaithi,
+    HindiMahajani,
     Hittite,
     Hmong,
     Ho,
@@ -244,7 +260,8 @@ pub enum Language {
     #[strum(serialize = "jpn")]
     Japanese,
     #[strum(serialize = "jav")]
-    Javanese,
+    Javanese, // Latin
+    JavaneseJavanese,
     #[strum(serialize = "kac")]
     Jingpho,
     #[strum(serialize = "kbp")]
@@ -257,13 +274,18 @@ pub enum Language {
     Kamba,
     #[strum(serialize = "kan")]
     Kannada,
+    KannadaTuluTigalari,
     #[strum(serialize = "knc_Latn")]
     KanuriCentral,
     #[strum(serialize = "knc_Arab")]
     KanuriCentralAjami,
     Karo,
-    #[strum(serialize = "kas")]
-    Kashmiri,
+    #[strum(serialize = "kas_Arab")]
+    Kashmiri, // Arabic
+    #[strum(serialize = "kas_Deva")]
+    KashmiriDevanagari,
+    KashmiriSharada,
+    KashmiriTakri,
     KayahLi,
     #[strum(serialize = "kaz")]
     Kazakh,
@@ -281,15 +303,17 @@ pub enum Language {
     Kinyarwanda,
     #[strum(serialize = "kor")]
     Korean,
-    Kurdish,
     #[strum(serialize = "ckb")]
-    KurdishCentral,
+    KurdishCentral, // Arabic
     #[strum(serialize = "kmr")]
-    KurdishNorthern,
+    KurdishNorthern, // Latin
+    KurdishSouthern, // Arabic
+    KurdishYezidi,
     #[strum(serialize = "kir")]
     Kyrgyz,
     #[strum(serialize = "lao")]
     Lao,
+    LaoTaiTham,
     #[strum(serialize = "ltg")]
     Latgalian,
     Latin,
@@ -320,9 +344,12 @@ pub enum Language {
     #[strum(serialize = "mkd")]
     Macedonian,
     #[strum(serialize = "mag")]
-    Magahi,
+    Magahi, // Devanagari
+    MagahiKaithi,
     #[strum(serialize = "mai")]
-    Maithili,
+    Maithili, // Devanagari
+    MaithiliKaithi,
+    MaithiliTirhuta,
     Makasar,
     Makassarese,
     #[strum(serialize = "zsm")]
@@ -341,21 +368,29 @@ pub enum Language {
     #[strum(serialize = "mri")]
     Maori,
     #[strum(serialize = "mar")]
-    Marathi,
+    Marathi, // Devanagari
+    MarathiBrahmi,
+    MarathiModi,
     Marwari,
     Medefaidrin,
     #[strum(serialize = "mni")]
     Meitei,
     Mende,
     Meroitic,
-    MiddlePersian,
+    MiddlePersianInscriptionalPahlavi,
+    MiddlePersianManichaean,
+    MiddlePersianPsalterPahlavi,
     #[strum(serialize = "min")]
     Minangkabau,
     Minoan,
     #[strum(serialize = "lus")]
     Mizo,
     #[strum(serialize = "khk")]
-    MongolianHalh,
+    MongolianHalh, // Cyrillic
+    MongolianHalhMongolian,
+    MongolianHalhPhagsPa,
+    MongolianHalhSoyombo,
+    MongolianHalhZanabazarSquare,
     #[strum(serialize = "mos")]
     Mossi,
     Mro,
@@ -377,6 +412,7 @@ pub enum Language {
     Odia,
     Ojibwe,
     OldChurchSlavonic,
+    OldChurchSlavonicGlagolitic,
     OldEnglish,
     OldHungarian,
     OldIrish,
@@ -414,7 +450,9 @@ pub enum Language {
     Prakrit,
     Pular,
     #[strum(serialize = "pan")]
-    PunjabiEastern,
+    PunjabiEastern, // Gurmukhi
+    PunjabiEasternMahajani,
+    PunjabiEasternShahmukhi,
     #[strum(serialize = "quy")]
     QuechuaAyacucho,
     Rejang,
@@ -430,7 +468,16 @@ pub enum Language {
     #[strum(serialize = "sag")]
     Sango,
     #[strum(serialize = "san")]
-    Sanskrit,
+    Sanskrit, // Devanagari
+    SanskritBrahmi,
+    SanskritGrantha,
+    SanskritKawi,
+    SanskritNandinagari,
+    SanskritSharada,
+    SanskritSiddham,
+    SanskritSoyombo,
+    SanskritTuluTigalari,
+    SanskritZanabazarSquare,
     #[strum(serialize = "sat")]
     Santali,
     Saraiki,
@@ -454,7 +501,10 @@ pub enum Language {
     Silesian,
     Simalungun,
     #[strum(serialize = "snd")]
-    Sindhi,
+    Sindhi, // Arabic
+    SindhiDevanagari,
+    SindhiKhojki,
+    SindhiKhudawadi,
     #[strum(serialize = "sin")]
     Sinhala,
     #[strum(serialize = "slk")]
@@ -462,14 +512,17 @@ pub enum Language {
     #[strum(serialize = "slv")]
     Slovene,
     Sogdian,
+    SogdianManichaean,
     #[strum(serialize = "som")]
-    Somali,
+    Somali, // Latin
+    SomaliOsmanya,
     Sora,
     #[strum(serialize = "spa")]
     Spanish,
     Sumerian,
     #[strum(serialize = "sun")]
-    Sundanese,
+    Sundanese, // Latin
+    SundaneseSundanese,
     Sunuwar,
     #[strum(serialize = "swh")]
     Swahili,
@@ -480,7 +533,8 @@ pub enum Language {
     Sylheti,
     Syriac,
     #[strum(serialize = "tgl")]
-    Tagalog,
+    Tagalog, // Latin
+    TagalogTagalog,
     Tagbanwa,
     TaiDam,
     TaiDon,
@@ -488,12 +542,15 @@ pub enum Language {
     TaiLue,
     #[strum(serialize = "tgk")]
     Tajik,
-    #[strum(serialize = "taq")]
-    Tamasheq,
+    #[strum(serialize = "taq_Latn")]
+    TamasheqLatin,
+    #[strum(serialize = "taq_Tfng")]
+    TamasheqTifinagh,
     #[strum(serialize = "tzm")]
     TamazightCentralAtlas,
     #[strum(serialize = "tam")]
-    Tamil,
+    Tamil, // Tamil
+    TamilGrantha,
     Tangsa,
     Tangut,
     #[strum(serialize = "tat")]
@@ -506,6 +563,9 @@ pub enum Language {
     Thai,
     #[strum(serialize = "bod")]
     Tibetan,
+    TibetanPhagsPa,
+    TibetanSoyombo,
+    TibetanZanabazarSquare,
     #[strum(serialize = "tir")]
     Tigrinya,
     Toba,
@@ -548,7 +608,8 @@ pub enum Language {
     #[strum(serialize = "cym")]
     Welsh,
     #[strum(serialize = "wol")]
-    Wolof,
+    Wolof, // Latin
+    WolofGaray,
     #[strum(serialize = "xho")]
     Xhosa,
     Yi,
