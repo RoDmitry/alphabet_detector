@@ -246,8 +246,13 @@ pub(crate) fn char_combine(s: Option<Script>, ch: char, extra: char) -> char {
     }
 }
 
-/// add all the leters of all the alphabets in the script group
-/// or not all, only if it does not require to exclude letters
+/// How to add a new alphabet:
+/// Add all the letters of all the alphabets in the script group,
+///  or not all, only if it does not require to exclude letters (like in `Script::Han`).
+/// Do not add same language to different scripts, except `Script::Common` or
+///  languages written with different scripts in a one word (like Japanese),
+///  instead create a new language for that "unusual" alphabet.
+/// There is no reason to add an alphabet if the script contains only one language.
 pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
     use Script::*;
     match script {
@@ -316,10 +321,10 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
         // If you want to add something here, validate that char's range is active in `ucd.rs`.
         // During parsing these considered as connectors
         // example1: `can't` for english is one word,
-        //   for other lang some other phrase (todo: needs example) will be parsed as separate words (like `can, t`),
-        //   because if Alphabets of all 3 chars do not intersect, it will be two words
+        //  for other lang some other phrase (todo: needs example) will be parsed as separate words (like `can, t`),
+        //  because if Alphabets of all 3 chars do not intersect, it will be two words
         // example2: `word1' word2` for all langs will be parsed as two words without `'`,
-        //   because next char after `'` is space, which is not a char of any language
+        //  because next char after `'` is space, which is not a char of any alphabet
         Common => match ch {
             '\'' => &[
                 Language::Belarusian,
