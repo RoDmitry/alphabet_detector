@@ -16,14 +16,14 @@ fn test_text(expected_language: Language, text: &str, expected_languages: AHashS
 
     assert!(
         languages.contains(&expected_language),
-        "text '{}', expected {:?}, got {:?}",
-        text,
+        "{:?} text '{}', got {:?}",
         expected_language,
+        text,
         languages
     );
     assert_eq!(
         languages, expected_languages,
-        "text '{}', expected {:?}, got {:?}",
-        text, expected_languages, languages
+        "{:?} text '{}'",
+        expected_language, text
     );
 }

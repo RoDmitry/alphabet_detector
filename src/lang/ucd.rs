@@ -951,6 +951,7 @@ pub const LATIN: &'static [(char, char)] = &[
     ('𐞲', '𐞺'),
     ('𝼀', '𝼞'),
     ('𝼥', '𝼪'),
+    ('\u{f0000}', '\u{fffff}'), // CUSTOM ADDED Private Area
 ];
 
 pub const LEPCHA: &'static [(char, char)] = &[('ᰀ', '\u{1c37}'), ('᰻', '᱉'), ('ᱍ', 'ᱏ')];
