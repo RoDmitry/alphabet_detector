@@ -68,13 +68,19 @@ pub fn alphabet_match(input: TokenStream) -> TokenStream {
             }
         });
 
+    let chars = value_to_keys.keys().map(|c| quote! { #c });
     // Generate the entire match block
-    let expanded = quote! {
+    let expanded = quote! {{
+        #[cfg(all(debug_assertions, feature = "test_chars"))]
+        {
+            let chars = [#(#chars),*];
+            test_chars(&chars);
+        }
         match ch {
             #(#arms)*
             _ => &[#(#keys_all),*],
         }
-    };
+    }};
 
     // Return the generated code as TokenStream
     TokenStream::from(expanded)

@@ -15,7 +15,7 @@ pub struct WordIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
     word_langs_cnt: LanguageArr<u32>,
     word_common_langs_cnt: LanguageArr<u32>,
     res: Option<WordData>,
-    // normalizer: icu_normalizer::ComposingNormalizerBorrowed<'static>,
+    ch_composer: icu_normalizer::properties::CanonicalCompositionBorrowed<'static>,
 }
 
 /* impl<CT: Iterator<Item = (usize, char)>, I: Iterator<Item = (Option<Script>, usize, char)>> From<T>
@@ -33,6 +33,7 @@ pub fn from_ch_iter(
         next_char = iter.next();
     }
     // let normalizer = icu_normalizer::ComposingNormalizerBorrowed::new_nfc();
+    let ch_composer = icu_normalizer::properties::CanonicalCompositionBorrowed::new();
 
     WordIterator {
         iter,
@@ -44,7 +45,7 @@ pub fn from_ch_iter(
         word_langs_cnt: lang_arr_default(),
         word_common_langs_cnt: lang_arr_default(),
         res: None,
-        // normalizer,
+        ch_composer,
     }
 }
 
@@ -53,6 +54,26 @@ pub struct WordData {
     pub chars: Vec<char>,
     pub langs_cnt: LanguageArr<u32>,
     pub range: Range<usize>,
+}
+
+#[cfg(all(debug_assertions, feature = "test_chars"))]
+pub(crate) fn test_chars(chars: &[char]) {
+    let nfd = icu_normalizer::DecomposingNormalizerBorrowed::new_nfd();
+    let ch_composer = icu_normalizer::properties::CanonicalCompositionBorrowed::new();
+    for &raw_ch in chars {
+        let raw_ch_str = raw_ch.to_string();
+        let denorm = nfd.normalize(&raw_ch_str);
+        let mut denorm_chars = denorm.chars();
+        let mut ch = denorm_chars.next().unwrap();
+        for c in denorm_chars {
+            if let Some(v) = ch_composer.compose(ch, c) {
+                ch = v;
+            } else {
+                ch = char_combine(ch, c);
+            }
+        }
+        assert_eq!(ch, raw_ch, "denorm '{:?}'", denorm.chars());
+    }
 }
 
 impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterator<I> {
@@ -70,11 +91,16 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
                 continue;
             } */
             while let Some((Some(Script::Inherited), i, c)) = self.next_char {
-                ch = char_combine(script, ch, c);
+                // ch = char_combine(ch, c);
+                if let Some(v) = self.ch_composer.compose(ch, c) {
+                    ch = v;
+                } else {
+                    ch = char_combine(ch, c);
+                }
                 /* let mut chars = self.normalizer.normalize_iter([ch, c].into_iter());
                 ch = chars.next().unwrap();
                 if let Some(c) = chars.next() {
-                    ch = char_combine(script, ch, c);
+                    ch = char_combine(ch, c);
                 } */
                 ch_idx = i;
                 self.next_char = self.iter.next();
