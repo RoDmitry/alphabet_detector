@@ -122,7 +122,7 @@ fn test_word_uniq(expected_language: Language, word: &str) {
 #[rstest(expected_language, word, expected_languages,
     case::eng_like(Slovak, "šefčovič's", ahashset!(Bosnian, Croatian, Czech, Latgalian, Latvian, Lithuanian, Silesian, Slovak, Slovene)),
     case(AlbanianTosk, "hashemidëve", ahashset!(Afrikaans, AlbanianTosk, AymaraCentral, Catalan, Dutch, French, Limburgish, Luxembourgish)),
-    case(Arabic, "والموضوع", ahashset!(AcehneseJawi, Arabic, ArabicEgyptian, ArabicMesopotamian, ArabicMoroccan, ArabicNajdi, ArabicNorthLevantine, ArabicSouthernYemeni, ArabicSouthLevantine, ArabicTunisian, AzerbaijaniSouth, BanjarJawi, Dari, DogriPersoArabic, KanuriCentralAjami, Kashmiri, KurdishCentral, KurdishSouthern, Pashto, PastoSouthern, Persian, PersianWestern, PunjabiEasternShahmukhi, Sindhi, Urdu, Uyghur)),
+    case(Arabic, "والموضوع", ahashset!(AcehneseJawi, Arabic, ArabicEgyptian, ArabicMesopotamian, ArabicMoroccan, ArabicNajdi, ArabicNorthLevantine, ArabicSouthernYemeni, ArabicSouthLevantine, ArabicTunisian, AzerbaijaniSouth, BanjarJawi, DogriPersoArabic, KanuriCentralAjami, Kashmiri, Pashto, PashtoSouthern, Persian, PersianDari, PersianWestern, PunjabiEasternShahmukhi, Sindhi, Urdu)),
     case(AzerbaijaniNorth, "məhərrəm", ahashset!(AzerbaijaniNorth, TatarCrimean)),
     case(Belarusian, "павінен", ahashset!(Belarusian, Kazakh, Ukrainian)),
     case(Belarusian, "раскрывае", ahashset!(Bashkir, Belarusian, Kazakh, Kyrgyz, MongolianHalh, Russian, Tatar)),

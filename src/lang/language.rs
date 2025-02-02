@@ -162,8 +162,6 @@ pub enum Language {
     Czech,
     #[strum(serialize = "dan")]
     Danish,
-    #[strum(serialize = "prs")]
-    Dari,
     #[strum(serialize = "dik")]
     DinkaSouthwestern,
     Dogri,
@@ -438,10 +436,12 @@ pub enum Language {
     Parthian,
     Pashto,
     #[strum(serialize = "pbt")]
-    PastoSouthern,
-    Persian,
+    PashtoSouthern,
+    Persian, // todo: rm
+    #[strum(serialize = "prs")]
+    PersianDari, // Afghani
     #[strum(serialize = "pes")]
-    PersianWestern,
+    PersianWestern, // Iranian
     Phoenician,
     #[strum(serialize = "pol")]
     Polish,
