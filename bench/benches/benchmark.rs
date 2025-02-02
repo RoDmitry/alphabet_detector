@@ -1,7 +1,7 @@
 use alphabet_detector::langs_count_max;
 use criterion::{criterion_group, criterion_main, Criterion};
 
-static SENTENCES: [&str; 16] = [
+const SENTENCES: &[&str] = &[
     "و في نفس الوقت أقول بأن الشيخ صالح لم يشر إلى مسؤولية الدولة التي تسمح لمواطنيها بملكية قنوات تبث ما تبث بل إنه حصر المسؤولية على ملاك هذه القنوات.",
     "102年度彰化县劳工运动会暨园游会于12月1日(星期日)上午在县立体育场盛大登场，来自全县共61个事业单位及职业工会超过3,000多位选手参加，运动会场将展开一系列的竞技对战。",
     "Aan de fysieke gesteldheid van de aspirant-beoefenaar worden geen bijzondere eisen gesteld anders dan een goede gezondheid.",
@@ -21,12 +21,10 @@ static SENTENCES: [&str; 16] = [
 ];
 
 fn benchmark(c: &mut Criterion) {
-    let sentences = SENTENCES.repeat(125);
-
-    let mut group1 = c.benchmark_group("Benchmark");
+    let mut group1 = c.benchmark_group("Sentences");
     group1.bench_function("run", |bencher| {
         bencher.iter(|| {
-            sentences.iter().for_each(|sentence| {
+            SENTENCES.iter().for_each(|sentence| {
                 let found_words = alphabet_detector::from_ch_iter(sentence.char_indices());
                 for wd in found_words {
                     let langs = langs_count_max(wd.langs_cnt).0;
@@ -40,6 +38,22 @@ fn benchmark(c: &mut Criterion) {
     group1.finish();
 }
 
-criterion_group!(benches, benchmark);
+const TO_COMBINE: &str = "ầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöű";
 
+fn benchmark_combine(c: &mut Criterion) {
+    let mut group1 = c.benchmark_group("Char combine");
+    group1.bench_function("run", |bencher| {
+        bencher.iter(|| {
+            let found_words = alphabet_detector::from_ch_iter(TO_COMBINE.char_indices());
+            for wd in found_words {
+                if wd.chars.is_empty() {
+                    panic!("empty chars");
+                }
+            }
+        });
+    });
+    group1.finish();
+}
+
+criterion_group!(benches, benchmark, benchmark_combine);
 criterion_main!(benches);

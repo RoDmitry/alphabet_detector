@@ -15,6 +15,7 @@ pub struct WordIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
     word_langs_cnt: LanguageArr<u32>,
     word_common_langs_cnt: LanguageArr<u32>,
     res: Option<WordData>,
+    // normalizer: icu_normalizer::ComposingNormalizerBorrowed<'static>,
 }
 
 /* impl<CT: Iterator<Item = (usize, char)>, I: Iterator<Item = (Option<Script>, usize, char)>> From<T>
@@ -27,7 +28,11 @@ pub fn from_ch_iter(
         .map(|(ch_idx, ch)| (Script::find(ch), ch_idx, ch))
         .chain([(None, usize::MAX - 1, '\0')]); // is it correct?
 
-    let next_char = iter.next();
+    let mut next_char = iter.next();
+    while let Some((Some(Script::Inherited), _, _)) = next_char {
+        next_char = iter.next();
+    }
+    // let normalizer = icu_normalizer::ComposingNormalizerBorrowed::new_nfc();
 
     WordIterator {
         iter,
@@ -39,6 +44,7 @@ pub fn from_ch_iter(
         word_langs_cnt: lang_arr_default(),
         word_common_langs_cnt: lang_arr_default(),
         res: None,
+        // normalizer,
     }
 }
 
@@ -60,11 +66,16 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
                 break;
             };
 
-            if script == Some(Script::Inherited) {
+            /* if script == Some(Script::Inherited) {
                 continue;
-            }
-            if let Some((Some(Script::Inherited), i, c)) = self.next_char {
+            } */
+            while let Some((Some(Script::Inherited), i, c)) = self.next_char {
                 ch = char_combine(script, ch, c);
+                /* let mut chars = self.normalizer.normalize_iter([ch, c].into_iter());
+                ch = chars.next().unwrap();
+                if let Some(c) = chars.next() {
+                    ch = char_combine(script, ch, c);
+                } */
                 ch_idx = i;
                 self.next_char = self.iter.next();
             }

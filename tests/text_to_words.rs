@@ -40,6 +40,7 @@ use rstest::*;
     ),
     case("Spanish Ñ two chars", ahashset!("spanish", "ñ", "two", "chars")),
     case("Spanish lowered ñ two chars", ahashset!("spanish", "lowered", "ñ", "two", "chars")),
+    case::combine("ầ M̄", ahashset!("ầ", "\u{f046d}")),
     // case::hangul("ㄹ語幹に付く態転換接尾辞に", ahashset!("ㄹ", "語幹に付く態転換接尾辞に")),
     // case::hangul2("ㅈ語幹用言に付く場合には", ahashset!("ㅈ", "語幹用言に付く場合には")),
     // case::hangul3("現代朝鮮語にも存在する上昇二重母音ㅑ", ahashset!("現代朝鮮語にも存在する上昇二重母音", "ㅑ")),

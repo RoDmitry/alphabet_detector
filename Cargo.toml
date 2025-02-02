@@ -23,6 +23,7 @@ path = "src/lib.rs"
 members = ["alphabet_match_macro"]
 
 [dependencies]
+# icu_normalizer = "=2.0.0-beta1"
 alphabet_match_macro = { path = "alphabet_match_macro", version = "0.1" }
 debug_unsafe = "0.1"
 # debug_unsafe = { path = "../debug_unsafe", version = "0.1" }
