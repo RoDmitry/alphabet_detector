@@ -97,7 +97,7 @@ use rstest::*;
     case(Thai, "ในทางหลวงหมายเลข"),
 )]
 fn test_word_uniq(expected_language: Language, word: &str) {
-    let found_words: Vec<_> = alphabet_detector::from_ch_iter(word.char_indices()).collect();
+    let found_words: Vec<_> = word_iter::from_ch_iter(word.char_indices()).collect();
     if found_words.len() > 1 {
         panic!("Not a word: {} got: {:?}", word, found_words);
     }
@@ -211,7 +211,7 @@ fn test_word_multiple_langs(
     word: &str,
     expected_languages: AHashSet<Language>,
 ) {
-    let found_words: Vec<_> = alphabet_detector::from_ch_iter(word.char_indices()).collect();
+    let found_words: Vec<_> = word_iter::from_ch_iter(word.char_indices()).collect();
     if found_words.len() > 1 {
         panic!("Not a word '{}' got {:?}", word, found_words);
     }

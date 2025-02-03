@@ -1,4 +1,4 @@
-use alphabet_detector::langs_count_max;
+use alphabet_detector::{langs_count_max, word_iter};
 use criterion::{criterion_group, criterion_main, Criterion};
 
 const SENTENCES: &[&str] = &[
@@ -25,7 +25,7 @@ fn benchmark(c: &mut Criterion) {
     group1.bench_function("run", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let found_words = alphabet_detector::from_ch_iter(sentence.char_indices());
+                let found_words = word_iter::from_ch_iter(sentence.char_indices());
                 for wd in found_words {
                     let langs = langs_count_max(wd.langs_cnt).0;
                     if langs.is_empty() {
@@ -38,13 +38,13 @@ fn benchmark(c: &mut Criterion) {
     group1.finish();
 }
 
-const TO_COMBINE: &str = "ầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöű";
+const TO_COMPOSE: &str = "ầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöűầûöű";
 
-fn benchmark_combine(c: &mut Criterion) {
-    let mut group1 = c.benchmark_group("Char combine");
+fn benchmark_compose(c: &mut Criterion) {
+    let mut group1 = c.benchmark_group("Char compose");
     group1.bench_function("run", |bencher| {
         bencher.iter(|| {
-            let found_words = alphabet_detector::from_ch_iter(TO_COMBINE.char_indices());
+            let found_words = word_iter::from_ch_iter(TO_COMPOSE.char_indices());
             for wd in found_words {
                 if wd.chars.is_empty() {
                     panic!("empty chars");
@@ -55,5 +55,5 @@ fn benchmark_combine(c: &mut Criterion) {
     group1.finish();
 }
 
-criterion_group!(benches, benchmark, benchmark_combine);
+criterion_group!(benches, benchmark, benchmark_compose);
 criterion_main!(benches);

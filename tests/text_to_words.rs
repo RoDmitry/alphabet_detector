@@ -47,7 +47,7 @@ use rstest::*;
     // case::hangul3("現代朝鮮語にも存在する上昇二重母音ㅑ", ahashset!("現代朝鮮語にも存在する上昇二重母音", "ㅑ")),
 )]
 fn test_text_to_words(text: &str, expected_words: AHashSet<&str>) {
-    let found_words: Vec<_> = from_ch_iter(text.char_indices())
+    let found_words: Vec<_> = word_iter::from_ch_iter(text.char_indices())
         .map(|wd| wd.chars.into_iter().collect::<String>())
         .collect();
     let words: AHashSet<&str> = found_words.iter().map(|w| w.as_str()).collect();

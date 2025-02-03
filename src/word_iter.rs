@@ -1,38 +1,13 @@
 use crate::{
-    lang::{char_compose_extra, script_char_to_langs, Script},
-    lang_arr_default, LanguageArr,
+    ch_norm_iter,
+    lang::{script_char_to_langs, Script},
+    lang_arr_default, CharNormalizingIterator, LanguageArr,
 };
 use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
-use icu_normalizer::properties::CanonicalCompositionBorrowed;
-
-#[cfg(all(debug_assertions, feature = "test_chars"))]
-pub(crate) fn test_chars(chars: &[char]) {
-    let decomp_nfd = icu_normalizer::DecomposingNormalizerBorrowed::new_nfd();
-    let ch_composer = CanonicalCompositionBorrowed::new();
-    for &raw_ch in chars {
-        let raw_ch_str = raw_ch.to_string();
-        let decomp = decomp_nfd.normalize(&raw_ch_str);
-        let mut decomp_chars = decomp.chars();
-        let mut ch = decomp_chars.next().unwrap();
-        for c in decomp_chars {
-            ch = char_compose(&ch_composer, ch, c);
-        }
-        assert_eq!(ch, raw_ch, "decomp '{:?}'", decomp.chars());
-    }
-}
-
-fn char_compose(composer: &CanonicalCompositionBorrowed<'static>, ch: char, mark: char) -> char {
-    if let Some(v) = composer.compose(ch, mark) {
-        v
-    } else {
-        char_compose_extra(ch, mark)
-    }
-}
 
 pub struct WordIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
-    iter: I,
-    next_char: Option<(Option<Script>, usize, char)>,
+    norm_iter: CharNormalizingIterator<I>,
     word_buf: Vec<char>,
     word_start_index: usize,
     not_saved_word_end_index: usize,
@@ -40,29 +15,20 @@ pub struct WordIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
     word_langs_cnt: LanguageArr<u32>,
     word_common_langs_cnt: LanguageArr<u32>,
     res: Option<WordData>,
-    ch_composer: icu_normalizer::properties::CanonicalCompositionBorrowed<'static>,
 }
 
 /* impl<CT: Iterator<Item = (usize, char)>, I: Iterator<Item = (Option<Script>, usize, char)>> From<T>
     for WordIterator<I>
 { */
+// impl<I: Iterator<Item = (Option<Script>, usize, char)>> WordIterator<I> {
+#[inline]
 pub fn from_ch_iter(
     ch_iter: impl Iterator<Item = (usize, char)>,
 ) -> WordIterator<impl Iterator<Item = (Option<Script>, usize, char)>> {
-    let mut iter = ch_iter
-        .map(|(ch_idx, ch)| (Script::find(ch), ch_idx, ch))
-        .chain([(None, usize::MAX - 1, '\0')]); // is it correct?
-
-    let mut next_char = iter.next();
-    while let Some((Some(Script::Inherited), _, _)) = next_char {
-        next_char = iter.next();
-    }
-    // let normalizer = icu_normalizer::ComposingNormalizerBorrowed::new_nfc();
-    let ch_composer = icu_normalizer::properties::CanonicalCompositionBorrowed::new();
+    let norm_iter = ch_norm_iter::from_ch_iter(ch_iter);
 
     WordIterator {
-        iter,
-        next_char,
+        norm_iter,
         word_buf: Default::default(),
         word_start_index: Default::default(),
         not_saved_word_end_index: Default::default(),
@@ -70,7 +36,22 @@ pub fn from_ch_iter(
         word_langs_cnt: lang_arr_default(),
         word_common_langs_cnt: lang_arr_default(),
         res: None,
-        ch_composer,
+    }
+}
+
+#[inline]
+pub fn from_norm_iter<I: Iterator<Item = (Option<Script>, usize, char)>>(
+    norm_iter: CharNormalizingIterator<I>,
+) -> WordIterator<I> {
+    WordIterator {
+        norm_iter,
+        word_buf: Default::default(),
+        word_start_index: Default::default(),
+        not_saved_word_end_index: Default::default(),
+        prev_char_script: Script::Common,
+        word_langs_cnt: lang_arr_default(),
+        word_common_langs_cnt: lang_arr_default(),
+        res: None,
     }
 }
 
@@ -86,28 +67,9 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {
-            let Some((script, mut ch_idx, mut ch)) =
-                ::core::mem::replace(&mut self.next_char, self.iter.next())
-            else {
+            let Some((script, ch_idx, ch)) = self.norm_iter.next() else {
                 break;
             };
-
-            /* if script == Some(Script::Inherited) {
-                continue;
-            } */
-            while let Some((Some(Script::Inherited), i, c)) = self.next_char {
-                ch = char_compose(&self.ch_composer, ch, c);
-                /* let mut chars = self.normalizer.normalize_iter([ch, c].into_iter());
-                ch = chars.next().unwrap();
-                if let Some(c) = chars.next() {
-                    ch = char_compose_extra(ch, c);
-                } */
-                ch_idx = i;
-                self.next_char = self.iter.next();
-            }
-            if ch == '’' {
-                ch = '\'';
-            }
 
             let langs = script
                 .map(|s| script_char_to_langs(s, ch))
@@ -128,7 +90,7 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
             } else if script == Script::Common {
                 if self.prev_char_script == Script::Common || langs_not_intersect {
                     true
-                } else if let Some((next_char_script, _, _)) = self.next_char {
+                } else if let Some((next_char_script, _, _)) = self.norm_iter.get_next_char() {
                     next_char_script.is_none() || next_char_script == Some(Script::Common)
                 } else {
                     true

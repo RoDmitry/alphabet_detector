@@ -1,6 +1,6 @@
 use super::{Language, Script};
 #[cfg(all(debug_assertions, feature = "test_chars"))]
-use crate::word_iter::test_chars;
+use crate::ch_norm_iter::test_chars;
 use alphabet_match_macro::alphabet_match;
 
 pub(crate) fn char_compose_extra(ch: char, mark: char) -> char {
