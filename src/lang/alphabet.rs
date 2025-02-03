@@ -3,7 +3,7 @@ use super::{Language, Script};
 use crate::word_iter::test_chars;
 use alphabet_match_macro::alphabet_match;
 
-pub(crate) fn char_combine(ch: char, mark: char) -> char {
+pub(crate) fn char_compose_extra(ch: char, mark: char) -> char {
     match mark {
         '\u{300}' | '\u{340}' => match ch {
             'ẹ' | 'Ẹ' => '\u{f00b9}', // Ẹ̀ẹ̀
