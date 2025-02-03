@@ -121,11 +121,11 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
                     });
                     // resets temp variables by taking
                 }
-                self.word_start_index = ch_idx + ch.len_utf8();
+                self.word_start_index = ch_idx.wrapping_add(ch.len_utf8());
             }
 
             if !ch_skip {
-                self.not_saved_word_end_index = ch_idx + ch.len_utf8();
+                self.not_saved_word_end_index = ch_idx.wrapping_add(ch.len_utf8());
                 self.word_buf.push(ch.to_lowercase().next().unwrap()); // maybe check each char?
                 let langs_cnt = if script == Script::Common {
                     &mut self.word_common_langs_cnt

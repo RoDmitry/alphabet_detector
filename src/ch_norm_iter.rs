@@ -76,7 +76,7 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for CharNormali
             ch_idx = i;
             self.next_char = self.iter.next();
         }
-        if ch == '’' {
+        if ch == '’' || ch == 'ʻ' {
             ch = '\'';
         }
 

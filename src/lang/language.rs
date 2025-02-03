@@ -624,17 +624,16 @@ pub enum Language {
 }
 
 // const LANGUAGE_COUNT: usize = ::core::mem::variant_count::<Language>();
-const LANGUAGE_COUNT: usize = Language::COUNT;
-pub type LanguageArr<T> = [T; LANGUAGE_COUNT];
+pub type LanguageArr<T> = [T; Language::COUNT];
 pub fn lang_arr_default<T: Default + Copy>() -> LanguageArr<T> {
-    [Default::default(); LANGUAGE_COUNT]
+    [Default::default(); Language::COUNT]
 }
 
 #[test]
 fn test_language_max_value() {
     for lang in Language::iter() {
         assert!(
-            (lang as usize) < LANGUAGE_COUNT,
+            (lang as usize) < Language::COUNT,
             "Language value >= it's count"
         );
     }
