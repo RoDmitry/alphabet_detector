@@ -1,4 +1,4 @@
-use alphabet_detector::{langs_count_max, word_iter};
+use alphabet_detector::{fulltext_langs, fulltext_langs_max, word_iter};
 use criterion::{criterion_group, criterion_main, Criterion};
 
 const SENTENCES: &[&str] = &[
@@ -22,16 +22,30 @@ const SENTENCES: &[&str] = &[
 
 fn benchmark(c: &mut Criterion) {
     let mut group1 = c.benchmark_group("Sentences");
-    group1.bench_function("run", |bencher| {
+    group1.bench_function("fulltext_langs", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let found_words = word_iter::from_ch_iter(sentence.char_indices());
+                let data = fulltext_langs(sentence.char_indices());
+                if data.0.is_empty() {
+                    panic!("empty");
+                }
+            });
+        });
+    });
+    group1.bench_function("fulltext_langs_max", |bencher| {
+        bencher.iter(|| {
+            SENTENCES.iter().for_each(|sentence| {
+                let cnt = fulltext_langs_max(sentence.char_indices()).2;
+                if cnt == 0 {
+                    panic!("zero");
+                }
+                /* let found_words = word_iter::from_ch_iter(sentence.char_indices());
                 for wd in found_words {
                     let langs = langs_count_max(wd.langs_cnt).0;
                     if langs.is_empty() {
                         panic!("empty langs");
                     }
-                }
+                } */
             });
         });
     });

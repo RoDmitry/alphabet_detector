@@ -101,7 +101,7 @@ fn test_word_uniq(expected_language: Language, word: &str) {
     if found_words.len() > 1 {
         panic!("Not a word: {} got: {:?}", word, found_words);
     }
-    let languages = langs_count_max(found_words[0].langs_cnt).0;
+    let languages: AHashSet<_> = langs_filter_max(found_words[0].langs_cnt).0.collect();
 
     assert!(
         languages.len() == 1,
@@ -215,7 +215,7 @@ fn test_word_multiple_langs(
     if found_words.len() > 1 {
         panic!("Not a word '{}' got {:?}", word, found_words);
     }
-    let languages = langs_count_max(found_words[0].langs_cnt).0;
+    let languages: AHashSet<_> = langs_filter_max(found_words[0].langs_cnt).0.collect();
 
     assert!(
         languages.contains(&expected_language),

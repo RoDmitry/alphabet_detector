@@ -1,16 +1,18 @@
 use crate::{Language, LanguageArr};
-use ahash::AHashSet;
 
-pub fn langs_count_max(langs_cnt: LanguageArr<u32>) -> (AHashSet<Language>, u32) {
-    let lang_count_max = langs_cnt.iter().fold(1, |acc, cnt| acc.max(*cnt));
+pub fn langs_count_max(langs_cnt: &LanguageArr<u32>) -> u32 {
+    langs_cnt.iter().fold(1, |acc, cnt| acc.max(*cnt))
+}
+
+pub fn langs_filter_max(langs_cnt: LanguageArr<u32>) -> (impl Iterator<Item = Language>, u32) {
+    let lang_count_max = langs_count_max(&langs_cnt);
 
     (
         langs_cnt
             .into_iter()
             .enumerate()
-            .filter(|(_, cnt)| *cnt == lang_count_max)
-            .map(|(l, _)| Language::from(l))
-            .collect(),
+            .filter(move |(_, cnt)| *cnt == lang_count_max)
+            .map(|(l, _)| Language::from(l)),
         lang_count_max,
     )
 }
