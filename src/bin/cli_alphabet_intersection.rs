@@ -147,7 +147,6 @@ fn main() {
                 } */
                 // TODO: rm this filter
                 if alph != "Latn" {
-                    // if alph != "Arab" {
                     return;
                 }
 
@@ -188,38 +187,39 @@ fn main() {
 
                 let count_diff = lang_count_max - res_count;
                 let count_percent_diff = (count_diff * 100) as f64 / lang_count_max as f64;
-                if count_percent_diff < 1.0 {
+                /* if count_percent_diff < 0.1 {
                     println!(
                         "*{}* {} within error bounds {}",
                         file_name, thread_lang, count_percent_diff
                     );
                     return;
-                }
+                } */
 
-                /* let res: Vec<(Language, usize)> = res
-                    .into_iter()
-                    .enumerate()
-                    .filter(|(_, c)| *c > 0)
-                    .map(|(l, cnt)| (Language::from(l), cnt))
-                    .collect();
-
-                let top_langs: ahash::AHashSet<Language> = res
+                /* let mut langs: Vec<(Language, usize)> = res
                     .iter()
-                    .filter(|(_, cnt)| *cnt == lang_count_max)
-                    .map(|(l, _)| *l)
-                    .collect(); */
+                    .enumerate()
+                    .filter(|(_, c)| **c > 0)
+                    .map(|(l, cnt)| (Language::from(l), *cnt))
+                    .collect();
+                langs.sort_by(|a, b| b.1.cmp(&a.1));
+                println!("*{}* {} langs {:?}", file_name, thread_lang, langs); */
+
+                /* let top_langs: ahash::AHashSet<Language> = res
+                .iter()
+                .filter(|(_, cnt)| *cnt == lang_count_max)
+                .map(|(l, _)| *l)
+                .collect(); */
                 let top_langs: ahash::AHashSet<Language> = res
                     .into_iter()
                     .enumerate()
-                    .filter(|(_, cnt)| *cnt == lang_count_max)
+                    .filter(|(_, cnt)| *cnt > res_count)
                     .map(|(l, _)| Language::from(l))
                     .collect();
+                // println!("top_langs {:?}", top_langs);
                 /* if top_langs.contains(&thread_lang) {
                     println!("*{}* {} GOOD!", file_name, thread_lang);
                     return;
                 } */
-                // res.sort_by(|a, b| b.1.cmp(&a.1));
-                // println!("*{}* {} {:?}", file_name, thread_lang, res);
 
                 let top_lang_chars: ahash::AHashMap<_, _> = res2
                     .iter()
@@ -228,11 +228,9 @@ fn main() {
                     .filter(|(l, _)| top_langs.contains(l))
                     .map(|(l, c)| {
                         (l, {
-                            let mut res = c
-                                .into_iter()
-                                .filter(|(_, cnt)| **cnt > (lang_count_max / 5000))
-                                .collect::<Vec<_>>();
+                            let mut res = c.into_iter().collect::<Vec<_>>();
                             res.sort_by(|a, b| b.1.cmp(&a.1));
+                            res.truncate(10);
                             res
                         })
                     })
@@ -249,7 +247,7 @@ fn main() {
                     .collect();
                 let mut res2: Vec<_> = res2
                     .into_iter()
-                    .filter(|(_, cnt)| *cnt > (lang_count_max / 5000))
+                    .filter(|(_, cnt)| *cnt > (lang_count_max / 15000))
                     .collect();
                 res2.sort_by(|a, b| b.1.cmp(&a.1));
 

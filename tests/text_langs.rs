@@ -8,7 +8,7 @@ use alphabet_detector::*;
 use rstest::*;
 
 #[rstest(expected_language, text, expected_languages,
-    case(ChineseSimplified, "也有越來越多的人開始飼養寵物", ahashset!(ChineseCantoneseTraditional, ChineseSimplified, ChineseTraditional, Japanese, Korean)),
+    case(ChineseTraditional, "也有越來越多的人開始飼養寵物", ahashset!(ChineseCantoneseTraditional, ChineseTraditional, Japanese)),
     case(Japanese, "昨日、東京で大切な友達に会いました。", ahashset!(Japanese)), // Kanji (Han) + Hiragana
 )]
 fn test_text_best(expected_language: Language, text: &str, expected_languages: AHashSet<Language>) {
