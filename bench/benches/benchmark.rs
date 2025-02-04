@@ -1,4 +1,4 @@
-use alphabet_detector::{fulltext_langs, fulltext_langs_max, word_iter};
+use alphabet_detector::{fulltext_langs, fulltext_langs_best, fulltext_langs_max, word_iter};
 use criterion::{criterion_group, criterion_main, Criterion};
 
 const SENTENCES: &[&str] = &[
@@ -32,12 +32,22 @@ fn benchmark(c: &mut Criterion) {
             });
         });
     });
+    group1.bench_function("fulltext_langs_best", |bencher| {
+        bencher.iter(|| {
+            SENTENCES.iter().for_each(|sentence| {
+                let data = fulltext_langs_best(sentence.char_indices());
+                if data.0.is_empty() {
+                    panic!("empty");
+                }
+            });
+        });
+    });
     group1.bench_function("fulltext_langs_max", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let cnt = fulltext_langs_max(sentence.char_indices()).2;
-                if cnt == 0 {
-                    panic!("zero");
+                let data = fulltext_langs_max(sentence.char_indices());
+                if data.0.is_empty() {
+                    panic!("empty");
                 }
                 /* let found_words = word_iter::from_ch_iter(sentence.char_indices());
                 for wd in found_words {

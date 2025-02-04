@@ -182,19 +182,19 @@ fn main() {
                 let res_count = res[thread_lang as usize];
                 let lang_count_max = res.iter().fold(1, |acc, cnt| acc.max(*cnt));
                 if lang_count_max == res_count {
-                    println!("*{}* {} GOOD!", file_name, thread_lang);
+                    println!("*{}* {} AWESOME!", file_name, thread_lang);
                     return;
                 }
 
                 let count_diff = lang_count_max - res_count;
-                let count_percent = (count_diff * 100) as f64 / lang_count_max as f64;
-                /* if count_percent < 0.3 {
+                let count_percent_diff = (count_diff * 100) as f64 / lang_count_max as f64;
+                if count_percent_diff < 1.0 {
                     println!(
                         "*{}* {} within error bounds {}",
-                        file_name, thread_lang, count_percent
+                        file_name, thread_lang, count_percent_diff
                     );
                     return;
-                } */
+                }
 
                 /* let res: Vec<(Language, usize)> = res
                     .into_iter()
@@ -255,7 +255,7 @@ fn main() {
 
                 println!(
                     "*{}* {} {} ({}/{}) {:?}",
-                    file_name, thread_lang, count_percent, count_diff, lang_count_max, res2
+                    file_name, thread_lang, count_percent_diff, count_diff, lang_count_max, res2
                 );
             }
 
