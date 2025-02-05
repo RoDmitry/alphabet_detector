@@ -36,7 +36,7 @@ pub fn fulltext_langs_max(
 /// uses `langs_filter_best`
 pub fn fulltext_langs_best(
     ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<Vec<char>>, impl Iterator<Item = Language>) {
+) -> (Vec<Vec<char>>, Vec<(Language, u32)>) {
     let (words, langs_count) = fulltext_langs(ch_iter);
     let langs = langs_filter_best(langs_count);
 
