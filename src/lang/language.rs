@@ -437,6 +437,7 @@ pub enum Language {
     Pashto,
     #[strum(serialize = "pbt")]
     PashtoSouthern,
+    #[deprecated]
     Persian, // todo: rm
     #[strum(serialize = "prs")]
     PersianDari, // Afghani
