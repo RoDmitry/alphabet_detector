@@ -11,7 +11,11 @@ use rstest::*;
     case(ChineseTraditional, "也有越來越多的人開始飼養寵物", ahashset!(ChineseCantoneseTraditional, ChineseTraditional, Japanese)),
     case(Japanese, "昨日、東京で大切な友達に会いました。", ahashset!(Japanese)), // Kanji (Han) + Hiragana
 )]
-fn test_text_best(expected_language: Language, text: &str, expected_languages: AHashSet<Language>) {
+fn test_fulltext_langs_best(
+    expected_language: Language,
+    text: &str,
+    expected_languages: AHashSet<Language>,
+) {
     let languages: AHashSet<_> = fulltext_langs_best(text.char_indices())
         .1
         .into_iter()

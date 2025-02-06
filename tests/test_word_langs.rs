@@ -192,6 +192,7 @@ fn test_word_uniq(expected_language: Language, word: &str) {
     case(Russian, "сопротивление"),
     case(Russian, "этот"),
     case(Slovak, "rozohňuje"),
+    case(Spanish, "¿que?"),
     case(Spanish, "años"),
     case(Ukrainian, "пристрої"),
     case(Vietnamese, "chỉnh"),

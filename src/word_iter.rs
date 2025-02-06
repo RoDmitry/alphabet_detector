@@ -1,6 +1,6 @@
 use crate::{
     ch_norm_iter,
-    lang::{script_char_to_langs, Script},
+    lang::{script_char_to_langs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
     lang_arr_default, CharNormalizingIterator, LanguageArr,
 };
 use ::core::ops::Range;
@@ -62,6 +62,28 @@ pub struct WordData {
     pub range: Range<usize>,
 }
 
+impl<I: Iterator<Item = (Option<Script>, usize, char)>> WordIterator<I> {
+    fn save_word(&mut self) {
+        if !self.word_buf.is_empty() {
+            for (lang, cnt) in
+                ::core::mem::replace(&mut self.word_common_langs_cnt, lang_arr_default())
+                    .into_iter()
+                    .enumerate()
+            {
+                let v = self.word_langs_cnt.get_safe_unchecked_mut(lang);
+                *v = v.wrapping_add(cnt);
+            }
+
+            self.res = Some(WordData {
+                chars: ::core::mem::take(&mut self.word_buf),
+                langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, lang_arr_default()),
+                range: self.word_start_index..self.not_saved_word_end_index,
+            });
+            // resets temp variables by taking
+        }
+    }
+}
+
 impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterator<I> {
     type Item = WordData;
 
@@ -78,9 +100,14 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
             let script = script.unwrap_or(Script::Common); // why Common, maybe skip?
 
             let langs_not_intersect = if self.prev_char_script != script {
+                let langs_cnt = if self.prev_char_script == Script::Common {
+                    &self.word_common_langs_cnt
+                } else {
+                    &self.word_langs_cnt
+                };
                 !langs
                     .iter()
-                    .any(|&l| *self.word_langs_cnt.get_safe_unchecked(l as usize) > 0)
+                    .any(|&l| *langs_cnt.get_safe_unchecked(l as usize) > 0)
             } else {
                 false
             };
@@ -88,7 +115,10 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
             let ch_skip = if langs.is_empty() {
                 true
             } else if script == Script::Common {
-                if self.prev_char_script == Script::Common || langs_not_intersect {
+                if langs_not_intersect
+                    || self.prev_char_script == Script::Common
+                        && !WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE.contains(&ch)
+                {
                     true
                 } else if let Some((next_char_script, _, _)) = self.norm_iter.get_next_char() {
                     next_char_script.is_none() || next_char_script == Some(Script::Common)
@@ -99,29 +129,12 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
                 false
             };
 
-            if ch_skip || langs_not_intersect {
-                if !self.word_buf.is_empty() {
-                    // saves word
-                    for (lang, cnt) in
-                        ::core::mem::replace(&mut self.word_common_langs_cnt, lang_arr_default())
-                            .into_iter()
-                            .enumerate()
-                    {
-                        let v = self.word_langs_cnt.get_safe_unchecked_mut(lang);
-                        *v = v.wrapping_add(cnt);
-                    }
-
-                    self.res = Some(WordData {
-                        chars: ::core::mem::take(&mut self.word_buf),
-                        langs_cnt: ::core::mem::replace(
-                            &mut self.word_langs_cnt,
-                            lang_arr_default(),
-                        ),
-                        range: self.word_start_index..self.not_saved_word_end_index,
-                    });
-                    // resets temp variables by taking
-                }
+            if ch_skip {
+                self.save_word();
                 self.word_start_index = ch_idx.wrapping_add(ch.len_utf8());
+            } else if langs_not_intersect {
+                self.save_word();
+                self.word_start_index = ch_idx;
             }
 
             if !ch_skip {

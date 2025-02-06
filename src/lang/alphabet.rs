@@ -336,6 +336,8 @@ pub(crate) fn char_compose_extra(ch: char, mark: char) -> char {
     }
 }
 
+pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
+
 /// How to add a new alphabet:
 /// Add all the letters of all the alphabets in the script group,
 ///  or not all, only if it does not require to exclude letters (like in `Script::Han`).
@@ -694,7 +696,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Zulu,
             ],
             '¡' => &[Language::Spanish],
-            '¿' => &[Language::Spanish],
+            '¿' => &[Language::QuechuaAyacucho, Language::Spanish],
             'ʻ' => &[
                 Language::Hawaiian,
                 Language::Samoan,

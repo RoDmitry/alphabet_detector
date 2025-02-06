@@ -2,6 +2,7 @@ mod shared;
 #[allow(unused_imports)]
 use shared::*;
 
+use ::core::ops::Range;
 use ahash::AHashSet;
 use alphabet_detector::*;
 use rstest::*;
@@ -40,6 +41,7 @@ use rstest::*;
     ),
     case("Spanish Ñ two chars", ahashset!("spanish", "ñ", "two", "chars")),
     case("Spanish lowered ñ two chars", ahashset!("spanish", "lowered", "ñ", "two", "chars")),
+    case::spanish("¿Que?", ahashset!("¿que")),
     case::combine("ầ M̄", ahashset!("ầ", "\u{f046d}")),
     // case::deva("हूँ", ahashset!("हूँ")),
     // case::hangul("ㄹ語幹に付く態転換接尾辞に", ahashset!("ㄹ", "語幹に付く態転換接尾辞に")),
@@ -53,4 +55,43 @@ fn test_text_to_words(text: &str, expected_words: AHashSet<&str>) {
     let words: AHashSet<&str> = found_words.iter().map(|w| w.as_str()).collect();
 
     assert_eq!(words, expected_words, "text: {}", text);
+}
+
+#[rstest(word, expected_range,
+    case("¿Que?", 0..5),
+    case("'word'", 1..5)
+)]
+fn test_word_range(word: &str, expected_range: Range<usize>) {
+    let found_words: Vec<_> = word_iter::from_ch_iter(word.char_indices()).collect();
+    if found_words.len() > 1 {
+        panic!("Not a word: {} got: {:?}", word, found_words);
+    }
+    let range = found_words[0].range.clone();
+
+    assert_eq!(range, expected_range, "word '{}'", word);
+}
+
+#[rstest(text, expected_ranges,
+    case("ЧтоWhat", vec![0..6, 6..10]),
+    case("¿ОнаShe", vec![0..2, 2..8, 8..11]),
+    case("Привет John", vec![0..12, 13..17]),
+)]
+fn test_text_ranges(text: &str, expected_ranges: Vec<Range<usize>>) {
+    let found_words: Vec<_> = word_iter::from_ch_iter(text.char_indices()).collect();
+    assert_eq!(
+        found_words.len(),
+        expected_ranges.len(),
+        "invalid word count"
+    );
+
+    for (i, wd) in found_words.into_iter().enumerate() {
+        let expected_range = expected_ranges.get(i).unwrap().clone();
+
+        assert_eq!(
+            wd.range,
+            expected_range,
+            "word '{}'",
+            wd.chars.into_iter().collect::<String>()
+        );
+    }
 }
