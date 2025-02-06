@@ -159,8 +159,9 @@ fn main() {
                 let file = BufReader::new(File::open(path.path()).expect("open failed"));
                 let ch_iter = file.chars_chunks(b'\n').map(|v| (0, v.unwrap()));
 
-                let mut res = lang_arr_default::<usize>();
-                let mut res2: ahash::AHashMap<Language, ahash::AHashMap<char, usize>> =
+                let mut langs_count = lang_arr_default::<usize>();
+                let mut found_chars: ahash::AHashMap<char, usize> = Default::default();
+                let mut not_found_chars: ahash::AHashMap<Language, ahash::AHashMap<char, usize>> =
                     Default::default();
                 for (script, _, ch) in ch_norm_iter::from_ch_iter(ch_iter) {
                     let langs = script
@@ -169,23 +170,32 @@ fn main() {
                     let mut has_lang = false;
                     for &l in langs {
                         has_lang |= l == thread_lang;
-                        res[l as usize] += 1;
+                        langs_count[l as usize] += 1;
                     }
-                    if !has_lang {
+
+                    if has_lang {
+                        if langs
+                            != script
+                                .map(|s| script_char_to_langs(s, char::default()))
+                                .unwrap_or_default()
+                        {
+                            *found_chars.entry(ch).or_default() += 1;
+                        }
+                    } else {
                         for &l in langs {
-                            *res2.entry(l).or_default().entry(ch).or_default() += 1;
+                            *not_found_chars.entry(l).or_default().entry(ch).or_default() += 1;
                         }
                     }
                 }
 
-                let res_count = res[thread_lang as usize];
-                let lang_count_max = res.iter().fold(1, |acc, cnt| acc.max(*cnt));
-                if lang_count_max == res_count {
+                let lang_count = langs_count[thread_lang as usize];
+                let lang_count_max = langs_count.iter().fold(1, |acc, cnt| acc.max(*cnt));
+                if lang_count_max == lang_count {
                     println!("*{}* {} AWESOME!", file_name, thread_lang);
                     return;
                 }
 
-                let count_diff = lang_count_max - res_count;
+                let count_diff = lang_count_max - lang_count;
                 let count_percent_diff = (count_diff * 100) as f64 / lang_count_max as f64;
                 /* if count_percent_diff < 0.1 {
                     println!(
@@ -195,7 +205,21 @@ fn main() {
                     return;
                 } */
 
-                /* let mut langs: Vec<(Language, usize)> = res
+                let mut found_chars_new: ahash::AHashMap<char, usize> = Default::default();
+                for (ch, cnt) in found_chars {
+                    let ch_lowered = ch.to_lowercase().next().unwrap();
+                    let v = found_chars_new.entry(ch_lowered).or_default();
+                    *v += cnt;
+                }
+                let mut found_chars_new = found_chars_new.into_iter().collect::<Vec<_>>();
+                found_chars_new.sort_by(|a, b| a.1.cmp(&b.1));
+                found_chars_new.truncate(10);
+                println!(
+                    "*{}* {} found: {:?}",
+                    file_name, thread_lang, found_chars_new
+                );
+
+                /* let mut langs: Vec<(Language, usize)> = langs_count
                     .iter()
                     .enumerate()
                     .filter(|(_, c)| **c > 0)
@@ -204,24 +228,14 @@ fn main() {
                 langs.sort_by(|a, b| b.1.cmp(&a.1));
                 println!("*{}* {} langs {:?}", file_name, thread_lang, langs); */
 
-                /* let top_langs: ahash::AHashSet<Language> = res
-                .iter()
-                .filter(|(_, cnt)| *cnt == lang_count_max)
-                .map(|(l, _)| *l)
-                .collect(); */
-                let top_langs: ahash::AHashSet<Language> = res
+                let top_langs: ahash::AHashSet<Language> = langs_count
                     .into_iter()
                     .enumerate()
-                    .filter(|(_, cnt)| *cnt > res_count)
+                    .filter(|(_, cnt)| *cnt > lang_count)
                     .map(|(l, _)| Language::from(l))
                     .collect();
-                // println!("top_langs {:?}", top_langs);
-                /* if top_langs.contains(&thread_lang) {
-                    println!("*{}* {} GOOD!", file_name, thread_lang);
-                    return;
-                } */
 
-                let top_lang_chars: ahash::AHashMap<_, _> = res2
+                let top_lang_chars: ahash::AHashMap<_, _> = not_found_chars
                     .iter()
                     .filter(|(_, c)| !c.is_empty())
                     .map(|(l, c)| (Language::from(*l), c))
@@ -234,10 +248,11 @@ fn main() {
                             res
                         })
                     })
+                    .take(2)
                     .collect();
                 println!("*{}* {} top: {:?}", file_name, thread_lang, top_lang_chars);
 
-                let res2: ahash::AHashSet<_> = res2
+                let not_found_chars: ahash::AHashSet<_> = not_found_chars
                     .into_iter()
                     .filter(|(_, c)| !c.is_empty())
                     .map(|(l, c)| (Language::from(l), c))
@@ -245,15 +260,20 @@ fn main() {
                     .map(|(_, c)| c.into_iter())
                     .flatten()
                     .collect();
-                let mut res2: Vec<_> = res2
+                let mut not_found_chars: Vec<_> = not_found_chars
                     .into_iter()
                     .filter(|(_, cnt)| *cnt > (lang_count_max / 15000))
                     .collect();
-                res2.sort_by(|a, b| b.1.cmp(&a.1));
+                not_found_chars.sort_by(|a, b| b.1.cmp(&a.1));
 
                 println!(
                     "*{}* {} {} ({}/{}) {:?}",
-                    file_name, thread_lang, count_percent_diff, count_diff, lang_count_max, res2
+                    file_name,
+                    thread_lang,
+                    count_percent_diff,
+                    count_diff,
+                    lang_count_max,
+                    not_found_chars
                 );
             }
 

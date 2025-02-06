@@ -1168,12 +1168,12 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     '戦', '践', '銭', '潜', '双', '壮', '争', '荘', '捜', '巣', '装', '総', '増',
                     '蔵', '属', '続', '堕', '対', '体', '帯', '滞', '滝', '沢', '担', '単', '胆',
                     '嘆', '団', '断', '弾', '遅', '痴', '虫', '庁', '徴', '聴', '勅', '鎮', '逓',
-                    '鉄', '点', '転', '伝', '灯', '当', '党', '盗', '稲', '闘', '徳', '独', '読',
-                    '届', '弐', '脳', '覇', '廃', '売', '発', '抜', '晩', '払', '仏', '並', '塀',
-                    '餅', '辺', '変', '弁', '歩', '宝', '豊', '没', '毎', '万', '満', '弥', '訳',
-                    '薬', '与', '誉', '揺', '様', /* '来', */ '頼', '乱', '欄', '竜', '虜',
-                    '両', '猟', '緑', '涙', '塁', '類', '礼', '励', '戻', '霊', '齢', '暦', '歴',
-                    '恋', '練', '錬', '炉', '労', '楼', '録', '湾',
+                    '鉄', '点', '転', '伝', '灯', '当', '盗', '稲', '闘', '徳', '独', '読', '届',
+                    '弐', '脳', '覇', '廃', '売', '発', '抜', '晩', '払', '仏', '並', '塀', '餅',
+                    '辺', '変', '弁', '歩', '宝', '豊', '没', '毎', '万', '満', '弥', '訳', '薬',
+                    '与', '誉', '揺', '様', /* '来', */ '頼', '乱', '欄', '竜', '虜', '両',
+                    '猟', '緑', '涙', '塁', '類', '礼', '励', '戻', '霊', '齢', '暦', '歴', '恋',
+                    '練', '錬', '炉', '労', '楼', '録', '湾',
                 ]
             ),
             (
@@ -1330,18 +1330,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
         ],
         Hiragana => &[Language::Japanese],
         ImperialAramaic => &[Language::AramaicImperial],
-        Inherited => &[], /* match ch {
-        /* '\u{307}' => &[
-                // Alphabet::ChechenLatin,
-                // Alphabet::OldIrishLatin,
-                Alphabet::LithuanianLatin,
-                // Alphabet::LivonianLatin,
-                // Alphabet::MalteseLatin,
-                // Alphabet::OldEnglishLatin,
-                Alphabet::PolishLatin,
-            ], */
-            _ => &[], // must be always empty
-        }, */
+        Inherited => &[], // must be always empty
         InscriptionalPahlavi => &[Language::MiddlePersianInscriptionalPahlavi],
         InscriptionalParthian => &[Language::Parthian],
         Javanese => &[Language::JavaneseJavanese],
@@ -2120,7 +2109,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 ]
             ),
             (
-                Language::Mizo, //+
+                Language::Mizo, //++
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
@@ -2244,13 +2233,11 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 ]
             ),
             (
-                Language::QuechuaAyacucho,
+                Language::QuechuaAyacucho, //++
                 [
-                    'A', 'a', /* 'Ch', 'ch', */ 'C', 'c', 'D', 'd', 'E', 'e', 'H', 'h', 'I',
-                    'i', 'K', 'k', 'L', 'l', /* 'Ll', 'll', */ 'M', 'm', 'N', 'n', 'Ñ', 'ñ',
-                    'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y',
-                    'y', /*added*/
-                    'O', 'o', 'B', 'b', 'V', 'v', 'J', 'j'
+                    'A', 'a', 'C', 'c', 'H', 'h', 'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n',
+                    'Ñ', 'ñ', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w',
+                    'Y', 'y', 'B', 'b', 'D', 'd', 'E', 'e', 'J', 'j', 'O', 'o', 'V', 'v',
                 ]
             ),
             (
@@ -2283,13 +2270,13 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 ]
             ),
             (
-                Language::Sango,
+                Language::Sango, //++
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r', 'S', 's',
-                    'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z', /*added*/
-                    'Ë', 'ë', 'Â', 'â', 'É', 'é', 'J', 'j', 'Ê', 'ê', 'Û', 'û', 'C', 'c', 'Ä', 'ä',
-                    'Ï', 'ï', 'Ö', 'ö', 'È', 'è', 'Q', 'q',
+                    'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z', 'Â', 'â', 'Ê', 'ê',
+                    'Î', 'î', 'Ô', 'ô', 'Û', 'û', 'Ä', 'ä', 'Ë', 'ë', 'Ï', 'ï', 'Ö', 'ö', 'Ü', 'ü',
+                    'É', 'é',
                 ]
             ),
             (
