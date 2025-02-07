@@ -26,9 +26,26 @@ fn char_compose(composer: &CanonicalCompositionBorrowed<'static>, ch: char, mark
     }
 }
 
+/// decompose ligatures
+/// https://en.wikipedia.org/wiki/Alphabetic_Presentation_Forms
+#[inline(always)]
+fn char_decompose(ch: char) -> (char, Option<char>, Option<char>) {
+    match ch {
+        'ﬀ' => ('f', Some('f'), None),
+        'ﬁ' => ('f', Some('i'), None),
+        'ﬂ' => ('f', Some('l'), None),
+        'ﬃ' => ('f', Some('f'), Some('i')),
+        'ﬄ' => ('f', Some('f'), Some('l')),
+        'ﬅ' | 'ﬆ' => ('s', Some('t'), None),
+        ch => (ch, None, None),
+    }
+}
+
 pub struct CharNormalizingIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
     iter: I,
+    /// not normalized
     next_char: Option<(Option<Script>, usize, char)>,
+    after_next_char: Option<(Option<Script>, usize, char)>,
     composer: CanonicalCompositionBorrowed<'static>,
 }
 
@@ -48,11 +65,13 @@ pub fn from_ch_iter(
     CharNormalizingIterator {
         iter,
         next_char,
+        after_next_char: None,
         composer,
     }
 }
 
 impl<I: Iterator<Item = (Option<Script>, usize, char)>> CharNormalizingIterator<I> {
+    /// not normalized
     #[inline(always)]
     pub fn get_next_char(&self) -> Option<(Option<Script>, usize, char)> {
         self.next_char
@@ -63,19 +82,28 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for CharNormali
     type Item = (Option<Script>, usize, char);
 
     fn next(&mut self) -> Option<Self::Item> {
-        let (script, mut ch_idx, mut ch) =
-            ::core::mem::replace(&mut self.next_char, self.iter.next())?;
+        let (script, mut ch_idx, mut ch) = self.next_char?;
+        // loading next chars
+        if let Some(next) = self.after_next_char.take() {
+            self.next_char = Some(next);
+        } else {
+            let (ch_decom, next_char, after_next_char) = char_decompose(ch);
+            if let Some(next_ch) = next_char {
+                self.next_char = Some((script, ch_idx, next_ch));
+                ch = ch_decom;
+                self.after_next_char = after_next_char.map(|ch| (script, ch_idx, ch));
+            } else {
+                self.next_char = self.iter.next();
+            }
+        }
 
+        // composing `ch` with `next_char` of `Script::Inherited`
         while let Some((Some(Script::Inherited), i, c)) = self.next_char {
             ch = char_compose(&self.composer, ch, c);
-            /* let mut chars = self.normalizer.normalize_iter([ch, c].into_iter());
-            ch = chars.next().unwrap();
-            if let Some(c) = chars.next() {
-                ch = char_compose_extra(ch, c);
-            } */
             ch_idx = i;
             self.next_char = self.iter.next();
         }
+
         if ch == '’' {
             ch = '\'';
         }

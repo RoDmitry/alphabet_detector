@@ -1,5 +1,5 @@
-use alphabet_detector::{fulltext_langs, fulltext_langs_best, fulltext_langs_max, word_iter};
-use criterion::{criterion_group, criterion_main, Criterion};
+use alphabet_detector::{ch_norm_iter, fulltext_langs, fulltext_langs_best, fulltext_langs_max};
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 const SENTENCES: &[&str] = &[
     "و في نفس الوقت أقول بأن الشيخ صالح لم يشر إلى مسؤولية الدولة التي تسمح لمواطنيها بملكية قنوات تبث ما تبث بل إنه حصر المسؤولية على ملاك هذه القنوات.",
@@ -26,9 +26,7 @@ fn benchmark(c: &mut Criterion) {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
                 let data = fulltext_langs(sentence.char_indices());
-                if data.0.is_empty() {
-                    panic!("empty");
-                }
+                black_box(data);
             });
         });
     });
@@ -36,9 +34,7 @@ fn benchmark(c: &mut Criterion) {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
                 let data = fulltext_langs_best(sentence.char_indices());
-                if data.0.is_empty() {
-                    panic!("empty");
-                }
+                black_box(data);
             });
         });
     });
@@ -46,16 +42,17 @@ fn benchmark(c: &mut Criterion) {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
                 let data = fulltext_langs_max(sentence.char_indices());
-                if data.0.is_empty() {
-                    panic!("empty");
+                let _ = black_box(data);
+            });
+        });
+    });
+    group1.bench_function("ch_norm_iter", |bencher| {
+        bencher.iter(|| {
+            SENTENCES.iter().for_each(|sentence| {
+                let chars = ch_norm_iter::from_ch_iter(sentence.char_indices());
+                for ch in chars {
+                    black_box(ch);
                 }
-                /* let found_words = word_iter::from_ch_iter(sentence.char_indices());
-                for wd in found_words {
-                    let langs = langs_count_max(wd.langs_cnt).0;
-                    if langs.is_empty() {
-                        panic!("empty langs");
-                    }
-                } */
             });
         });
     });
@@ -68,11 +65,9 @@ fn benchmark_compose(c: &mut Criterion) {
     let mut group1 = c.benchmark_group("Char compose");
     group1.bench_function("run", |bencher| {
         bencher.iter(|| {
-            let found_words = word_iter::from_ch_iter(TO_COMPOSE.char_indices());
-            for wd in found_words {
-                if wd.chars.is_empty() {
-                    panic!("empty chars");
-                }
+            let chars = ch_norm_iter::from_ch_iter(TO_COMPOSE.char_indices());
+            for ch in chars {
+                black_box(ch);
             }
         });
     });
