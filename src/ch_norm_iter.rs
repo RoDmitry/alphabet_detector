@@ -1,4 +1,4 @@
-use crate::lang::{char_compose_extra, Script};
+use crate::lang::{char_compose_custom, Script};
 use icu_normalizer::properties::CanonicalCompositionBorrowed;
 
 #[cfg(all(debug_assertions, feature = "test_chars"))]
@@ -22,7 +22,7 @@ fn char_compose(composer: &CanonicalCompositionBorrowed<'static>, ch: char, mark
     if let Some(v) = composer.compose(ch, mark) {
         v
     } else {
-        char_compose_extra(ch, mark)
+        char_compose_custom(ch, mark)
     }
 }
 
@@ -49,6 +49,7 @@ pub struct CharNormalizingIterator<I: Iterator<Item = (Option<Script>, usize, ch
     composer: CanonicalCompositionBorrowed<'static>,
 }
 
+#[inline]
 pub fn from_ch_iter(
     ch_iter: impl Iterator<Item = (usize, char)>,
 ) -> CharNormalizingIterator<impl Iterator<Item = (Option<Script>, usize, char)>> {

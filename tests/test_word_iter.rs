@@ -59,7 +59,9 @@ fn test_text_to_words(text: &str, expected_words: AHashSet<&str>) {
 
 #[rstest(word, expected_range,
     case("¿Que?", 0..5),
-    case("'word'", 1..5)
+    case("'word'", 1..5),
+    case("aﬁre", 0..6),
+    case("oﬃce", 0..6),
 )]
 fn test_word_range(word: &str, expected_range: Range<usize>) {
     let found_words: Vec<_> = word_iter::from_ch_iter(word.char_indices()).collect();

@@ -3,7 +3,7 @@ use super::{Language, Script};
 use crate::ch_norm_iter::test_chars;
 use alphabet_match_macro::alphabet_match;
 
-pub(crate) fn char_compose_extra(ch: char, mark: char) -> char {
+pub(crate) fn char_compose_custom(ch: char, mark: char) -> char {
     match mark {
         '\u{300}' | '\u{340}' => match ch {
             'ẹ' | 'Ẹ' => '\u{f00b9}', // Ẹ̀ẹ̀
@@ -23,6 +23,7 @@ pub(crate) fn char_compose_extra(ch: char, mark: char) -> char {
             'ɔ' | 'Ɔ' => '\u{f0254}', // Ɔ̂ɔ̂
             _ => ch,
         },
+        // '\u{303}' | '\u{342}' => match ch { // Ã
         '\u{304}' => match ch {
             'ẹ' | 'Ẹ' => '\u{f04b9}', // Ẹ̄ẹ̄
             'm' | 'M' => '\u{f046d}', // M̄m̄
@@ -39,7 +40,7 @@ pub(crate) fn char_compose_extra(ch: char, mark: char) -> char {
             'ɔ' | 'Ɔ' => '\u{f0c54}', // Ɔ̌ɔ̌
             _ => ch,
         },
-        '\u{331}' => match ch {
+        '\u{331}' | '\u{320}' => match ch {
             '\u{f0890}' => '\u{f3190}', // Ɛ̱̈ɛ̱̈
             'a' | 'A' => '\u{f3161}',   // A̱a̱
             'e' | 'E' => '\u{f3165}',   // E̱e̱
@@ -49,298 +50,17 @@ pub(crate) fn char_compose_extra(ch: char, mark: char) -> char {
             _ => ch,
         },
         _ => ch,
-        /* '\u{300}' | '\u{340}' => match ch {
-            'a' => 'à',
-            'A' => 'À',
-            'â' => 'ầ',
-            'Â' => 'Ầ',
-            'e' => 'è',
-            'E' => 'È',
-            'ẹ' | 'Ẹ' => '\u{f00b9}', // Ẹ̀ẹ̀
-            'i' => 'ì',
-            'I' => 'Ì',
-            'm' | 'M' => '\u{f006d}', // M̀m̀
-            'o' => 'ò',
-            'O' => 'Ò',
-            'ọ' | 'Ọ' => '\u{f00cd}', // Ọ̀ọ̀
-            'u' => 'ù',
-            'U' => 'Ù',
-            'ê' => 'ề',
-            'Ê' => 'Ề',
-            'n' => 'ǹ',
-            'N' => 'Ǹ',
-            _ => ch,
-        },
-        '\u{301}' | '\u{341}' => match ch {
-            'a' => 'á',
-            'A' => 'Á',
-            'c' => 'ć',
-            'C' => 'Ć',
-            'e' => 'é',
-            'E' => 'É',
-            'ẹ' | 'Ẹ' => '\u{f01b9}', // Ẹ́ẹ́
-            'i' => 'í',
-            'I' => 'Í',
-            'l' => 'ĺ',
-            'L' => 'Ĺ',
-            'm' => 'ḿ',
-            'M' => 'Ḿ',
-            'n' => 'ń',
-            'N' => 'Ń',
-            'o' => 'ó',
-            'O' => 'Ó',
-            'ọ' | 'Ọ' => '\u{f01cd}', // Ọ́ọ́
-            'r' => 'ŕ',
-            'R' => 'Ŕ',
-            's' => 'ś',
-            'S' => 'Ś',
-            'u' => 'ú',
-            'U' => 'Ú',
-            'y' => 'ý',
-            'Y' => 'Ý',
-            'z' => 'ź',
-            'Z' => 'Ź',
-            // Cyrillic
-            'к' => 'ќ',
-            'К' => 'Ќ',
-            'г' => 'ѓ',
-            'Г' => 'Ѓ',
-            _ => ch,
-        },
-        '\u{302}' => match ch {
-            'a' => 'â',
-            'A' => 'Â',
-            'c' => 'ĉ',
-            'C' => 'Ĉ',
-            'e' => 'ê',
-            'E' => 'Ê',
-            'g' => 'ĝ',
-            'G' => 'Ĝ',
-            'h' => 'ĥ',
-            'H' => 'Ĥ',
-            'i' => 'î',
-            'I' => 'Î',
-            'j' => 'ĵ',
-            'J' => 'Ĵ',
-            'o' => 'ô',
-            'O' => 'Ô',
-            's' => 'ŝ',
-            'S' => 'Ŝ',
-            'u' => 'û',
-            'U' => 'Û',
-            'w' => 'ŵ',
-            'W' => 'Ŵ',
-            'y' => 'ŷ',
-            'Y' => 'Ŷ',
-            _ => ch,
-        },
-        '\u{303}' | '\u{342}' => match ch {
-            'a' => 'ã',
-            'A' => 'Ã',
-            'e' => 'ẽ',
-            'E' => 'Ẽ',
-            'i' => 'ĩ',
-            'I' => 'Ĩ',
-            'n' => 'ñ',
-            'N' => 'Ñ',
-            'o' => 'õ',
-            'O' => 'Õ',
-            'u' => 'ũ',
-            'U' => 'Ũ',
-            'y' => 'ỹ',
-            'Y' => 'Ỹ',
-            'ê' => 'ễ',
-            'Ê' => 'Ễ',
-            _ => ch,
-        },
-        '\u{304}' => match ch {
-            'a' => 'ā',
-            'A' => 'Ā',
-            'e' => 'ē',
-            'E' => 'Ē',
-            'ẹ' | 'Ẹ' => '\u{f04b9}', // Ẹ̄ẹ̄
-            'i' => 'ī',
-            'I' => 'Ī',
-            'm' | 'M' => '\u{f046d}', // M̄m̄
-            'n' | 'N' => '\u{f046e}', // N̄n̄
-            'o' => 'ō',
-            'O' => 'Ō',
-            'ọ' | 'Ọ' => '\u{f04cd}', // Ọ̄ọ̄
-            'u' => 'ū',
-            'U' => 'Ū',
-            _ => ch,
-        },
-        '\u{306}' => match ch {
-            // Cyrillic
-            'у' => 'ў',
-            'У' => 'Ў',
-            'и' => 'й',
-            'И' => 'Й',
-            _ => ch,
-        },
-        '\u{307}' => match ch {
-            'c' => 'ċ',
-            'C' => 'Ċ',
-            'g' => 'ġ',
-            'G' => 'Ġ',
-            'I' => 'İ',
-            'z' => 'ż',
-            'Z' => 'Ż',
-            _ => ch,
-        },
-        '\u{308}' => match ch {
-            'a' => 'ä',
-            'A' => 'Ä',
-            'e' => 'ë',
-            'E' => 'Ë',
-            'i' => 'ï',
-            'I' => 'Ï',
-            'o' => 'ö',
-            'O' => 'Ö',
-            'u' => 'ü',
-            'U' => 'Ü',
-            'y' => 'ÿ',
-            'Y' => 'Ÿ',
-            // Cyrillic
-            'і' => 'ї',
-            'І' => 'Ї',
-            'е' => 'ё',
-            'Е' => 'Ё',
-            _ => ch,
-        },
-        '\u{309}' => match ch {
-            'a' => 'ả',
-            'A' => 'Ả',
-            'ơ' => 'ở',
-            'Ơ' => 'Ở',
-            'u' => 'ủ',
-            'U' => 'Ủ',
-            _ => ch,
-        },
-        '\u{30A}' => match ch {
-            'a' => 'å',
-            'A' => 'Å',
-            'u' => 'ů',
-            'U' => 'Ů',
-            _ => ch,
-        },
-        '\u{30B}' => match ch {
-            'u' => 'ű',
-            'U' => 'Ű',
-            'o' => 'ő',
-            'O' => 'Ő',
-            _ => ch,
-        },
-        '\u{30C}' => match ch {
-            'a' => 'ǎ',
-            'A' => 'Ǎ',
-            'c' => 'č',
-            'C' => 'Č',
-            'd' => 'ď',
-            'D' => 'Ď',
-            'e' => 'ě',
-            'E' => 'Ě',
-            'g' => 'ğ',
-            'G' => 'Ğ',
-            'l' => 'ľ',
-            'L' => 'Ľ',
-            'o' => 'ǒ',
-            'O' => 'Ǒ',
-            'r' => 'ř',
-            'R' => 'Ř',
-            's' => 'š',
-            'S' => 'Š',
-            't' => 'ť',
-            'T' => 'Ť',
-            'u' => 'ŭ',
-            'U' => 'Ŭ',
-            'z' => 'ž',
-            'Z' => 'Ž',
-            _ => ch,
-        },
-        '\u{31B}' => match ch {
-            'o' => 'ơ',
-            'O' => 'Ơ',
-            'ó' => 'ớ',
-            'Ó' => 'Ớ',
-            'u' => 'ư',
-            'U' => 'Ư',
-            'ù' => 'ừ',
-            'Ù' => 'Ừ',
-            'ũ' => 'ữ',
-            'Ũ' => 'Ữ',
-            _ => ch,
-        },
-        '\u{323}' => match ch {
-            'a' => 'ạ',
-            'A' => 'Ạ',
-            'â' => 'ậ',
-            'Â' => 'Ậ',
-            'ǎ' => 'ặ',
-            'Ǎ' => 'Ặ',
-            'e' => 'ẹ',
-            'E' => 'Ẹ',
-            'ê' => 'ệ',
-            'Ê' => 'Ệ',
-            'i' => 'ị',
-            'I' => 'Ị',
-            'o' => 'ọ',
-            'O' => 'Ọ',
-            'ô' => 'ộ',
-            'Ô' => 'Ộ',
-            'ơ' => 'ợ',
-            'Ơ' => 'Ợ',
-            's' => 'ṣ',
-            'S' => 'Ṣ',
-            'u' => 'ụ',
-            'U' => 'Ụ',
-            'y' => 'ỵ',
-            'Y' => 'Ỵ',
-            _ => ch,
-        },
-        '\u{326}' => match ch {
-            's' => 'ș',
-            'S' => 'Ș',
-            't' => 'ț',
-            'T' => 'Ț',
-            _ => ch,
-        },
-        '\u{327}' => match ch {
-            'c' => 'ç',
-            'C' => 'Ç',
-            'g' => 'ģ',
-            'G' => 'Ģ',
-            'k' => 'ķ',
-            'K' => 'Ķ',
-            'l' => 'ļ',
-            'L' => 'Ļ',
-            'n' => 'ņ',
-            'N' => 'Ņ',
-            's' => 'ş',
-            'S' => 'Ş',
-            't' => 'ţ',
-            'T' => 'Ţ',
-            _ => ch,
-        },
-        '\u{328}' => match ch {
-            'a' => 'ą',
-            'A' => 'Ą',
-            'e' => 'ę',
-            'E' => 'Ę',
-            'u' => 'ų',
-            'U' => 'Ų',
-            _ => ch,
-        },
-        _ => ch, */
-        /* 'Ħ', 'ħ', 'Ł', 'ł',*/
     }
 }
 
 pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
 
 /// How to add a new alphabet:
-/// Add all the letters of all the alphabets in the script group,
-///  or not all, only if it does not require to exclude letters (like in `Script::Han`).
+/// Add all the letters of all the alphabets in the script group.
+///  Even though it's possible to add not all of the letters,
+///   (for example when all langs include them, like in `Script::Han`),
+///   it's recommended to add common letters (if alphabet is not very big),
+///   anyway they will be filtered out by `alphabet_match!` macro.
 /// Do not add same language to different scripts, except `Script::Common` or
 ///  languages written with different scripts in a one word (like Japanese),
 ///  instead create a new language for that "unusual" alphabet.
@@ -598,9 +318,9 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
         // If you want to add something here, validate that char's range is active in `ucd.rs`.
         // During parsing these considered as connectors
         // example1: `can't` for english is one word,
-        //  for other lang some other phrase (todo: needs example) will be parsed as separate words (like `can, t`),
-        //  because if Alphabets of all 3 chars do not intersect, it will be two words
-        // example2: `word1' word2` for all langs will be parsed as two words without `'`,
+        //  but `one/two` will be parsed as separate words,
+        //  because if alphabets of all 3 chars do not intersect, it will be two words
+        // example2: `aaa' bbb` for all langs will be parsed as two words without `'`,
         //  because next char after `'` is space, which is not a char of any alphabet
         Common => match ch {
             '\'' => &[
@@ -1155,7 +875,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     '難', '漢', '衛', '賓', '為', '頻', '併', '旣', '汚', '緖', '緒', '懲', '脹',
                     '謹', '証', '顛', '後', '凜', '顚', '來', '业', '内', '携', '彦', '庄', '猫',
                     '却', '悅', //
-                    // added
+                    // unverified
                     '亜', '悪', '圧', '囲', '医', '栄', '駅', '謁', '応', '欧', '奥', '横',
                     /* '温', */ '仮', '価', '禍', '画', '会', '絵', '覚', '学', '楽', '渇',
                     '寛', '関', '歓', '観', '気', '帰', '亀', '偽', '戯', '旧', '挙', '虚', '郷',
@@ -1421,7 +1141,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'É',
-                    'é', /*added*/
+                    'é', /*unverified*/
                     'V', 'v', 'Z', 'z'
                 ]
             ),
@@ -1741,7 +1461,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'R', 'r',
                     'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Ɓ', 'ɓ', 'Ɗ', 'ɗ', 'Ƙ', 'ƙ',
-                    'Ƴ', 'ƴ', /*added*/ 'Z', 'z'
+                    'Ƴ', 'ƴ', /*unverified*/ 'Z', 'z'
                 ]
             ),
             (
@@ -1835,7 +1555,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
-                    'Y', 'y', 'Z', 'z', /*added*/
+                    'Y', 'y', 'Z', 'z', /*unverified*/
                     'É', 'é', 'È', 'è'
                 ]
             ),
@@ -1854,7 +1574,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y',
-                    'y', /*added*/
+                    'y', /*unverified*/
                     'Ɛ', 'ɛ', 'Ɔ', 'ɔ', 'Ɣ', 'ɣ', 'Ʋ', 'ʋ', 'Ɖ', 'ɖ', 'Ŋ', 'ŋ', 'Z', 'z'
                 ]
             ),
@@ -1881,8 +1601,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'S', 's',
-                    'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', /*added*/ 'V', 'v', 'Ũ', 'ũ', 'Ĩ',
-                    'ĩ', 'Z', 'z', 'R', 'r'
+                    'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', /*unverified*/ 'V', 'v', 'Ũ', 'ũ',
+                    'Ĩ', 'ĩ', 'Z', 'z', 'R', 'r'
                 ]
             ),
             (
@@ -1890,8 +1610,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', /*added*/ 'Z',
-                    'z', 'Ə', 'ə'
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y',
+                    /*unverified*/ 'Z', 'z', 'Ə', 'ə'
                 ]
             ),
             (
@@ -1899,7 +1619,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
-                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', /*added*/
+                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', /*unverified*/
                     'Z', 'z',
                 ]
             ),
@@ -1909,7 +1629,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
                     'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Í', 'í', 'Ú',
-                    'ú', /*added*/
+                    'ú', /*unverified*/
                     'Ĩ', 'ĩ', 'Ũ', 'ũ', 'J', 'j', 'V', 'v'
                 ]
             ),
@@ -1918,9 +1638,9 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'S', 's', 'T', 't',
-                    'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', /*added*/ 'J', 'j', 'Z', 'z', 'Á',
-                    'á', 'É', 'é', 'X', 'x', 'Ê', 'ê', 'Í', 'í', 'Ú', 'ú', 'R', 'r', 'Â', 'â', 'Ó',
-                    'ó', 'Ô', 'ô', 'C', 'c'
+                    'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', /*unverified*/ 'J', 'j', 'Z', 'z',
+                    'Á', 'á', 'É', 'é', 'X', 'x', 'Ê', 'ê', 'Í', 'í', 'Ú', 'ú', 'R', 'r', 'Â', 'â',
+                    'Ó', 'ó', 'Ô', 'ô', 'C', 'c'
                 ]
             ),
             (
@@ -1929,7 +1649,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Í', 'í', 'Ú',
-                    'ú', /*added*/
+                    'ú', /*unverified*/
                     'V', 'v', 'Z', 'z'
                 ]
             ),
@@ -1939,8 +1659,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'Ç', 'ç', 'D', 'd', 'E', 'e', 'Ê', 'ê', 'F', 'f',
                     'G', 'g', 'H', 'h', 'I', 'i', 'Î', 'î', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm',
                     'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'Ş', 'ş', 'T', 't',
-                    'U', 'u', 'Û', 'û', 'V', 'v', 'X', 'x', 'Y', 'y', 'Z', 'z', /*added*/ 'W',
-                    'w'
+                    'U', 'u', 'Û', 'û', 'V', 'v', 'X', 'x', 'Y', 'y', 'Z', 'z',
+                    /*unverified*/ 'W', 'w'
                 ]
             ),
             (
@@ -2003,7 +1723,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'P', 'p', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y',
                     'Z', 'z', 'Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú', 'Â', 'â', 'Ê', 'ê',
                     'Î', 'î', 'Ô', 'ô', 'Ǎ', 'ǎ', 'Ě', 'ě', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ',
-                    // from `char_compose_extra`
+                    // from `char_compose_custom`
                     '\u{f0154}', // Ɔ́ɔ́
                     '\u{f015b}', // Ɛ́ɛ́
                     '\u{f0254}', // Ɔ̂ɔ̂
@@ -2029,7 +1749,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
                     'Y', 'y', 'Z', 'z', 'Á', 'á', 'È', 'è', 'É', 'é', 'Ì', 'ì', 'Í', 'í', 'Ò', 'ò',
-                    'Ó', 'ó', 'Ù', 'ù', 'Ú', 'ú', /*added*/ 'À', 'à', 'Ü', 'ü'
+                    'Ó', 'ó', 'Ù', 'ù', 'Ú', 'ú', /*unverified*/ 'À', 'à', 'Ü', 'ü'
                 ]
             ),
             (
@@ -2038,7 +1758,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y',
-                    'y', /*added*/
+                    'y', /*unverified*/
                     'Z', 'z'
                 ]
             ),
@@ -2057,7 +1777,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
                     'Y', 'y', 'Z', 'z', 'Ä', 'ä', 'É', 'é', 'Ë', 'ë', 'Ó', 'ó', 'Ö', 'ö', 'Ü',
-                    'ü', /*added*/
+                    'ü', /*unverified*/
                     'È', 'è'
                 ]
             ),
@@ -2075,8 +1795,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
-                    'S', 's', 'T', 't', 'V', 'v', 'Y', 'y', 'Z', 'z', /*added*/ 'À', 'à', 'Ô',
-                    'ô'
+                    'S', 's', 'T', 't', 'V', 'v', 'Y', 'y', 'Z', 'z', /*unverified*/ 'À', 'à',
+                    'Ô', 'ô'
                 ]
             ),
             (
@@ -2095,7 +1815,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'E', 'e', 'H', 'h', 'I', 'i', 'K', 'k', 'M', 'm', 'N', 'n', 'O', 'o',
                     'P', 'p', 'R', 'r', 'T', 't', 'U', 'u', 'W', 'w', /* 'Ng', 'ng', */ 'G',
                     'g', /* 'Wh', 'wh' */ 'Ā', 'ā', 'Ē', 'ē', 'Ī', 'ī', 'Ō', 'ō', 'Ū',
-                    'ū', /*added*/
+                    'ū', /*unverified*/
                     'L', 'l', 'S', 's', 'D', 'd', 'C', 'c', 'Y', 'y', 'B', 'b'
                 ]
             ),
@@ -2142,7 +1862,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'G', 'g', 'Ɣ', 'ɣ', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm',
                     'N', 'n', 'Ŋ', 'ŋ', 'O', 'o', 'Ö', 'ö', 'Ɔ', 'ɔ', 'P', 'p', 'R', 'r', 'T', 't',
                     'U', 'u', 'W', 'w', 'Y', 'y',
-                    // from `char_compose_extra`
+                    // from `char_compose_custom`
                     '\u{f0890}', // Ɛ̈ɛ̈
                     '\u{f3154}', // Ɔ̱ɔ̱
                     '\u{f3161}', // A̱a̱
@@ -2158,7 +1878,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Z',
-                    'z', /*added*/
+                    'z', /*unverified*/
                     'V', 'v', 'Ŵ', 'ŵ'
                 ]
             ),
@@ -2187,7 +1907,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'X', 'x', 'Y',
-                    'y', /*added*/
+                    'y', /*unverified*/
                     'Z', 'z', 'V', 'v'
                 ]
             ),
@@ -2196,8 +1916,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'G', 'g', 'I', 'i', 'K', 'k', 'L', 'l',
                     'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u',
-                    'W', 'w', 'Y', 'y', /*added*/ 'H', 'h', 'J', 'j', 'V', 'v', 'C', 'c', 'F',
-                    'f'
+                    'W', 'w', 'Y', 'y', /*unverified*/ 'H', 'h', 'J', 'j', 'V', 'v', 'C', 'c',
+                    'F', 'f'
                 ]
             ),
             (
@@ -2207,7 +1927,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y',
                     'Z', 'z', 'Á', 'á', 'É', 'é', 'È', 'è', 'Ó', 'ó', 'Ú', 'ú', 'Ü', 'ü', 'Ñ',
-                    'ñ', /*added*/
+                    'ñ', /*unverified*/
                     'Í', 'í', 'Ò', 'ò'
                 ]
             ),
@@ -2256,7 +1976,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y',
-                    'y', /*added*/
+                    'y', /*unverified*/
                     'Z', 'z'
                 ]
             ),
@@ -2265,7 +1985,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'E', 'e', 'F', 'f', 'G', 'g', 'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm',
                     'N', 'n', 'O', 'o', 'P', 'p', 'S', 's', 'T', 't', 'U', 'u', 'V',
-                    'v', /*added*/
+                    'v', /*unverified*/
                     'Ā', 'ā', 'Ē', 'ē', 'R', 'r'
                 ]
             ),
@@ -2367,7 +2087,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'Q', 'q',
                     'R', 'r', 'S', 's', /* 'Sh', 'sh', */ 'T', 't', 'U', 'u', 'W', 'w', 'X',
-                    'x', 'Y', 'y', /*added*/
+                    'x', 'Y', 'y', /*unverified*/
                     'P', 'p', 'V', 'v'
                 ]
             ),
@@ -2387,7 +2107,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
-                    'Y', 'y', 'Z', 'z', /*added*/ 'É', 'é'
+                    'Y', 'y', 'Z', 'z', /*unverified*/ 'É', 'é'
                 ]
             ),
             (
@@ -2403,7 +2123,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', /*added*/
+                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', /*unverified*/
                     'Z', 'z', 'R', 'r'
                 ]
             ),
@@ -2430,8 +2150,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
-                    'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', /*added*/ 'C', 'c', 'Z',
-                    'z', 'Ɣ', 'ɣ', 'Ə', 'ə', 'Q', 'q'
+                    'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', /*unverified*/ 'C', 'c',
+                    'Z', 'z', 'Ɣ', 'ɣ', 'Ə', 'ə', 'Q', 'q'
                 ]
             ),
             (
@@ -2441,7 +2161,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'H', 'h', 'I', 'ı', 'İ', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n',
                     'O', 'o', 'Ö', 'ö', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'Ş', 'ş', 'T', 't',
                     'U', 'u', 'Ü', 'ü', 'V', 'v', 'Y', 'y', 'Z', 'z', 'Ğ', 'ğ', 'Ə',
-                    'ə', /*added*/
+                    'ə', /*unverified*/
                     'Ñ', 'ñ', 'Â', 'â'
                 ]
             ),
@@ -2451,7 +2171,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
                     'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z',
-                    'z', /*added*/
+                    'z', /*unverified*/
                     'C', 'c',
                 ]
             ),
@@ -2478,7 +2198,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z',
-                    'z', /*added*/
+                    'z', /*unverified*/
                     'Ŵ', 'ŵ'
                 ]
             ),
@@ -2498,7 +2218,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'Ç', 'ç', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'ı', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'Ö', 'ö',
                     'P', 'p', 'R', 'r', 'S', 's', 'Ş', 'ş', 'T', 't', 'U', 'u', 'Ü', 'ü', 'W', 'w',
-                    'Y', 'y', 'Z', 'z', 'Ä', 'ä', 'Ý', 'ý', 'Ž', 'ž', /*added*/ 'i' //i?
+                    'Y', 'y', 'Z', 'z', 'Ä', 'ä', 'Ý', 'ý', 'Ž', 'ž',
+                    /*unverified*/ 'i' //i?
                 ]
             ),
             (
@@ -2506,8 +2227,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r', 'S', 's',
-                    'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', /*added*/ 'Ɛ', 'ɛ', 'Ɔ', 'ɔ', 'C',
-                    'c', 'Á', 'á', 'Ã', 'ã'
+                    'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', /*unverified*/ 'Ɛ', 'ɛ', 'Ɔ', 'ɔ',
+                    'C', 'c', 'Á', 'á', 'Ã', 'ã'
                 ]
             ),
             (
@@ -2516,7 +2237,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y',
-                    'y', /*added*/
+                    'y', /*unverified*/
                     'Ã', 'ã', 'Ẽ', 'ẽ', 'Ĩ', 'ĩ', 'Ñ', 'ñ', 'Ũ', 'ũ', 'Õ', 'õ'
                 ]
             ),
@@ -2526,7 +2247,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q',
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'X', 'x', 'Y', 'y', 'Z',
-                    'z', /*added*/
+                    'z', /*unverified*/
                     'C', 'c'
                 ]
             ),
@@ -2537,7 +2258,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
                     'Y', 'y', 'Z', 'z', 'À', 'à', 'È', 'è', 'É', 'é', 'Ì', 'ì', 'Ó', 'ó', 'Ù', 'ù',
-                    'Ç', 'ç', /*added*/ 'Ł', 'ł'
+                    'Ç', 'ç', /*unverified*/ 'Ł', 'ł'
                 ]
             ),
             (
@@ -2563,7 +2284,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'G', 'g', 'H', 'h', 'I', 'i', 'K', 'k',
                     'L', 'l', 'M', 'm', 'N', 'n', /* 'Ng', 'ng', */ 'O', 'o', 'P', 'p', 'R',
                     'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Á', 'á', 'É', 'é', 'Í',
-                    'í', 'Ó', 'ó', 'Ú', 'ú', 'Ñ', 'ñ', /*added*/ 'J', 'j', 'V', 'v', 'C', 'c'
+                    'í', 'Ó', 'ó', 'Ú', 'ú', 'Ñ', 'ñ', /*unverified*/ 'J', 'j', 'V', 'v', 'C',
+                    'c'
                 ]
             ),
             (
@@ -2588,7 +2310,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'Ñ', 'ñ', 'O', 'o',
                     'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'X', 'x',
-                    'Y', 'y', 'Z', 'z', 'Ŋ', 'ŋ', /*added*/ 'À', 'à', 'Ë', 'ë'
+                    'Y', 'y', 'Z', 'z', 'Ŋ', 'ŋ', /*unverified*/ 'À', 'à', 'Ë', 'ë'
                 ]
             ),
             (
@@ -2610,7 +2332,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'Á', 'á', 'À', 'à', 'Ā', 'ā', 'É', 'é', 'È', 'è', 'Ē', 'ē', 'Í', 'í', 'Ì', 'ì',
                     'Ī', 'ī', 'Ń', 'ń', 'Ǹ', 'ǹ', 'Ḿ', 'ḿ', 'Ó', 'ó', 'Ò', 'ò', 'Ō', 'ō', 'Ú', 'ú',
                     'Ù', 'ù', 'Ū', 'ū',
-                    // from `char_compose_extra`
+                    // from `char_compose_custom`
                     '\u{f006d}', // M̀m̀
                     '\u{f00b9}', // Ẹ̀ẹ̀
                     '\u{f00cd}', // Ọ̀ọ̀

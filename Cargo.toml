@@ -11,7 +11,6 @@ exclude = [".github/*", "tests/*"]
 readme = "README.md"
 license = "MIT OR Apache-2.0"
 edition = "2021"
-default-run = "cli_alphabet_intersection"
 
 [profile.dev]
 opt-level = 1
@@ -28,23 +27,20 @@ required-features = ["cli_alphabet_intersection"]
 members = ["alphabet_match_macro"]
 
 [dependencies]
-icu_normalizer = "=2.0.0-beta1"
 alphabet_match_macro = { path = "alphabet_match_macro", version = "0.1" }
 debug_unsafe = "0.1"
 # debug_unsafe = { path = "../debug_unsafe", version = "0.1" }
+icu_normalizer = "=2.0.0-beta1"
 serde = { version = "1.0", features = ["derive"] }
 strum = "0.26"
 strum_macros = "0.26"
 
+# cli_alphabet_intersection
+clap = { version = "4.5", features = ["derive"], optional = true }
+threadpool = { version = "1.8", optional = true }
+
 # [target.'cfg(not(target_family = "wasm"))'.dependencies]
 ahash = "0.8"
-
-# cli_alphabet_intersection
-cap = { version = "0.1", optional = true }
-clap = { version = "4.5", features = ["derive"], optional = true }
-jemallocator = { version = "0.5", optional = true }
-libc = { version = "0.2", optional = true }
-threadpool = { version = "1.8", optional = true }
 
 # [target.'cfg(target_family = "wasm")'.dependencies]
 # ahash = { version = "0.8", default-features = false, features = ["std", "compile-time-rng"] }
@@ -62,4 +58,4 @@ serde_json = "1.0"
 python = []
 test_chars = []
 files_read = []
-cli_alphabet_intersection = ["files_read", "cap", "clap", "jemallocator", "libc", "threadpool"]
+cli_alphabet_intersection = ["files_read", "clap", "threadpool"]
