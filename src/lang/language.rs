@@ -115,8 +115,8 @@ pub enum Language {
     Bhojpuri, // Devanagari
     BhojpuriKaithi,
     BishnupriyaManipuri,
-    #[strum(serialize = "nob")]
-    Bokmal,
+    #[deprecated]
+    Bokmal, // todo: rm, renamed to NorwegianBokmal
     #[strum(serialize = "bos")]
     Bosnian,
     Braille, // Any language adapted to Braille
@@ -398,12 +398,16 @@ pub enum Language {
     Nepali,
     Newari,
     NorthernThai,
+    #[strum(serialize = "nob")]
+    NorwegianBokmal,
+    #[strum(serialize = "nno")]
+    NorwegianNynorsk,
     #[strum(serialize = "nus")]
     Nuer,
     #[strum(serialize = "nya")]
     Nyanja,
-    #[strum(serialize = "nno")]
-    Nynorsk,
+    #[deprecated]
+    Nynorsk, // todo: rm, renamed to NorwegianNynorsk
     #[strum(serialize = "oci")]
     Occitan,
     #[strum(serialize = "ory")]
