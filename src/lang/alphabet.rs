@@ -332,6 +332,10 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
         //  because next char after `'` is space, which is not a char of any alphabet
         Common => match ch {
             '\'' => &[
+                // Cyrillic
+                Language::Belarusian,
+                Language::Ukrainian,
+                // Latin
                 Language::Acehnese,
                 Language::Afrikaans,
                 Language::AlbanianTosk,
@@ -341,7 +345,6 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Balinese,
                 Language::Bambara,
                 Language::Banjar,
-                Language::Belarusian,
                 Language::Bemba,
                 Language::Bokmal,
                 Language::Buginese,
@@ -422,7 +425,6 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Tumbuka,
                 Language::Turkish,
                 Language::Twi,
-                Language::Ukrainian,
                 Language::Umbundu,
                 Language::UzbekNorthern,
                 Language::Venetian,
@@ -432,6 +434,21 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Zulu,
             ],
             '-' => &[
+                // Cyrillic
+                Language::Bashkir,
+                Language::Belarusian,
+                Language::Bulgarian,
+                Language::Kazakh,
+                Language::Kyrgyz,
+                Language::Macedonian,
+                Language::MongolianHalh,
+                Language::OldChurchSlavonic,
+                Language::Russian,
+                Language::Serbian,
+                Language::Tajik,
+                Language::Tatar,
+                Language::Ukrainian,
+                // Latin
                 Language::Acehnese,
                 Language::Afrikaans,
                 Language::AlbanianTosk,
@@ -2622,7 +2639,37 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
 }
 
 #[test]
-fn test_langs_multiple_scripts() {
+fn test_script_char_to_langs_doubles() {
+    use super::ucd::BY_NAME;
+    use strum::IntoEnumIterator;
+
+    let mut langs;
+    for &(script, ranges) in BY_NAME {
+        for range in ranges {
+            for ch in range.0..=range.1 {
+                langs = super::lang_arr_default::<usize>();
+
+                for &lang in script_char_to_langs(script, ch) {
+                    langs[lang as usize] += 1;
+                }
+
+                let langs_used: ahash::AHashSet<Language> = langs
+                    .into_iter()
+                    .enumerate()
+                    .filter(|(_, cnt)| *cnt > 1)
+                    .map(|(l, _)| Language::from(l))
+                    .collect();
+
+                if !langs_used.is_empty() {
+                    panic!("{:?} are used twice in {:?}", langs_used, script);
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn test_script_char_to_langs_multiple_scripts() {
     use strum::IntoEnumIterator;
 
     let mut langs = super::lang_arr_default::<usize>();
