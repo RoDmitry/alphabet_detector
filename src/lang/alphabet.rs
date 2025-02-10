@@ -433,7 +433,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Xhosa,
                 Language::Zulu,
             ],
-            '-' => &[
+            /* '-' => bypassed for all langs in `word_iter`
                 // Cyrillic
                 Language::Bashkir,
                 Language::Belarusian,
@@ -535,7 +535,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Xhosa,
                 Language::Yoruba,
                 Language::Zulu,
-            ],
+            ], */
             '¡' => &[Language::AymaraCentral, Language::Spanish],
             '¿' => &[
                 Language::AymaraCentral,

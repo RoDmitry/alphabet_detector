@@ -1,10 +1,11 @@
 use crate::{
     ch_norm_iter,
     lang::{script_char_to_langs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
-    lang_arr_default, CharNormalizingIterator, LanguageArr,
+    lang_arr_default, CharNormalizingIterator, Language, LanguageArr,
 };
 use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
+use strum::IntoEnumIterator;
 
 pub struct WordIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
     norm_iter: CharNormalizingIterator<I>,
@@ -102,21 +103,21 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
             let script = script.unwrap_or(Script::Common);
 
             let langs_not_intersect = if self.prev_char_script != script {
-                let langs_cnt = if self.prev_char_script == Script::Common {
-                    &self.word_common_langs_cnt
-                } else {
-                    &self.word_langs_cnt
-                };
-                !langs
-                    .iter()
-                    .any(|&l| *langs_cnt.get_safe_unchecked(l as usize) > 0)
+                !(ch == '-' || {
+                    let langs_cnt = if self.prev_char_script == Script::Common {
+                        &self.word_common_langs_cnt
+                    } else {
+                        &self.word_langs_cnt
+                    };
+                    langs
+                        .iter()
+                        .any(|&l| *langs_cnt.get_safe_unchecked(l as usize) > 0)
+                })
             } else {
                 false
             };
 
-            let ch_skip = if langs.is_empty() {
-                true
-            } else if script == Script::Common {
+            let ch_skip = if script == Script::Common {
                 if langs_not_intersect
                     || self.prev_char_script == Script::Common
                         && !WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE.contains(&ch)
@@ -147,9 +148,14 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
                 } else {
                     &mut self.word_langs_cnt
                 };
-                for &lang in langs {
+                let langs_cnt_incr = |lang: Language| {
                     let v = langs_cnt.get_safe_unchecked_mut(lang as usize);
                     *v = v.wrapping_add(1);
+                };
+                if ch == '-' {
+                    Language::iter().for_each(langs_cnt_incr);
+                } else {
+                    langs.iter().map(|&l| l).for_each(langs_cnt_incr);
                 }
             }
             self.prev_char_script = script;
