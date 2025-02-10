@@ -90,6 +90,7 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {
             let Some((script, ch_idx, ch)) = self.norm_iter.next() else {
+                self.save_word();
                 break;
             };
 
@@ -97,7 +98,8 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
                 .map(|s| script_char_to_langs(s, ch))
                 .unwrap_or_default();
 
-            let script = script.unwrap_or(Script::Common); // why Common, maybe skip?
+            // optimization, allows to comment out unused Common ranges in `ucd`
+            let script = script.unwrap_or(Script::Common);
 
             let langs_not_intersect = if self.prev_char_script != script {
                 let langs_cnt = if self.prev_char_script == Script::Common {

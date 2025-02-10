@@ -2639,17 +2639,31 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
 }
 
 #[test]
+fn test_script_char_to_langs_inherited() {
+    assert!(
+        script_char_to_langs(Script::Inherited, char::default()).is_empty(),
+        "Script::Inherited must be always empty"
+    );
+}
+
+#[test]
 fn test_script_char_to_langs_doubles() {
     use super::ucd::BY_NAME;
-    use strum::IntoEnumIterator;
 
     let mut langs;
     for &(script, ranges) in BY_NAME {
+        if script == Script::Inherited {
+            continue;
+        }
         for range in ranges {
             for ch in range.0..=range.1 {
                 langs = super::lang_arr_default::<usize>();
 
-                for &lang in script_char_to_langs(script, ch) {
+                let ch_langs = script_char_to_langs(script, ch);
+                if ch_langs.is_empty() && script != Script::Common {
+                    panic!("Empty langs in {:?} for char: {}", script, ch);
+                }
+                for &lang in ch_langs {
                     langs[lang as usize] += 1;
                 }
 
@@ -2661,7 +2675,10 @@ fn test_script_char_to_langs_doubles() {
                     .collect();
 
                 if !langs_used.is_empty() {
-                    panic!("{:?} are used twice in {:?}", langs_used, script);
+                    panic!(
+                        "{:?} are used twice in {:?} for char: {}",
+                        langs_used, script, ch
+                    );
                 }
             }
         }

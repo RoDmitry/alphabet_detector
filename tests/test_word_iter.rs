@@ -8,6 +8,7 @@ use alphabet_detector::*;
 use rstest::*;
 
 #[rstest(text, expected_words,
+    case("a", ahashset!("a")),
     case("word", ahashset!("word")),
     case("worda wordb", ahashset!("worda", "wordb")),
     case("word'", ahashset!("word")),
@@ -43,6 +44,7 @@ use rstest::*;
     case("Spanish lowered ñ two chars", ahashset!("spanish", "lowered", "ñ", "two", "chars")),
     case("¿Que?", ahashset!("¿que")),
     case("¿-", ahashset!()),
+    case(" ¿-", ahashset!()),
     case("a-b", ahashset!("a-b")),
     case::combine("ầ M̄", ahashset!("ầ", "\u{f046d}")),
     // case::deva("हूँ", ahashset!("हूँ")),

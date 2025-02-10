@@ -53,9 +53,7 @@ pub struct CharNormalizingIterator<I: Iterator<Item = (Option<Script>, usize, ch
 pub fn from_ch_iter(
     ch_iter: impl Iterator<Item = (usize, char)>,
 ) -> CharNormalizingIterator<impl Iterator<Item = (Option<Script>, usize, char)>> {
-    let mut iter = ch_iter
-        .map(|(ch_idx, ch)| (Script::find(ch), ch_idx, ch))
-        .chain([(None, usize::MAX - 1, '\0')]); // is it correct?
+    let mut iter = ch_iter.map(|(ch_idx, ch)| (Script::find(ch), ch_idx, ch));
 
     let mut next_char = iter.next();
     while let Some((Some(Script::Inherited), _, _)) = next_char {
