@@ -1,6 +1,6 @@
 [package]
 name = "alphabet_match_macro"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Dmitry Rodionov <gh@rdmtr.com>"]
 description = "Alphabet match procedural macro"
 repository = "https://github.com/RoDmitry/alphabet_detector"

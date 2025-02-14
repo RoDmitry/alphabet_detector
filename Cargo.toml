@@ -1,6 +1,6 @@
 [package]
 name = "alphabet_detector"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Dmitry Rodionov <gh@rdmtr.com>"]
 description = "Natural language alphabet detection library"
 documentation = "https://docs.rs/alphabet_detector/"
@@ -27,13 +27,13 @@ required-features = ["cli_alphabet_intersection"]
 members = ["alphabet_match_macro"]
 
 [dependencies]
-alphabet_match_macro = { path = "alphabet_match_macro", version = "0.1" }
+alphabet_match_macro = { path = "alphabet_match_macro", version = "0.2" }
 debug_unsafe = "0.1"
 # debug_unsafe = { path = "../debug_unsafe", version = "0.1" }
 icu_normalizer = "=2.0.0-beta1"
 serde = { version = "1.0", features = ["derive"] }
-strum = "0.26"
-strum_macros = "0.26"
+strum = "0.27"
+strum_macros = "0.27"
 
 # cli_alphabet_intersection
 clap = { version = "4.5", features = ["derive"], optional = true }
