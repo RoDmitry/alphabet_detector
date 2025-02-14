@@ -4,7 +4,7 @@ pub fn langs_count_max(langs_cnt: &LanguageArr<u32>) -> u32 {
     langs_cnt.iter().fold(1, |acc, &cnt| acc.max(cnt))
 }
 
-/// only top langs are retained
+/// only top languages are retained
 pub fn langs_filter_max(langs_cnt: LanguageArr<u32>) -> (impl Iterator<Item = Language>, u32) {
     let lang_count_max = langs_count_max(&langs_cnt);
 

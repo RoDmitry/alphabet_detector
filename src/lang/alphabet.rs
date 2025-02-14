@@ -56,17 +56,18 @@ pub(crate) fn char_compose_custom(ch: char, mark: char) -> char {
 
 pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
 
-/// How to add a new alphabet:
-/// Add all the letters of all the alphabets in the script group.
-///  Even though it's possible to add not all of the letters,
-///   (for example when all langs include them, like in `Script::Han`),
-///   it's recommended to add common letters (if alphabet is not very big),
-///   anyway they will be filtered out by `alphabet_match!` macro.
-/// Do not add same language to different scripts, except `Script::Common` or
-///  languages written with different scripts in a one word (like Japanese),
-///  instead create a new language for that "unusual" alphabet.
-/// There is no reason to add an alphabet if the script contains only one language.
-/// Do not add letters used only for loanwords, but save them in a comment.
+// How to add a new alphabet:
+// Add all the letters of all the alphabets in the script group.
+//  Even though it's possible to add not all of the letters,
+//   (for example when all langs include them, like in `Script::Han`),
+//   it's recommended to add common letters (if alphabet is not very big),
+//   anyway they will be filtered out by `alphabet_match!` macro.
+// Do not add same language to different scripts, except `Script::Common` or
+//  languages written with different scripts in a one word (like Japanese),
+//  instead create a new language for that "unusual" alphabet.
+// There is no reason to add an alphabet if the script contains only one language.
+// Do not add letters used only for loanwords, but save them in a comment.
+/// Returns all languages for `Script` and `char`
 pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
     use Script::*;
     match script {
