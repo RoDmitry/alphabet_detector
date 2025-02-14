@@ -155,7 +155,7 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
                 if ch == '-' {
                     Language::iter().for_each(langs_cnt_incr);
                 } else {
-                    langs.iter().map(|&l| l).for_each(langs_cnt_incr);
+                    langs.iter().copied().for_each(langs_cnt_incr);
                 }
             }
             self.prev_char_script = script;

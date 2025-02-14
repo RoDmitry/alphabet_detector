@@ -1,4 +1,4 @@
-use super::Script;
+use super::{script_char_to_langs, Script};
 use crate::isocode::{IsoCode639_1, IsoCode639_3};
 use ::std::fmt::{Debug, Display, Formatter, Result};
 use ahash::AHashSet;
@@ -657,9 +657,14 @@ impl Display for Language {
 }
 
 impl Language {
-    /// Returns a set of all supported languages.
-    pub fn all() -> AHashSet<Language> {
-        Language::iter().collect()
+    /// Returns an iterator of all languages
+    pub fn all() -> impl Iterator<Item = Language> {
+        Language::iter()
+    }
+
+    /// Returns all languages supporting selected `Script`
+    pub fn all_with_script(script: Script) -> &'static [Language] {
+        script_char_to_langs(script, char::default())
     }
 
     /// Returns a set of all supported spoken languages.
@@ -667,38 +672,6 @@ impl Language {
     pub fn all_spoken_ones() -> AHashSet<Language> {
         Language::iter()
             .filter(|it| it != &Language::Latin)
-            .collect()
-    }
-
-    /// Returns a set of all languages supporting the Arabic script.
-    #[deprecated]
-    pub fn all_with_arabic_script() -> AHashSet<Language> {
-        Language::iter()
-            .filter(|it| it.scripts().contains(&Script::Arabic))
-            .collect()
-    }
-
-    /// Returns a set of all languages supporting the Cyrillic script.
-    #[deprecated]
-    pub fn all_with_cyrillic_script() -> AHashSet<Language> {
-        Language::iter()
-            .filter(|it| it.scripts().contains(&Script::Cyrillic))
-            .collect()
-    }
-
-    /// Returns a set of all languages supporting the Devanagari script.
-    #[deprecated]
-    pub fn all_with_devanagari_script() -> AHashSet<Language> {
-        Language::iter()
-            .filter(|it| it.scripts().contains(&Script::Devanagari))
-            .collect()
-    }
-
-    /// Returns a set of all languages supporting the Latin script.
-    #[deprecated]
-    pub fn all_with_latin_script() -> AHashSet<Language> {
-        Language::iter()
-            .filter(|it| it.scripts().contains(&Script::Latin))
             .collect()
     }
 
@@ -887,88 +860,6 @@ impl Language {
             _ => IsoCode639_3::SQI,
         }
     }
-
-    #[deprecated]
-    pub(crate) fn scripts(&self) -> &[Script] {
-        match self {
-            Language::Afrikaans => &[Script::Latin],
-            Language::AlbanianTosk => &[Script::Latin],
-            Language::AzerbaijaniNorth => &[Script::Latin],
-            Language::Basque => &[Script::Latin],
-            Language::Bokmal => &[Script::Latin],
-            Language::Bosnian => &[Script::Latin],
-            Language::Catalan => &[Script::Latin],
-            Language::Croatian => &[Script::Latin],
-            Language::Czech => &[Script::Latin],
-            Language::Danish => &[Script::Latin],
-            Language::Dutch => &[Script::Latin],
-            Language::English => &[Script::Latin],
-            Language::Esperanto => &[Script::Latin],
-            Language::Estonian => &[Script::Latin],
-            Language::Finnish => &[Script::Latin],
-            Language::French => &[Script::Latin],
-            Language::Ganda => &[Script::Latin],
-            Language::German => &[Script::Latin],
-            Language::Hungarian => &[Script::Latin],
-            Language::Icelandic => &[Script::Latin],
-            Language::Indonesian => &[Script::Latin],
-            Language::Irish => &[Script::Latin],
-            Language::Italian => &[Script::Latin],
-            Language::Latin => &[Script::Latin],
-            Language::Latvian => &[Script::Latin],
-            Language::Lithuanian => &[Script::Latin],
-            Language::Malay => &[Script::Latin],
-            Language::Maori => &[Script::Latin],
-            Language::Nynorsk => &[Script::Latin],
-            Language::Polish => &[Script::Latin],
-            Language::Portuguese => &[Script::Latin],
-            Language::Romanian => &[Script::Latin],
-            Language::Shona => &[Script::Latin],
-            Language::Slovak => &[Script::Latin],
-            Language::Slovene => &[Script::Latin],
-            Language::Somali => &[Script::Latin],
-            Language::Sesotho => &[Script::Latin],
-            Language::Spanish => &[Script::Latin],
-            Language::Swahili => &[Script::Latin],
-            Language::Swedish => &[Script::Latin],
-            Language::Tagalog => &[Script::Latin],
-            Language::Tsonga => &[Script::Latin],
-            Language::Tswana => &[Script::Latin],
-            Language::Turkish => &[Script::Latin],
-            Language::Vietnamese => &[Script::Latin],
-            Language::Welsh => &[Script::Latin],
-            Language::Xhosa => &[Script::Latin],
-            Language::Yoruba => &[Script::Latin],
-            Language::Zulu => &[Script::Latin],
-            Language::Belarusian => &[Script::Cyrillic],
-            Language::Bulgarian => &[Script::Cyrillic],
-            Language::Kazakh => &[Script::Cyrillic],
-            Language::Macedonian => &[Script::Cyrillic],
-            Language::MongolianHalh => &[Script::Cyrillic],
-            Language::Russian => &[Script::Cyrillic],
-            Language::Serbian => &[Script::Cyrillic],
-            Language::Ukrainian => &[Script::Cyrillic],
-            Language::Arabic => &[Script::Arabic],
-            Language::Persian => &[Script::Arabic],
-            Language::Urdu => &[Script::Arabic],
-            Language::Hindi => &[Script::Devanagari],
-            Language::Marathi => &[Script::Devanagari],
-            Language::Armenian => &[Script::Armenian],
-            Language::Bengali => &[Script::Bengali],
-            Language::ChineseSimplified => &[Script::Han],
-            Language::Georgian => &[Script::Georgian],
-            Language::Greek => &[Script::Greek],
-            Language::Gujarati => &[Script::Gujarati],
-            Language::Hebrew => &[Script::Hebrew],
-            Language::Japanese => &[Script::Hiragana, Script::Katakana, Script::Han],
-            Language::Korean => &[Script::Hangul],
-            Language::PunjabiEastern => &[Script::Gurmukhi],
-            Language::Tamil => &[Script::Tamil],
-            Language::Telugu => &[Script::Telugu],
-            Language::Thai => &[Script::Thai],
-            _ => &[],
-        }
-    }
 }
 
 #[cfg(test)]
@@ -999,95 +890,4 @@ mod tests {
         let language = Language::from_str("eng").unwrap();
         assert_eq!(language, English);
     }
-
-    /* #[test]
-    fn assert_certain_languages_support_arabic_script() {
-        assert_eq!(
-            Language::all_with_arabic_script(),
-            ahashset!(Arabic, Persian, Urdu)
-        );
-    }
-
-    #[test]
-    fn assert_certain_languages_support_cyrillic_script() {
-        assert_eq!(
-            Language::all_with_cyrillic_script(),
-            ahashset!(
-                Belarusian,
-                Bulgarian,
-                Kazakh,
-                Macedonian,
-                MongolianHalh,
-                Russian,
-                Serbian,
-                Ukrainian
-            )
-        );
-    }
-
-    #[test]
-    fn assert_certain_languages_support_devanagari_script() {
-        assert_eq!(
-            Language::all_with_devanagari_script(),
-            ahashset!(Hindi, Marathi)
-        );
-    }
-
-    #[test]
-    fn assert_certain_languages_support_latin_script() {
-        assert_eq!(
-            Language::all_with_latin_script(),
-            ahashset!(
-                Afrikaans,
-                AlbanianTosk,
-                AzerbaijaniNorth,
-                Basque,
-                Bokmal,
-                Bosnian,
-                Catalan,
-                Croatian,
-                Czech,
-                Danish,
-                Dutch,
-                English,
-                Esperanto,
-                Estonian,
-                Finnish,
-                French,
-                Ganda,
-                German,
-                Hungarian,
-                Icelandic,
-                Indonesian,
-                Irish,
-                Italian,
-                Latin,
-                Latvian,
-                Lithuanian,
-                Malay,
-                Maori,
-                Nynorsk,
-                Polish,
-                Portuguese,
-                Romanian,
-                Shona,
-                Slovak,
-                Slovene,
-                Somali,
-                Sesotho,
-                Spanish,
-                Swahili,
-                Swedish,
-                Tagalog,
-                Tsonga,
-                Tswana,
-                Turkish,
-                Vietnamese,
-                Welsh,
-                Xhosa,
-                Yoruba,
-                Zulu
-            )
-        );
-    } */
 }

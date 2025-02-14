@@ -104,10 +104,10 @@ fn main() {
 
             let lang_count = langs_count[thread_lang as usize];
             let lang_count_max = langs_count.iter().fold(1, |acc, cnt| acc.max(*cnt));
-            if lang_count_max == lang_count {
+            /* if lang_count_max == lang_count {
                 println!("*{}* {} AWESOME!", file_name, thread_lang);
                 return;
-            }
+            } */
 
             let count_diff = lang_count_max - lang_count;
             let count_percent_diff = (count_diff * 100) as f64 / lang_count_max as f64;
@@ -176,7 +176,7 @@ fn main() {
                 .collect();
             let mut not_found_chars: Vec<_> = not_found_chars
                 .into_iter()
-                .filter(|(_, cnt)| *cnt > (lang_count_max / 15000))
+                // .filter(|(_, cnt)| *cnt > (lang_count_max / 15000))
                 .collect();
             not_found_chars.sort_by(|a, b| b.1.cmp(&a.1));
 
