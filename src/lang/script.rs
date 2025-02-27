@@ -316,3 +316,26 @@ pub(crate) fn script_same(script: Script, ch: char) -> bool {
 
     arr
 } */
+
+#[cfg(test)]
+mod tests {
+    use super::CHAR_RANGES_SORTED;
+
+    #[test]
+    fn test_char_ranges_sorted() {
+        let mut prev = *CHAR_RANGES_SORTED.first().unwrap();
+        for range in CHAR_RANGES_SORTED.into_iter().skip(1) {
+            assert_ne!(range.range_start, char::MAX, "range_start is default");
+            assert_ne!(range.range_end, char::MAX, "range_end is default");
+            assert!(
+                range.range_start <= range.range_end,
+                "range_start > range_end\n{range:?}"
+            );
+            assert!(
+                prev.range_end < range.range_start,
+                "prev.range_end >= range.range_start\nprev: {prev:?}\nrange: {range:?}"
+            );
+            prev = range;
+        }
+    }
+}
