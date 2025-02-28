@@ -2639,86 +2639,94 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
     }
 }
 
-#[test]
-fn test_script_char_to_langs_inherited() {
-    assert!(
-        script_char_to_langs(Script::Inherited, char::default()).is_empty(),
-        "Script::Inherited must be always empty"
-    );
-}
+#[cfg(test)]
+mod tests {
+    use super::script_char_to_langs;
+    use crate::lang::lang_arr_default;
+    use crate::Language;
+    use crate::Script;
 
-#[test]
-fn test_script_char_to_langs_doubles() {
-    use super::ucd::BY_NAME;
-
-    let mut langs;
-    for &(script, ranges) in BY_NAME {
-        if script == Script::Inherited {
-            continue;
-        }
-        for range in ranges {
-            for ch in range.0..=range.1 {
-                langs = super::lang_arr_default::<usize>();
-
-                let ch_langs = script_char_to_langs(script, ch);
-                if ch_langs.is_empty() && script != Script::Common {
-                    panic!("Empty langs in {:?} for char: {}", script, ch);
-                }
-                for &lang in ch_langs {
-                    langs[lang as usize] += 1;
-                }
-
-                let langs_used: ahash::AHashSet<Language> = langs
-                    .into_iter()
-                    .enumerate()
-                    .filter(|(_, cnt)| *cnt > 1)
-                    .map(|(l, _)| Language::from(l))
-                    .collect();
-
-                if !langs_used.is_empty() {
-                    panic!(
-                        "{:?} are used twice in {:?} for char: {}",
-                        langs_used, script, ch
-                    );
-                }
-            }
-        }
+    #[test]
+    fn test_script_char_to_langs_inherited() {
+        assert!(
+            script_char_to_langs(Script::Inherited, char::default()).is_empty(),
+            "Script::Inherited must be always empty"
+        );
     }
-}
 
-#[test]
-fn test_script_char_to_langs_multiple_scripts() {
-    use strum::IntoEnumIterator;
+    #[test]
+    fn test_script_char_to_langs_doubles() {
+        use crate::lang::ucd::BY_NAME;
 
-    let mut langs = super::lang_arr_default::<usize>();
-    for script in Script::iter() {
-        if script == Script::Common || script == Script::Inherited {
-            continue;
-        }
-        for &lang in script_char_to_langs(script, char::default()) {
-            if lang == Language::Japanese
-                || lang == Language::Korean
-                || lang == Language::Meroitic
-                || lang == Language::Hmong
-                || lang == Language::TaiLue
-                || lang == Language::MaldivianDhivehi
-                || lang == Language::AlbanianHistorical
-                || lang == Language::Ho
-            {
+        let mut langs;
+        for &(script, ranges) in BY_NAME {
+            if script == Script::Inherited {
                 continue;
             }
-            langs[lang as usize] += 1;
+            for range in ranges {
+                for ch in range.0..=range.1 {
+                    langs = lang_arr_default::<usize>();
+
+                    let ch_langs = script_char_to_langs(script, ch);
+                    if ch_langs.is_empty() && script != Script::Common {
+                        panic!("Empty langs in {:?} for char: {}", script, ch);
+                    }
+                    for &lang in ch_langs {
+                        langs[lang as usize] += 1;
+                    }
+
+                    let langs_used: ahash::AHashSet<Language> = langs
+                        .into_iter()
+                        .enumerate()
+                        .filter(|(_, cnt)| *cnt > 1)
+                        .map(|(l, _)| Language::from(l))
+                        .collect();
+
+                    if !langs_used.is_empty() {
+                        panic!(
+                            "{:?} are used twice in {:?} for char: {}",
+                            langs_used, script, ch
+                        );
+                    }
+                }
+            }
         }
     }
 
-    let langs_used: ahash::AHashSet<Language> = langs
-        .into_iter()
-        .enumerate()
-        .filter(|(_, cnt)| *cnt > 1)
-        .map(|(l, _)| Language::from(l))
-        .collect();
+    #[test]
+    fn test_script_char_to_langs_multiple_scripts() {
+        use strum::IntoEnumIterator;
 
-    if !langs_used.is_empty() {
-        panic!("{:?} are used in multiple scripts", langs_used);
+        let mut langs = lang_arr_default::<usize>();
+        for script in Script::iter() {
+            if script == Script::Common || script == Script::Inherited {
+                continue;
+            }
+            for &lang in script_char_to_langs(script, char::default()) {
+                if lang == Language::Japanese
+                    || lang == Language::Korean
+                    || lang == Language::Meroitic
+                    || lang == Language::Hmong
+                    || lang == Language::TaiLue
+                    || lang == Language::MaldivianDhivehi
+                    || lang == Language::AlbanianHistorical
+                    || lang == Language::Ho
+                {
+                    continue;
+                }
+                langs[lang as usize] += 1;
+            }
+        }
+
+        let langs_used: ahash::AHashSet<Language> = langs
+            .into_iter()
+            .enumerate()
+            .filter(|(_, cnt)| *cnt > 1)
+            .map(|(l, _)| Language::from(l))
+            .collect();
+
+        if !langs_used.is_empty() {
+            panic!("{:?} are used in multiple scripts", langs_used);
+        }
     }
 }

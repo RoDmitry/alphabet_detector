@@ -630,6 +630,7 @@ pub enum Language {
 
 // const LANGUAGE_COUNT: usize = ::core::mem::variant_count::<Language>();
 pub type LanguageArr<T> = [T; Language::COUNT];
+#[inline(always)]
 pub fn lang_arr_default<T: Default + Copy>() -> LanguageArr<T> {
     [Default::default(); Language::COUNT]
 }
@@ -645,6 +646,7 @@ fn test_language_max_value() {
 }
 
 impl From<usize> for Language {
+    #[inline(always)]
     fn from(v: usize) -> Self {
         unsafe { ::core::mem::transmute(v) }
     }
@@ -658,11 +660,13 @@ impl Display for Language {
 
 impl Language {
     /// Returns an iterator of all languages
+    #[inline]
     pub fn all() -> impl Iterator<Item = Language> {
         Language::iter()
     }
 
     /// Returns all languages supporting selected `Script`
+    #[inline]
     pub fn all_with_script(script: Script) -> &'static [Language] {
         script_char_to_langs(script, char::default())
     }
