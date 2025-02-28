@@ -281,7 +281,7 @@ fn compare(ra: &RangeScript, ch: char) -> Ordering {
 }
 
 impl Script {
-    pub(crate) fn find(ch: char) -> Option<Self> {
+    pub fn find(ch: char) -> Option<Self> {
         CHAR_RANGES_SORTED
             .binary_search_by(|ra| compare(ra, ch))
             .ok()
