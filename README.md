@@ -10,4 +10,4 @@
 
 Separates words in text (from iterator `CharIndices`), and detects language of words by used alphabets (chars).
 
-Warning: can return words with chars from the Unicode private area (for `Yoruba` or `Nuer` language)
+Warning: can return words with chars from the Unicode private area (for example `Lingala`, `Nuer` or `Yoruba` languages)
