@@ -1,5 +1,7 @@
-use std::io::{self, BufRead, ErrorKind, Read};
-use std::string::{FromUtf8Error, IntoChars};
+use ::std::{
+    io::{self, BufRead, ErrorKind, Read},
+    string::{FromUtf8Error, IntoChars},
+};
 
 #[derive(Debug)]
 pub enum Error {

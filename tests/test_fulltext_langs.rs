@@ -3,8 +3,7 @@ mod shared;
 use shared::*;
 
 use ahash::AHashSet;
-use alphabet_detector::Language::*;
-use alphabet_detector::*;
+use alphabet_detector::{Language::*, *};
 use rstest::*;
 
 #[rstest(expected_language, text, expected_languages,

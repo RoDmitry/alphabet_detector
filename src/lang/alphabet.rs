@@ -2642,9 +2642,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
 #[cfg(test)]
 mod tests {
     use super::script_char_to_langs;
-    use crate::lang::lang_arr_default;
-    use crate::Language;
-    use crate::Script;
+    use crate::{lang::lang_arr_default, Language, Script};
 
     #[test]
     fn test_script_char_to_langs_inherited() {

@@ -1,12 +1,13 @@
-use ::std::fs;
-use ::std::fs::File;
-use ::std::io::BufReader;
-use ::std::str::FromStr;
-use ::std::sync::Arc;
-use ::std::sync::Mutex;
-use alphabet_detector::read_iter::ReadCharsChunks;
+use ::std::{
+    fs,
+    fs::File,
+    io::BufReader,
+    str::FromStr,
+    sync::{Arc, Mutex},
+};
 use alphabet_detector::{
-    ch_norm_iter, lang_arr_default, script_char_to_langs, str_to_langs, Language,
+    ch_norm_iter, lang_arr_default, read_iter::ReadCharsChunks, script_char_to_langs, str_to_langs,
+    Language,
 };
 use clap::Parser;
 

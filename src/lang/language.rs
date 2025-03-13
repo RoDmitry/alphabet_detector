@@ -635,16 +635,6 @@ pub fn lang_arr_default<T: Default + Copy>() -> LanguageArr<T> {
     [Default::default(); Language::COUNT]
 }
 
-#[test]
-fn test_language_max_value() {
-    for lang in Language::iter() {
-        assert!(
-            (lang as usize) < Language::COUNT,
-            "Language value >= it's count"
-        );
-    }
-}
-
 impl From<usize> for Language {
     #[inline(always)]
     fn from(v: usize) -> Self {
@@ -871,6 +861,16 @@ mod tests {
     use super::*;
     use crate::Language::*;
     use ::core::str::FromStr;
+
+    #[test]
+    fn test_language_max_value() {
+        for lang in Language::iter() {
+            assert!(
+                (lang as usize) < Language::COUNT,
+                "Language value >= it's count"
+            );
+        }
+    }
 
     #[test]
     fn assert_language_string_representation_is_correct() {

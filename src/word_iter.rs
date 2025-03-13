@@ -1,5 +1,5 @@
 use crate::{
-    ch_norm_iter,
+    ch_norm_iter::{self, CharData},
     lang::{script_char_to_langs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
     lang_arr_default, CharNormalizingIterator, Language, LanguageArr,
 };
@@ -7,7 +7,7 @@ use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
 use strum::IntoEnumIterator;
 
-pub struct WordIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
+pub struct WordIterator<I: Iterator<Item = CharData>> {
     norm_iter: CharNormalizingIterator<I>,
     word_buf: Vec<char>,
     word_start_index: usize,
@@ -18,42 +18,32 @@ pub struct WordIterator<I: Iterator<Item = (Option<Script>, usize, char)>> {
     res: Option<WordData>,
 }
 
-/* impl<CT: Iterator<Item = (usize, char)>, I: Iterator<Item = (Option<Script>, usize, char)>> From<T>
-    for WordIterator<I>
-{ */
-// impl<I: Iterator<Item = (Option<Script>, usize, char)>> WordIterator<I> {
-#[inline]
-pub fn from_ch_iter(
-    ch_iter: impl Iterator<Item = (usize, char)>,
-) -> WordIterator<impl Iterator<Item = (Option<Script>, usize, char)>> {
-    let norm_iter = ch_norm_iter::from_ch_iter(ch_iter);
-
-    WordIterator {
-        norm_iter,
-        word_buf: Default::default(),
-        word_start_index: Default::default(),
-        not_saved_word_end_index: Default::default(),
-        prev_char_script: Script::Common,
-        word_langs_cnt: lang_arr_default(),
-        word_common_langs_cnt: lang_arr_default(),
-        res: None,
+impl<I: Iterator<Item = CharData>> From<CharNormalizingIterator<I>> for WordIterator<I> {
+    #[inline]
+    fn from(norm_iter: CharNormalizingIterator<I>) -> WordIterator<I> {
+        Self {
+            norm_iter,
+            word_buf: Default::default(),
+            word_start_index: Default::default(),
+            not_saved_word_end_index: Default::default(),
+            prev_char_script: Script::Common,
+            word_langs_cnt: lang_arr_default(),
+            word_common_langs_cnt: lang_arr_default(),
+            res: None,
+        }
     }
 }
 
+/* impl<CI: Iterator<Item = (usize, char)>, I: Iterator<Item = CharData>> From<CI>
+    for WordIterator<I>
+{ */
+// impl<I: Iterator<Item = CharData>> WordIterator<I> {
 #[inline]
-pub fn from_norm_iter<I: Iterator<Item = (Option<Script>, usize, char)>>(
-    norm_iter: CharNormalizingIterator<I>,
-) -> WordIterator<I> {
-    WordIterator {
-        norm_iter,
-        word_buf: Default::default(),
-        word_start_index: Default::default(),
-        not_saved_word_end_index: Default::default(),
-        prev_char_script: Script::Common,
-        word_langs_cnt: lang_arr_default(),
-        word_common_langs_cnt: lang_arr_default(),
-        res: None,
-    }
+pub fn from_ch_iter(
+    ch_iter: impl Iterator<Item = (usize, char)>,
+) -> WordIterator<impl Iterator<Item = CharData>> {
+    let norm_iter = ch_norm_iter::from_ch_iter(ch_iter);
+    WordIterator::from(norm_iter)
 }
 
 #[derive(Debug)]
@@ -63,7 +53,7 @@ pub struct WordData {
     pub range: Range<usize>,
 }
 
-impl<I: Iterator<Item = (Option<Script>, usize, char)>> WordIterator<I> {
+impl<I: Iterator<Item = CharData>> WordIterator<I> {
     fn save_word(&mut self) {
         if !self.word_buf.is_empty() {
             for (lang, cnt) in
@@ -85,7 +75,7 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> WordIterator<I> {
     }
 }
 
-impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterator<I> {
+impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
     type Item = WordData;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -135,12 +125,13 @@ impl<I: Iterator<Item = (Option<Script>, usize, char)>> Iterator for WordIterato
             if ch_skip {
                 self.save_word();
                 self.word_start_index = ch_idx.wrapping_add(ch.len_utf8());
-            } else if langs_not_intersect {
-                self.save_word();
-                self.word_start_index = ch_idx;
-            }
+            } else {
+                if langs_not_intersect {
+                    self.save_word();
+                    self.word_start_index = ch_idx;
+                }
 
-            if !ch_skip {
+                // saving char
                 self.not_saved_word_end_index = ch_idx.wrapping_add(ch.len_utf8());
                 self.word_buf.push(ch.to_lowercase().next().unwrap()); // maybe check each char?
                 let langs_cnt = if script == Script::Common {
