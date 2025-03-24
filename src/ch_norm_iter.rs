@@ -41,7 +41,12 @@ fn char_decompose(ch: char) -> (char, Option<char>, Option<char>) {
     }
 }
 
-pub type CharData = (Script, usize, char);
+#[derive(Clone, Copy, Debug)]
+pub struct CharData {
+    pub script: Script,
+    pub idx: usize,
+    pub ch: char,
+}
 
 pub struct CharNormalizingIterator<I: Iterator<Item = CharData>> {
     iter: I,
@@ -55,10 +60,18 @@ pub struct CharNormalizingIterator<I: Iterator<Item = CharData>> {
 pub fn from_ch_iter(
     ch_iter: impl Iterator<Item = (usize, char)>,
 ) -> CharNormalizingIterator<impl Iterator<Item = CharData>> {
-    let mut iter = ch_iter.map(|(ch_idx, ch)| (Script::find(ch), ch_idx, ch));
+    let mut iter = ch_iter.map(|(ch_idx, ch)| CharData {
+        script: Script::find(ch),
+        idx: ch_idx,
+        ch,
+    });
 
     let mut next_char = iter.next();
-    while let Some((Script::Inherited, _, _)) = next_char {
+    while let Some(CharData {
+        script: Script::Inherited,
+        ..
+    }) = next_char
+    {
         next_char = iter.next();
     }
 
@@ -82,25 +95,38 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
     type Item = CharData;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let (script, mut ch_idx, mut ch) = self.next_char?;
+        let CharData {
+            script,
+            mut idx,
+            mut ch,
+        } = self.next_char?;
         // loading next chars
         if let Some(next) = self.after_next_char.take() {
             self.next_char = Some(next);
         } else {
             let (ch_decom, next_char, after_next_char) = char_decompose(ch);
             if let Some(next_ch) = next_char {
-                self.next_char = Some((script, ch_idx, next_ch));
+                self.next_char = Some(CharData {
+                    script,
+                    idx,
+                    ch: next_ch,
+                });
                 ch = ch_decom;
-                self.after_next_char = after_next_char.map(|ch| (script, ch_idx, ch));
+                self.after_next_char = after_next_char.map(|ch| CharData { script, idx, ch });
             } else {
                 self.next_char = self.iter.next();
             }
         }
 
         // composing `ch` with `next_char` of `Script::Inherited`
-        while let Some((Script::Inherited, i, c)) = self.next_char {
+        while let Some(CharData {
+            script: Script::Inherited,
+            idx: i,
+            ch: c,
+        }) = self.next_char
+        {
             ch = char_compose(&self.composer, ch, c);
-            ch_idx = i;
+            idx = i;
             self.next_char = self.iter.next();
         }
 
@@ -108,6 +134,6 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
             ch = '\'';
         }
 
-        Some((script, ch_idx, ch))
+        Some(CharData { script, idx, ch })
     }
 }

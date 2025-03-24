@@ -20,7 +20,7 @@ use rstest::*;
 )]
 fn test_ch_norm_iter_chars(text: &str, expected_chars: Vec<char>) {
     let chars: Vec<_> = ch_norm_iter::from_ch_iter(text.char_indices())
-        .map(|data| data.2)
+        .map(|data| data.ch)
         .collect();
 
     assert_eq!(chars, expected_chars, "text: {}", text);

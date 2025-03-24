@@ -80,7 +80,7 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {
-            let Some((script, ch_idx, ch)) = self.norm_iter.next() else {
+            let Some(CharData { script, idx, ch }) = self.norm_iter.next() else {
                 self.save_word();
                 break;
             };
@@ -108,7 +108,11 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
                         && !WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE.contains(&ch)
                 {
                     true
-                } else if let Some((next_char_script, _, _)) = self.norm_iter.get_next_char() {
+                } else if let Some(CharData {
+                    script: next_char_script,
+                    ..
+                }) = self.norm_iter.get_next_char()
+                {
                     next_char_script == Script::Common
                 } else {
                     true
@@ -119,16 +123,17 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
 
             if ch_skip {
                 self.save_word();
-                self.word_start_index = ch_idx.wrapping_add(ch.len_utf8());
+                self.word_start_index = idx.wrapping_add(ch.len_utf8());
             } else {
                 if langs_not_intersect {
                     self.save_word();
-                    self.word_start_index = ch_idx;
+                    self.word_start_index = idx;
                 }
 
                 // saving char
-                self.not_saved_word_end_index = ch_idx.wrapping_add(ch.len_utf8());
-                self.word_buf.push(ch.to_lowercase().next().unwrap()); // maybe check each char?
+                self.not_saved_word_end_index = idx.wrapping_add(ch.len_utf8());
+                // lowercase
+                self.word_buf.push(ch.to_lowercase().next().unwrap());
                 let langs_cnt = if script == Script::Common {
                     &mut self.word_common_langs_cnt
                 } else {
