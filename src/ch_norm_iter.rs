@@ -41,7 +41,7 @@ fn char_decompose(ch: char) -> (char, Option<char>, Option<char>) {
     }
 }
 
-pub type CharData = (Option<Script>, usize, char);
+pub type CharData = (Script, usize, char);
 
 pub struct CharNormalizingIterator<I: Iterator<Item = CharData>> {
     iter: I,
@@ -58,7 +58,7 @@ pub fn from_ch_iter(
     let mut iter = ch_iter.map(|(ch_idx, ch)| (Script::find(ch), ch_idx, ch));
 
     let mut next_char = iter.next();
-    while let Some((Some(Script::Inherited), _, _)) = next_char {
+    while let Some((Script::Inherited, _, _)) = next_char {
         next_char = iter.next();
     }
 
@@ -98,7 +98,7 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
         }
 
         // composing `ch` with `next_char` of `Script::Inherited`
-        while let Some((Some(Script::Inherited), i, c)) = self.next_char {
+        while let Some((Script::Inherited, i, c)) = self.next_char {
             ch = char_compose(&self.composer, ch, c);
             ch_idx = i;
             self.next_char = self.iter.next();

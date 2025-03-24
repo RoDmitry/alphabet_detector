@@ -281,11 +281,13 @@ fn compare(ra: &RangeScript, ch: char) -> Ordering {
 }
 
 impl Script {
-    pub fn find(ch: char) -> Option<Self> {
+    pub fn find(ch: char) -> Self {
         CHAR_RANGES_SORTED
             .binary_search_by(|ra| compare(ra, ch))
             .ok()
             .map(|i| CHAR_RANGES_SORTED.get_safe_unchecked(i).script)
+            // Some unused `Common` ranges in `ucd` are commented out, so it defaults to `Common`
+            .unwrap_or(Self::Common)
     }
 }
 

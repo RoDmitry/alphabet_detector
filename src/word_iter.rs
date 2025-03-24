@@ -85,12 +85,7 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
                 break;
             };
 
-            let langs = script
-                .map(|s| script_char_to_langs(s, ch))
-                .unwrap_or_default();
-
-            // optimization, allows to comment out unused Common ranges in `ucd`
-            let script = script.unwrap_or(Script::Common);
+            let langs = script_char_to_langs(script, ch);
 
             let langs_not_intersect = if self.prev_char_script != script {
                 !(ch == '-' || {
@@ -114,7 +109,7 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
                 {
                     true
                 } else if let Some((next_char_script, _, _)) = self.norm_iter.get_next_char() {
-                    next_char_script.is_none() || next_char_script == Some(Script::Common)
+                    next_char_script == Script::Common
                 } else {
                     true
                 }
