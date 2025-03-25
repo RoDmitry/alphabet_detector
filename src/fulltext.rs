@@ -15,7 +15,7 @@ pub fn fulltext_langs(
         // let (langs, count_max) = langs_filter_max(wd.langs_cnt); // worse at detecting
         for (lang, cnt) in wd.langs_cnt.into_iter().enumerate() {
             let v = langs_count.get_safe_unchecked_mut(lang);
-            *v = v.wrapping_add(cnt);
+            *v += cnt;
         }
     }
 

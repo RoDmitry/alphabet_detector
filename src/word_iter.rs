@@ -62,7 +62,7 @@ impl<I: Iterator<Item = CharData>> WordIterator<I> {
                     .enumerate()
             {
                 let v = self.word_langs_cnt.get_safe_unchecked_mut(lang);
-                *v = v.wrapping_add(cnt);
+                *v += cnt;
             }
 
             self.res = Some(WordData {
@@ -123,7 +123,7 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
 
             if ch_skip {
                 self.save_word();
-                self.word_start_index = idx.wrapping_add(ch.len_utf8());
+                self.word_start_index = idx + ch.len_utf8();
             } else {
                 if langs_not_intersect {
                     self.save_word();
@@ -131,7 +131,7 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
                 }
 
                 // saving char
-                self.not_saved_word_end_index = idx.wrapping_add(ch.len_utf8());
+                self.not_saved_word_end_index = idx + ch.len_utf8();
                 // lowercase
                 self.word_buf.push(ch.to_lowercase().next().unwrap());
                 let langs_cnt = if script == Script::Common {
@@ -141,7 +141,7 @@ impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
                 };
                 let langs_cnt_incr = |lang: Language| {
                     let v = langs_cnt.get_safe_unchecked_mut(lang as usize);
-                    *v = v.wrapping_add(1);
+                    *v += 1;
                 };
                 if ch == '-' {
                     Language::iter().for_each(langs_cnt_incr);
