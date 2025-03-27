@@ -15,7 +15,7 @@ pub struct WordIterator<I: Iterator<Item = CharData>> {
     prev_char_script: Script,
     word_langs_cnt: LanguageArr<u32>,
     word_common_langs_cnt: LanguageArr<u32>,
-    res: Option<WordData>,
+    res: Option<WordLangsData>,
 }
 
 impl<I: Iterator<Item = CharData>> From<CharNormalizingIterator<I>> for WordIterator<I> {
@@ -47,10 +47,10 @@ pub fn from_ch_iter(
 }
 
 #[derive(Debug)]
-pub struct WordData {
+pub struct WordLangsData {
     pub chars: Vec<char>,
-    pub langs_cnt: LanguageArr<u32>,
     pub range: Range<usize>,
+    pub langs_cnt: LanguageArr<u32>,
 }
 
 impl<I: Iterator<Item = CharData>> WordIterator<I> {
@@ -65,10 +65,10 @@ impl<I: Iterator<Item = CharData>> WordIterator<I> {
                 *v += cnt;
             }
 
-            self.res = Some(WordData {
+            self.res = Some(WordLangsData {
                 chars: ::core::mem::take(&mut self.word_buf),
-                langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, lang_arr_default()),
                 range: self.word_start_index..self.not_saved_word_end_index,
+                langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, lang_arr_default()),
             });
             // resets temp variables by taking
         }
@@ -76,7 +76,7 @@ impl<I: Iterator<Item = CharData>> WordIterator<I> {
 }
 
 impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
-    type Item = WordData;
+    type Item = WordLangsData;
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {

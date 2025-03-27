@@ -14,7 +14,7 @@ pub use fulltext::*;
 pub use isocode::{IsoCode639_1, IsoCode639_3};
 pub use lang::*;
 pub use langs_filter::*;
-pub use word_iter::{WordData, WordIterator};
+pub use word_iter::{WordLangsData, WordIterator};
 
 #[cfg(feature = "files_read")]
 pub fn str_to_langs(s: &str) -> &[Language] {
