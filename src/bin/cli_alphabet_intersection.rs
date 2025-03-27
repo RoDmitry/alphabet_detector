@@ -7,7 +7,7 @@ use ::std::{
 };
 use alphabet_detector::{
     ch_norm_iter, lang_arr_default, read_iter::ReadCharsChunks, script_char_to_langs, str_to_langs,
-    Language,
+    CharData, Language,
 };
 use clap::Parser;
 
@@ -78,10 +78,8 @@ fn main() {
             let mut found_chars: ahash::AHashMap<char, usize> = Default::default();
             let mut not_found_chars: ahash::AHashMap<Language, ahash::AHashMap<char, usize>> =
                 Default::default();
-            for (script, _, ch) in ch_norm_iter::from_ch_iter(ch_iter) {
-                let langs = script
-                    .map(|s| script_char_to_langs(s, ch))
-                    .unwrap_or_default();
+            for CharData { script, ch, .. } in ch_norm_iter::from_ch_iter(ch_iter) {
+                let langs = script_char_to_langs(script, ch);
                 let mut has_lang = false;
                 for &l in langs {
                     has_lang |= l == thread_lang;
@@ -89,11 +87,7 @@ fn main() {
                 }
 
                 if has_lang {
-                    if langs
-                        != script
-                            .map(|s| script_char_to_langs(s, char::default()))
-                            .unwrap_or_default()
-                    {
+                    if langs != script_char_to_langs(script, char::default()) {
                         *found_chars.entry(ch).or_default() += 1;
                     }
                 } else {

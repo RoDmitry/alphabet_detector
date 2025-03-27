@@ -9,12 +9,12 @@ mod langs_filter;
 pub mod read_iter;
 pub mod word_iter;
 
-pub use ch_norm_iter::CharNormalizingIterator;
+pub use ch_norm_iter::{CharData, CharNormalizingIterator};
 pub use fulltext::*;
 pub use isocode::{IsoCode639_1, IsoCode639_3};
 pub use lang::*;
 pub use langs_filter::*;
-pub use word_iter::{WordLangsData, WordIterator};
+pub use word_iter::{WordIterator, WordLangsData};
 
 #[cfg(feature = "files_read")]
 pub fn str_to_langs(s: &str) -> &[Language] {
