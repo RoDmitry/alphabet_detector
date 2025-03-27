@@ -395,6 +395,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Malay,
                 Language::MalgasyPlateau,
                 Language::Maltese,
+                Language::Maori,
                 Language::Mizo,
                 Language::Mossi,
                 Language::NorwegianBokmal,
