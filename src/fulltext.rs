@@ -12,7 +12,7 @@ pub struct WordData {
 }
 
 impl From<WordLangsData> for WordData {
-    #[inline]
+    #[inline(always)]
     fn from(v: WordLangsData) -> Self {
         Self {
             chars: v.chars,
