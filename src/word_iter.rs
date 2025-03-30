@@ -7,20 +7,72 @@ use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
 use strum::IntoEnumIterator;
 
-pub struct WordIterator<I: Iterator<Item = CharData>> {
+pub trait WordBuf: Default {
+    fn push(&mut self, ch: char);
+    fn is_empty(&self) -> bool;
+}
+
+impl WordBuf for Vec<char> {
+    #[inline(always)]
+    fn push(&mut self, ch: char) {
+        self.push(ch);
+    }
+    #[inline(always)]
+    fn is_empty(&self) -> bool {
+        self.is_empty()
+    }
+}
+
+impl WordBuf for String {
+    #[inline(always)]
+    fn push(&mut self, ch: char) {
+        self.push(ch);
+    }
+    #[inline(always)]
+    fn is_empty(&self) -> bool {
+        self.is_empty()
+    }
+}
+
+impl WordBuf for compact_str::CompactString {
+    #[inline(always)]
+    fn push(&mut self, ch: char) {
+        self.push(ch);
+    }
+    #[inline(always)]
+    fn is_empty(&self) -> bool {
+        self.is_empty()
+    }
+}
+
+/// if you don't need word buf
+impl WordBuf for bool {
+    #[inline(always)]
+    fn push(&mut self, _ch: char) {
+        *self = true;
+    }
+    #[inline(always)]
+    fn is_empty(&self) -> bool {
+        !self
+    }
+}
+
+pub struct WordIterator<I: Iterator<Item = CharData>, B: WordBuf> {
     norm_iter: CharNormalizingIterator<I>,
-    word_buf: Vec<char>,
+    word_buf: B,
     word_start_index: usize,
     not_saved_word_end_index: usize,
     prev_char_script: Script,
     word_langs_cnt: LanguageArr<u32>,
     word_common_langs_cnt: LanguageArr<u32>,
-    res: Option<WordLangsData>,
+    res: Option<WordLangsData<B>>,
 }
 
-impl<I: Iterator<Item = CharData>> From<CharNormalizingIterator<I>> for WordIterator<I> {
+impl<I: Iterator<Item = CharData>, B: WordBuf> From<CharNormalizingIterator<I>>
+    for WordIterator<I, B>
+{
     #[inline]
-    fn from(norm_iter: CharNormalizingIterator<I>) -> WordIterator<I> {
+    fn from(norm_iter: CharNormalizingIterator<I>) -> WordIterator<I, B> {
         Self {
             norm_iter,
             word_buf: Default::default(),
@@ -39,21 +91,21 @@ impl<I: Iterator<Item = CharData>> From<CharNormalizingIterator<I>> for WordIter
 { */
 // impl<I: Iterator<Item = CharData>> WordIterator<I> {
 #[inline]
-pub fn from_ch_iter(
+pub fn from_ch_iter<B: WordBuf>(
     ch_iter: impl Iterator<Item = (usize, char)>,
-) -> WordIterator<impl Iterator<Item = CharData>> {
+) -> WordIterator<impl Iterator<Item = CharData>, B> {
     let norm_iter = ch_norm_iter::from_ch_iter(ch_iter);
     WordIterator::from(norm_iter)
 }
 
 #[derive(Debug)]
-pub struct WordLangsData {
-    pub chars: Vec<char>,
+pub struct WordLangsData<B: WordBuf> {
+    pub buf: B,
     pub range: Range<usize>,
     pub langs_cnt: LanguageArr<u32>,
 }
 
-impl<I: Iterator<Item = CharData>> WordIterator<I> {
+impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
     fn save_word(&mut self) {
         if !self.word_buf.is_empty() {
             for (lang, cnt) in
@@ -66,7 +118,7 @@ impl<I: Iterator<Item = CharData>> WordIterator<I> {
             }
 
             self.res = Some(WordLangsData {
-                chars: ::core::mem::take(&mut self.word_buf),
+                buf: ::core::mem::take(&mut self.word_buf),
                 range: self.word_start_index..self.not_saved_word_end_index,
                 langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, lang_arr_default()),
             });
@@ -75,8 +127,8 @@ impl<I: Iterator<Item = CharData>> WordIterator<I> {
     }
 }
 
-impl<I: Iterator<Item = CharData>> Iterator for WordIterator<I> {
-    type Item = WordLangsData;
+impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
+    type Item = WordLangsData<B>;
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {

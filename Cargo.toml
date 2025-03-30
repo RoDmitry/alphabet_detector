@@ -28,6 +28,7 @@ members = ["alphabet_match_macro"]
 
 [dependencies]
 alphabet_match_macro = { path = "alphabet_match_macro", version = "0.2" }
+compact_str = "0.9"
 debug_unsafe = "0.1"
 icu_normalizer = "2.0.0-beta2"
 serde = { version = "1", features = ["derive"] }

@@ -25,7 +25,7 @@ fn benchmark(c: &mut Criterion) {
     group1.bench_function("fulltext_langs", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let data = fulltext_langs(sentence.char_indices());
+                let data = fulltext_langs::<Vec<char>>(sentence.char_indices());
                 black_box(data);
             });
         });
@@ -33,7 +33,7 @@ fn benchmark(c: &mut Criterion) {
     group1.bench_function("fulltext_langs_best", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let data = fulltext_langs_best(sentence.char_indices());
+                let data = fulltext_langs_best::<Vec<char>>(sentence.char_indices());
                 black_box(data);
             });
         });
@@ -41,7 +41,7 @@ fn benchmark(c: &mut Criterion) {
     group1.bench_function("fulltext_langs_max", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let data = fulltext_langs_max(sentence.char_indices());
+                let data = fulltext_langs_max::<Vec<char>>(sentence.char_indices());
                 let _ = black_box(data);
             });
         });

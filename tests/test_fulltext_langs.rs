@@ -15,7 +15,7 @@ fn test_fulltext_langs_best(
     text: &str,
     expected_languages: AHashSet<Language>,
 ) {
-    let languages: AHashSet<_> = fulltext_langs_best(text.char_indices())
+    let languages: AHashSet<_> = fulltext_langs_best::<bool>(text.char_indices())
         .1
         .into_iter()
         .map(|(l, _)| l)
