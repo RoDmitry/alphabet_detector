@@ -149,13 +149,13 @@ pub enum Language {
     Cherokee,
     #[strum(serialize = "hne")]
     Chhattisgarhi,
+    #[strum(serialize = "yue_Hant")]
+    ChineseCantoneseTraditional,
+    ChineseMandarinBopomofo,
     #[strum(serialize = "zho_Hans")]
     ChineseSimplified,
     #[strum(serialize = "zho_Hant")]
     ChineseTraditional,
-    #[strum(serialize = "yue_Hant")]
-    ChineseCantoneseTraditional,
-    ChineseMandarinBopomofo,
     ChineseTuhua,
     #[strum(serialize = "cjk")]
     Chokwe,
@@ -901,6 +901,19 @@ mod tests {
                 (lang as usize) < Language::COUNT,
                 "Language value >= it's count"
             );
+        }
+    }
+
+    #[test]
+    fn test_language_order() {
+        let mut lang_prev = format!("{:?}", Language::iter().next().unwrap()).to_lowercase();
+        for lang in Language::iter() {
+            let lang = format!("{lang:?}").to_lowercase();
+            assert!(
+                lang_prev <= lang,
+                "Language wrong order: {lang_prev} > {lang}"
+            );
+            lang_prev = lang;
         }
     }
 

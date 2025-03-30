@@ -322,7 +322,6 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
         Chakma => &[Language::Chakma],
         Cham => &[Language::Cham],
         Cherokee => &[Language::Cherokee],
-        Nushu => &[Language::ChineseTuhua],
         Chorasmian => &[Language::Chorasmian],
         // If you want to add something here, validate that char's range is active in `ucd.rs`.
         // During parsing these considered as connectors
@@ -2451,6 +2450,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
         Newa => &[Language::Newari],
         NewTaiLue => &[Language::TaiLue],
         Nko => &[Language::Mande],
+        Nushu => &[Language::ChineseTuhua],
         NyiakengPuachueHmong => &[Language::Hmong],
         Ogham => &[Language::OldIrish],
         OlChiki => &[Language::Santali],
