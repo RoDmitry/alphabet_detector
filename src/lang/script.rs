@@ -199,7 +199,7 @@ struct RangeScript {
 const RANGE_SCRIPT_DEFAULT: RangeScript = RangeScript {
     range_start: char::MAX,
     range_end: char::MAX,
-    script: Script::Latin,
+    script: unsafe { ::core::mem::transmute(0_u8) },
 };
 
 /* #[const_trait]
