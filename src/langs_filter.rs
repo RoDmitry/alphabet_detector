@@ -19,6 +19,7 @@ pub fn langs_filter_max(langs_cnt: LanguageArr<u32>) -> (impl Iterator<Item = La
 }
 
 /// < `FILTER`% margin for an error
+/// `FILTER` = 95 is recommended
 pub fn langs_filter_best<const FILTER: u32>(
     langs_cnt: LanguageArr<u32>,
 ) -> impl Iterator<Item = (Language, u32)> {
