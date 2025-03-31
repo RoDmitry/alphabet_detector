@@ -1,6 +1,6 @@
 use super::{script_char_to_langs, Script};
 use crate::isocode::{IsoCode639_1, IsoCode639_3};
-use ::std::fmt::{Debug, Display, Formatter, Result};
+use ::std::fmt::Debug;
 use ahash::AHashSet;
 use serde::{Deserialize, Serialize};
 use strum::{EnumCount, IntoEnumIterator};
@@ -20,7 +20,7 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter, EnumString};
     EnumCountMacro,
     EnumIter,
     EnumString,
-    // strum_macros::Display,
+    strum_macros::Display,
 )]
 // todo: remove this UPPERCASE?
 #[serde(rename_all(serialize = "UPPERCASE", deserialize = "UPPERCASE"))]
@@ -122,8 +122,6 @@ pub enum Language {
     Bhojpuri,
     BhojpuriKaithi,
     BishnupriyaManipuri,
-    #[deprecated]
-    Bokmal, // todo: rm, renamed to NorwegianBokmal
     #[strum(serialize = "bos")]
     Bosnian,
     /// any language adapted to Braille
@@ -427,8 +425,6 @@ pub enum Language {
     Nuer,
     #[strum(serialize = "nya")]
     Nyanja,
-    #[deprecated]
-    Nynorsk, // todo: rm, renamed to NorwegianNynorsk
     #[strum(serialize = "oci")]
     Occitan,
     #[strum(serialize = "ory")]
@@ -462,8 +458,6 @@ pub enum Language {
     Pashto,
     #[strum(serialize = "pbt")]
     PashtoSouthern,
-    #[deprecated]
-    Persian, // todo: rm
     /// Afghani
     #[strum(serialize = "prs")]
     PersianDari,
@@ -649,8 +643,6 @@ pub enum Language {
     #[strum(serialize = "xho")]
     Xhosa,
     Yi,
-    #[deprecated]
-    Yiddish,
     #[strum(serialize = "ydd")]
     YiddishEastern,
     #[strum(serialize = "yor")]
@@ -674,11 +666,11 @@ impl From<usize> for Language {
     }
 }
 
-impl Display for Language {
+/* impl Display for Language {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         write!(f, "{self:?}")
     }
-}
+} */
 
 impl Language {
     /// Returns an iterator of all languages
@@ -732,7 +724,6 @@ impl Language {
             Basque => IsoCode639_1::EU,
             Belarusian => IsoCode639_1::BE,
             Bengali => IsoCode639_1::BN,
-            Bokmal => IsoCode639_1::NB,
             Bosnian => IsoCode639_1::BS,
             Bulgarian => IsoCode639_1::BG,
             Catalan => IsoCode639_1::CA,
@@ -769,8 +760,9 @@ impl Language {
             Maori => IsoCode639_1::MI,
             Marathi => IsoCode639_1::MR,
             MongolianHalh => IsoCode639_1::MN,
-            Nynorsk => IsoCode639_1::NN,
-            Persian => IsoCode639_1::FA,
+            NorwegianBokmal => IsoCode639_1::NB,
+            NorwegianNynorsk => IsoCode639_1::NN,
+            PersianWestern => IsoCode639_1::FA,
             Polish => IsoCode639_1::PL,
             Portuguese => IsoCode639_1::PT,
             PunjabiEastern => IsoCode639_1::PA,
@@ -816,7 +808,6 @@ impl Language {
             Basque => IsoCode639_3::EUS,
             Belarusian => IsoCode639_3::BEL,
             Bengali => IsoCode639_3::BEN,
-            Bokmal => IsoCode639_3::NOB,
             Bosnian => IsoCode639_3::BOS,
             Bulgarian => IsoCode639_3::BUL,
             Catalan => IsoCode639_3::CAT,
@@ -853,8 +844,9 @@ impl Language {
             Maori => IsoCode639_3::MRI,
             Marathi => IsoCode639_3::MAR,
             MongolianHalh => IsoCode639_3::MON,
-            Nynorsk => IsoCode639_3::NNO,
-            Persian => IsoCode639_3::FAS,
+            NorwegianBokmal => IsoCode639_3::NOB,
+            NorwegianNynorsk => IsoCode639_3::NNO,
+            PersianWestern => IsoCode639_3::FAS,
             Polish => IsoCode639_3::POL,
             Portuguese => IsoCode639_3::POR,
             PunjabiEastern => IsoCode639_3::PAN,
@@ -919,7 +911,7 @@ mod tests {
 
     #[test]
     fn assert_language_string_representation_is_correct() {
-        assert_eq!(English.to_string(), "English");
+        assert_eq!(English.to_string(), "eng");
     }
 
     #[test]

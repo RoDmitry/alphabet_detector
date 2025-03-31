@@ -230,14 +230,6 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 ]
             ),
             (
-                Language::Persian, //+ todo: rm, clone of PersianWestern
-                [
-                    'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش',
-                    'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی',
-                    'ء', 'ڤ', 'ئ', 'ك', 'ي', /* 'آ' */
-                ]
-            ),
-            (
                 Language::PersianDari,
                 [
                     'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش',
@@ -346,7 +338,6 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Bambara,
                 Language::Banjar,
                 Language::Bemba,
-                Language::Bokmal,
                 Language::Buginese,
                 Language::Catalan,
                 Language::Cebuano,
@@ -400,7 +391,6 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::NorwegianBokmal,
                 Language::NorwegianNynorsk,
                 Language::Nyanja,
-                Language::Nynorsk,
                 Language::Occitan,
                 Language::OromoWestCentral,
                 Language::Pangasinan,
@@ -1067,11 +1057,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
         HanifiRohingya => &[Language::Rohingya],
         Hanunoo => &[Language::Hanunoo],
         Hatran => &[Language::AramaicHatran],
-        Hebrew => &[
-            Language::Hebrew,
-            Language::Yiddish,
-            Language::YiddishEastern,
-        ],
+        Hebrew => &[Language::Hebrew, Language::YiddishEastern],
         Hiragana => &[Language::Japanese],
         ImperialAramaic => &[Language::AramaicImperial],
         Inherited => &[], // must be always empty
@@ -1878,25 +1864,6 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                     'Z', 'z', 'Ã', 'ã', 'Ẽ', 'ẽ', 'Ĩ', 'ĩ', 'Õ', 'õ', 'Ũ', 'ũ', 'É',
                     'é',
                     // any more diacritics?
-                ]
-            ),
-            (
-                Language::Bokmal, // todo: rm
-                [
-                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
-                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
-                    'Y', 'y', 'Z', 'z', 'Æ', 'æ', 'Ø', 'ø', 'Å', 'å', 'É', 'é', 'Ó', 'ó', 'Ô', 'ô',
-                ]
-            ),
-            (
-                Language::Nynorsk, // todo: rm
-                [
-                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
-                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
-                    'Y', 'y', 'Z', 'z', 'Æ', 'æ', 'Ø', 'ø', 'Å', 'å', 'É', 'é', 'Ó', 'ó', 'Ò', 'ò',
-                    'Ô', 'ô', 'Ê', 'ê',
                 ]
             ),
             (
