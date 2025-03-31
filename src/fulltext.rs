@@ -1,5 +1,5 @@
 use crate::{
-    lang_arr_default, langs_filter_best, langs_filter_max,
+    lang_arr_default, langs_filter_best, langs_filter_best_sorted, langs_filter_max,
     word_iter::{self, WordBuf},
     Language, LanguageArr, WordLangsData,
 };
@@ -53,11 +53,20 @@ pub fn fulltext_langs_max<B: WordBuf>(
 
 /// uses `langs_filter_best`.
 /// Recommended
-pub fn fulltext_langs_best<B: WordBuf>(
+pub fn fulltext_langs_best<B: WordBuf, const FILTER: u32>(
+    ch_iter: impl Iterator<Item = (usize, char)>,
+) -> (Vec<WordData<B>>, impl Iterator<Item = (Language, u32)>) {
+    let (words, langs_count) = fulltext_langs(ch_iter);
+    let langs = langs_filter_best::<FILTER>(langs_count);
+
+    (words, langs)
+}
+
+pub fn fulltext_langs_best_sorted<B: WordBuf, const FILTER: u32>(
     ch_iter: impl Iterator<Item = (usize, char)>,
 ) -> (Vec<WordData<B>>, Vec<(Language, u32)>) {
     let (words, langs_count) = fulltext_langs(ch_iter);
-    let langs = langs_filter_best(langs_count);
+    let langs = langs_filter_best_sorted::<FILTER>(langs_count);
 
     (words, langs)
 }

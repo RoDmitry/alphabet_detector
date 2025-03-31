@@ -1324,7 +1324,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 ]
             ),
             (
-                Language::English,
+                Language::English, //+++
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
@@ -1553,9 +1553,8 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 Language::Irish, //++
                 [
                     'A', 'a', 'Á', 'á', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'É', 'é', 'F', 'f',
-                    'G', 'g', 'H', 'h', 'I', 'i', 'Í', 'í', 'J', 'j', 'L', 'l', 'M', 'm', 'N', 'n',
-                    'O', 'o', 'Ó', 'ó', 'P', 'p', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'Ú', 'ú',
-                    'V', 'v'
+                    'G', 'g', 'H', 'h', 'I', 'i', 'Í', 'í', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o',
+                    'Ó', 'ó', 'P', 'p', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'Ú', 'ú',
                 ]
             ),
             (

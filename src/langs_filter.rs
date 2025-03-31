@@ -18,16 +18,24 @@ pub fn langs_filter_max(langs_cnt: LanguageArr<u32>) -> (impl Iterator<Item = La
     )
 }
 
-/// < 5% margin for an error
-pub fn langs_filter_best(langs_cnt: LanguageArr<u32>) -> Vec<(Language, u32)> {
-    let lang_count_filter = langs_count_max(&langs_cnt) * 95 / 100;
+/// < `FILTER`% margin for an error
+pub fn langs_filter_best<const FILTER: u32>(
+    langs_cnt: LanguageArr<u32>,
+) -> impl Iterator<Item = (Language, u32)> {
+    assert!(FILTER < 100);
+    let lang_count_filter = langs_count_max(&langs_cnt) * FILTER / 100;
 
-    let mut res: Vec<_> = langs_cnt
+    langs_cnt
         .into_iter()
         .enumerate()
         .filter(move |(_, cnt)| *cnt > lang_count_filter)
         .map(|(l, cnt)| (Language::from(l), cnt))
-        .collect();
+}
+
+pub fn langs_filter_best_sorted<const FILTER: u32>(
+    langs_cnt: LanguageArr<u32>,
+) -> Vec<(Language, u32)> {
+    let mut res: Vec<_> = langs_filter_best::<FILTER>(langs_cnt).collect();
     res.sort_unstable_by(|a, b| b.1.cmp(&a.1));
     res
 }
