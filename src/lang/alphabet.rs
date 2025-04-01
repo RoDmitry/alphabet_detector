@@ -2510,10 +2510,14 @@ mod tests {
     use crate::{lang::lang_arr_default, Language, Script};
 
     #[test]
-    fn test_script_char_to_langs_inherited() {
+    fn test_script_char_to_langs_empty() {
         assert!(
             script_char_to_langs(Script::Inherited, char::default()).is_empty(),
             "Script::Inherited must be always empty"
+        );
+        assert!(
+            script_char_to_langs(Script::Common, char::default()).is_empty(),
+            "Script::Common match other char must be always empty"
         );
     }
 
