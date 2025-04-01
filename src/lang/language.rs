@@ -22,13 +22,12 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter, EnumString};
     EnumString,
     strum_macros::Display,
 )]
-// todo: remove this UPPERCASE?
-#[serde(rename_all(serialize = "UPPERCASE", deserialize = "UPPERCASE"))]
+// #[serde(rename_all(serialize = "UPPERCASE", deserialize = "UPPERCASE"))]
 // #[strum(ascii_case_insensitive)]
 #[cfg_attr(
     feature = "python",
-    pyo3::prelude::pyclass(eq, eq_int, frozen, hash, ord, rename_all = "UPPERCASE")
-)]
+    pyo3::prelude::pyclass(eq, eq_int, frozen, hash, ord)
+)] /* rename_all = "UPPERCASE" */
 #[non_exhaustive]
 #[repr(usize)]
 pub enum Language {
@@ -40,6 +39,8 @@ pub enum Language {
     #[strum(serialize = "afr")]
     Afrikaans,
     Ahom,
+    #[strum(serialize = "aka")]
+    Akan,
     Akkadian,
     AlbanianHistorical,
     /// Latin
@@ -910,25 +911,25 @@ mod tests {
     }
 
     #[test]
-    fn assert_language_string_representation_is_correct() {
+    fn test_language_to_string() {
         assert_eq!(English.to_string(), "eng");
     }
 
     #[test]
-    fn test_language_serializer() {
-        let serialized = serde_json::to_string(&English).unwrap();
-        assert_eq!(serialized, "\"ENGLISH\"");
-    }
-
-    #[test]
-    fn test_language_deserializer() {
-        let deserialized = serde_json::from_str::<Language>("\"ENGLISH\"").unwrap();
-        assert_eq!(deserialized, English);
-    }
-
-    #[test]
-    fn test_from_str() {
+    fn test_language_from_str() {
         let language = Language::from_str("eng").unwrap();
         assert_eq!(language, English);
+    }
+
+    #[test]
+    fn test_language_serialize() {
+        let serialized = serde_json::to_string(&English).unwrap();
+        assert_eq!(serialized, "\"English\"");
+    }
+
+    #[test]
+    fn test_language_deserialize() {
+        let deserialized = serde_json::from_str::<Language>("\"English\"").unwrap();
+        assert_eq!(deserialized, English);
     }
 }

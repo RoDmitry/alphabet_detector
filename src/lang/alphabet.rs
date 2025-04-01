@@ -1103,6 +1103,15 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [Language] {
                 ]
             ),
             (
+                Language::Akan, //+
+                [
+                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'Ɛ', 'ɛ', 'F', 'f', 'G', 'g', 'H', 'h',
+                    'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'Ɔ', 'ɔ', 'P', 'p',
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y',
+                    'y', // loanwords C, J, Q, V, X, Z
+                ]
+            ),
+            (
                 Language::AlbanianTosk, //+
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'Ç', 'ç', 'D', 'd', /* 'Dh', 'dh', */ 'E',
@@ -2561,7 +2570,7 @@ mod tests {
     }
 
     #[test]
-    fn test_script_char_to_langs_multiple_scripts() {
+    fn test_script_char_to_langs_alphabets() {
         use strum::IntoEnumIterator;
 
         let mut langs = lang_arr_default::<usize>();
@@ -2570,30 +2579,45 @@ mod tests {
                 continue;
             }
             for &lang in script_char_to_langs(script, char::default()) {
-                if lang == Language::Japanese
-                    || lang == Language::Korean
-                    || lang == Language::Meroitic
-                    || lang == Language::Hmong
-                    || lang == Language::TaiLue
-                    || lang == Language::MaldivianDhivehi
-                    || lang == Language::AlbanianHistorical
-                    || lang == Language::Ho
-                {
-                    continue;
-                }
                 langs[lang as usize] += 1;
             }
         }
 
         let langs_used: ahash::AHashSet<Language> = langs
-            .into_iter()
+            .iter()
+            .copied()
             .enumerate()
             .filter(|(_, cnt)| *cnt > 1)
             .map(|(l, _)| Language::from(l))
+            .filter(|l| {
+                ![
+                    Language::Japanese,
+                    Language::Korean,
+                    Language::Meroitic,
+                    Language::Hmong,
+                    Language::TaiLue,
+                    Language::MaldivianDhivehi,
+                    Language::AlbanianHistorical,
+                    Language::Ho,
+                ]
+                .contains(l)
+            })
             .collect();
 
         if !langs_used.is_empty() {
             panic!("{:?} are used in multiple scripts", langs_used);
+        }
+
+        let langs_used: ahash::AHashSet<Language> = langs
+            .iter()
+            .copied()
+            .enumerate()
+            .filter(|(_, cnt)| *cnt == 0)
+            .map(|(l, _)| Language::from(l))
+            .collect();
+
+        if !langs_used.is_empty() {
+            panic!("{:?} do not have alphabets", langs_used);
         }
     }
 }
