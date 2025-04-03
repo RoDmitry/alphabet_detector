@@ -1,11 +1,13 @@
-use crate::{Language, LanguageArr};
+use crate::{ScriptLanguage, ScriptLanguageArr};
 
-pub fn langs_count_max(langs_cnt: &LanguageArr<u32>) -> u32 {
+pub fn langs_count_max(langs_cnt: &ScriptLanguageArr<u32>) -> u32 {
     langs_cnt.iter().fold(1, |acc, &cnt| acc.max(cnt))
 }
 
 /// only top languages are retained
-pub fn langs_filter_max(langs_cnt: LanguageArr<u32>) -> (impl Iterator<Item = Language>, u32) {
+pub fn langs_filter_max(
+    langs_cnt: ScriptLanguageArr<u32>,
+) -> (impl Iterator<Item = ScriptLanguage>, u32) {
     let lang_count_max = langs_count_max(&langs_cnt);
 
     (
@@ -13,7 +15,7 @@ pub fn langs_filter_max(langs_cnt: LanguageArr<u32>) -> (impl Iterator<Item = La
             .into_iter()
             .enumerate()
             .filter(move |(_, cnt)| *cnt == lang_count_max)
-            .map(|(l, _)| Language::from(l)),
+            .map(|(l, _)| ScriptLanguage::from(l)),
         lang_count_max,
     )
 }
@@ -21,8 +23,8 @@ pub fn langs_filter_max(langs_cnt: LanguageArr<u32>) -> (impl Iterator<Item = La
 /// < `FILTER`% margin for an error
 /// `FILTER` = 95 is recommended
 pub fn langs_filter_best<const FILTER: u32>(
-    langs_cnt: LanguageArr<u32>,
-) -> impl Iterator<Item = (Language, u32)> {
+    langs_cnt: ScriptLanguageArr<u32>,
+) -> impl Iterator<Item = (ScriptLanguage, u32)> {
     assert!(FILTER < 100);
     let lang_count_filter = langs_count_max(&langs_cnt) * FILTER / 100;
 
@@ -30,12 +32,12 @@ pub fn langs_filter_best<const FILTER: u32>(
         .into_iter()
         .enumerate()
         .filter(move |(_, cnt)| *cnt > lang_count_filter)
-        .map(|(l, cnt)| (Language::from(l), cnt))
+        .map(|(l, cnt)| (ScriptLanguage::from(l), cnt))
 }
 
 pub fn langs_filter_best_sorted<const FILTER: u32>(
-    langs_cnt: LanguageArr<u32>,
-) -> Vec<(Language, u32)> {
+    langs_cnt: ScriptLanguageArr<u32>,
+) -> Vec<(ScriptLanguage, u32)> {
     let mut res: Vec<_> = langs_filter_best::<FILTER>(langs_cnt).collect();
     res.sort_unstable_by(|a, b| b.1.cmp(&a.1));
     res

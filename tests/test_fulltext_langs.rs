@@ -3,7 +3,7 @@ mod shared;
 use shared::*;
 
 use ahash::AHashSet;
-use alphabet_detector::{Language::*, *};
+use alphabet_detector::{ScriptLanguage::*, *};
 use rstest::*;
 
 #[rstest(expected_language, text, expected_languages,
@@ -11,9 +11,9 @@ use rstest::*;
     case(Japanese, "昨日、東京で大切な友達に会いました。", ahashset!(Japanese)), // Kanji (Han) + Hiragana
 )]
 fn test_fulltext_langs_max(
-    expected_language: Language,
+    expected_language: ScriptLanguage,
     text: &str,
-    expected_languages: AHashSet<Language>,
+    expected_languages: AHashSet<ScriptLanguage>,
 ) {
     let languages: AHashSet<_> = fulltext_langs_max::<bool>(text.char_indices()).1.collect();
 

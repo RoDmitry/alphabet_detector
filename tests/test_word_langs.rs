@@ -3,7 +3,7 @@ mod shared;
 use shared::*;
 
 use ahash::AHashSet;
-use alphabet_detector::{Language::*, *};
+use alphabet_detector::{ScriptLanguage::*, *};
 use rstest::*;
 
 #[rstest(expected_language, word,
@@ -82,7 +82,7 @@ use rstest::*;
     case(Telugu, "కృష్ణదేవరాయలు"),
     case(Thai, "ในทางหลวงหมายเลข"),
 )]
-fn test_word_uniq(expected_language: Language, word: &str) {
+fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     let found_words: Vec<_> = word_iter::from_ch_iter::<String>(word.char_indices()).collect();
     if found_words.len() > 1 {
         panic!("Not a word: {} got: {:?}", word, found_words);
@@ -208,7 +208,7 @@ fn test_word_uniq(expected_language: Language, word: &str) {
     case(Vietnamese, "trĩ"),
     case(Yoruba, "ṣaaju")
 )]
-fn test_word_multiple_langs(expected_language: Language, word: &str) {
+fn test_word_multiple_langs(expected_language: ScriptLanguage, word: &str) {
     let found_words: Vec<_> = word_iter::from_ch_iter::<String>(word.char_indices()).collect();
     if found_words.len() > 1 {
         panic!("Not a word '{}' got {:?}", word, found_words);

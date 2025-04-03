@@ -1,7 +1,7 @@
 use crate::{
     ch_norm_iter::{self, CharData},
     lang::{script_char_to_langs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
-    lang_arr_default, CharNormalizingIterator, Language, LanguageArr,
+    lang_arr_default, CharNormalizingIterator, ScriptLanguage, ScriptLanguageArr,
 };
 use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
@@ -63,8 +63,8 @@ pub struct WordIterator<I: Iterator<Item = CharData>, B: WordBuf> {
     word_start_index: usize,
     not_saved_word_end_index: usize,
     prev_char_script: Script,
-    word_langs_cnt: LanguageArr<u32>,
-    word_common_langs_cnt: LanguageArr<u32>,
+    word_langs_cnt: ScriptLanguageArr<u32>,
+    word_common_langs_cnt: ScriptLanguageArr<u32>,
     res: Option<WordLangsData<B>>,
 }
 
@@ -102,7 +102,7 @@ pub fn from_ch_iter<B: WordBuf>(
 pub struct WordLangsData<B: WordBuf> {
     pub buf: B,
     pub range: Range<usize>,
-    pub langs_cnt: LanguageArr<u32>,
+    pub langs_cnt: ScriptLanguageArr<u32>,
 }
 
 impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
@@ -191,12 +191,12 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 } else {
                     &mut self.word_langs_cnt
                 };
-                let langs_cnt_incr = |lang: Language| {
+                let langs_cnt_incr = |lang: ScriptLanguage| {
                     let v = langs_cnt.get_safe_unchecked_mut(lang as usize);
                     *v += 1;
                 };
                 if ch == '-' {
-                    Language::iter().for_each(langs_cnt_incr);
+                    ScriptLanguage::iter().for_each(langs_cnt_incr);
                 } else {
                     langs.iter().copied().for_each(langs_cnt_incr);
                 }

@@ -17,7 +17,7 @@ pub use langs_filter::*;
 pub use word_iter::{WordIterator, WordLangsData};
 
 #[cfg(feature = "files_read")]
-pub fn str_to_langs(s: &str) -> &[Language] {
+pub fn str_to_langs(s: &str) -> &[ScriptLanguage] {
     match s {
         "Arab" => script_char_to_langs(Script::Arabic, char::default()),
         "Armn" => script_char_to_langs(Script::Armenian, char::default()),

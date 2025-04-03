@@ -1,3 +1,5 @@
+#![allow(unexpected_cfgs)]
+
 use alphabet_match_macro::*;
 
 #[derive(Debug, PartialEq)]

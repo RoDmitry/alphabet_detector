@@ -6,6 +6,9 @@ use serde::{Deserialize, Serialize};
 use strum::{EnumCount, IntoEnumIterator};
 use strum_macros::{EnumCount as EnumCountMacro, EnumIter, EnumString};
 
+/// An int representation is unstable and can be changed anytime,
+/// not safe to store in a serialized form,
+/// instead use string representation or create your own enum
 #[derive(
     Clone,
     Copy,
@@ -30,7 +33,7 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter, EnumString};
 )] /* rename_all = "UPPERCASE" */
 #[non_exhaustive]
 #[repr(usize)]
-pub enum Language {
+pub enum ScriptLanguage {
     /// Latin
     #[strum(serialize = "ace_Latn")]
     Acehnese,
@@ -653,52 +656,52 @@ pub enum Language {
     Zulu,
 }
 
-// const LANGUAGE_COUNT: usize = ::core::mem::variant_count::<Language>();
-pub type LanguageArr<T> = [T; Language::COUNT];
+// const SCRIPT_LANGUAGE_COUNT: usize = ::core::mem::variant_count::<ScriptLanguage>();
+pub type ScriptLanguageArr<T> = [T; ScriptLanguage::COUNT];
 #[inline(always)]
-pub fn lang_arr_default<T: Default + Copy>() -> LanguageArr<T> {
-    [Default::default(); Language::COUNT]
+pub fn lang_arr_default<T: Default + Copy>() -> ScriptLanguageArr<T> {
+    [Default::default(); ScriptLanguage::COUNT]
 }
 
-impl From<usize> for Language {
+impl From<usize> for ScriptLanguage {
     #[inline(always)]
     fn from(v: usize) -> Self {
         unsafe { ::core::mem::transmute(v) }
     }
 }
 
-/* impl Display for Language {
+/* impl Display for Alphabet {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         write!(f, "{self:?}")
     }
 } */
 
-impl Language {
+impl ScriptLanguage {
     /// Returns an iterator of all languages
     #[inline]
-    pub fn all() -> impl Iterator<Item = Language> {
-        Language::iter()
+    pub fn all() -> impl Iterator<Item = ScriptLanguage> {
+        ScriptLanguage::iter()
     }
 
     /// Returns all languages supporting selected `Script`
     #[inline]
-    pub fn all_with_script(script: Script) -> &'static [Language] {
+    pub fn all_with_script(script: Script) -> &'static [ScriptLanguage] {
         script_char_to_langs(script, char::default())
     }
 
     /// Returns a set of all supported spoken languages.
     #[deprecated]
-    pub fn all_spoken_ones() -> AHashSet<Language> {
-        Language::iter()
-            .filter(|it| it != &Language::Latin)
+    pub fn all_spoken_ones() -> AHashSet<ScriptLanguage> {
+        ScriptLanguage::iter()
+            .filter(|it| it != &ScriptLanguage::Latin)
             .collect()
     }
 
     /// Returns the language associated with the ISO 639-1 code
     /// passed to this method.
     #[deprecated]
-    pub fn from_iso_code_639_1(iso_code: &IsoCode639_1) -> Language {
-        Language::iter()
+    pub fn from_iso_code_639_1(iso_code: &IsoCode639_1) -> ScriptLanguage {
+        ScriptLanguage::iter()
             .find(|it| &it.iso_code_639_1() == iso_code)
             .unwrap()
     }
@@ -706,8 +709,8 @@ impl Language {
     /// Returns the language associated with the ISO 639-3 code
     /// passed to this method.
     #[deprecated]
-    pub fn from_iso_code_639_3(iso_code: &IsoCode639_3) -> Language {
-        Language::iter()
+    pub fn from_iso_code_639_3(iso_code: &IsoCode639_3) -> ScriptLanguage {
+        ScriptLanguage::iter()
             .find(|it| &it.iso_code_639_3() == iso_code)
             .unwrap()
     }
@@ -715,7 +718,7 @@ impl Language {
     /// Returns the ISO 639-1 code of this language.
     #[deprecated]
     pub fn iso_code_639_1(&self) -> IsoCode639_1 {
-        use Language::*;
+        use ScriptLanguage::*;
         match self {
             Afrikaans => IsoCode639_1::AF,
             AlbanianTosk => IsoCode639_1::SQ, // invalid
@@ -799,7 +802,7 @@ impl Language {
     /// Returns the ISO 639-3 code of this language.
     #[deprecated]
     pub fn iso_code_639_3(&self) -> IsoCode639_3 {
-        use Language::*;
+        use ScriptLanguage::*;
         match self {
             Afrikaans => IsoCode639_3::AFR,
             AlbanianTosk => IsoCode639_3::SQI,
@@ -884,14 +887,14 @@ impl Language {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Language::*;
+    use crate::ScriptLanguage::*;
     use ::core::str::FromStr;
 
     #[test]
     fn test_language_max_value() {
-        for lang in Language::iter() {
+        for lang in ScriptLanguage::iter() {
             assert!(
-                (lang as usize) < Language::COUNT,
+                (lang as usize) < ScriptLanguage::COUNT,
                 "Language value >= it's count"
             );
         }
@@ -899,8 +902,8 @@ mod tests {
 
     #[test]
     fn test_language_order() {
-        let mut lang_prev = format!("{:?}", Language::iter().next().unwrap()).to_lowercase();
-        for lang in Language::iter() {
+        let mut lang_prev = format!("{:?}", ScriptLanguage::iter().next().unwrap()).to_lowercase();
+        for lang in ScriptLanguage::iter() {
             let lang = format!("{lang:?}").to_lowercase();
             assert!(
                 lang_prev <= lang,
@@ -917,7 +920,7 @@ mod tests {
 
     #[test]
     fn test_language_from_str() {
-        let language = Language::from_str("eng").unwrap();
+        let language = ScriptLanguage::from_str("eng").unwrap();
         assert_eq!(language, English);
     }
 
@@ -929,7 +932,7 @@ mod tests {
 
     #[test]
     fn test_language_deserialize() {
-        let deserialized = serde_json::from_str::<Language>("\"English\"").unwrap();
+        let deserialized = serde_json::from_str::<ScriptLanguage>("\"English\"").unwrap();
         assert_eq!(deserialized, English);
     }
 }

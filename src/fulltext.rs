@@ -1,7 +1,7 @@
 use crate::{
     lang_arr_default, langs_filter_best, langs_filter_best_sorted, langs_filter_max,
     word_iter::{self, WordBuf},
-    Language, LanguageArr, WordLangsData,
+    ScriptLanguage, ScriptLanguageArr, WordLangsData,
 };
 use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
@@ -24,9 +24,9 @@ impl<B: WordBuf> From<WordLangsData<B>> for WordData<B> {
 
 pub fn fulltext_langs<B: WordBuf>(
     ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<WordData<B>>, LanguageArr<u32>) {
+) -> (Vec<WordData<B>>, ScriptLanguageArr<u32>) {
     let mut words = Vec::new();
-    let mut langs_count: LanguageArr<u32> = lang_arr_default();
+    let mut langs_count: ScriptLanguageArr<u32> = lang_arr_default();
 
     let found_words = word_iter::from_ch_iter(ch_iter);
     for wld in found_words {
@@ -44,7 +44,7 @@ pub fn fulltext_langs<B: WordBuf>(
 /// uses `langs_filter_max`
 pub fn fulltext_langs_max<B: WordBuf>(
     ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<WordData<B>>, impl Iterator<Item = Language>, u32) {
+) -> (Vec<WordData<B>>, impl Iterator<Item = ScriptLanguage>, u32) {
     let (words, langs_count) = fulltext_langs(ch_iter);
     let (langs, cnt) = langs_filter_max(langs_count);
 
@@ -55,7 +55,10 @@ pub fn fulltext_langs_max<B: WordBuf>(
 /// Recommended
 pub fn fulltext_langs_best<B: WordBuf, const FILTER: u32>(
     ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<WordData<B>>, impl Iterator<Item = (Language, u32)>) {
+) -> (
+    Vec<WordData<B>>,
+    impl Iterator<Item = (ScriptLanguage, u32)>,
+) {
     let (words, langs_count) = fulltext_langs(ch_iter);
     let langs = langs_filter_best::<FILTER>(langs_count);
 
@@ -64,7 +67,7 @@ pub fn fulltext_langs_best<B: WordBuf, const FILTER: u32>(
 
 pub fn fulltext_langs_best_sorted<B: WordBuf, const FILTER: u32>(
     ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<WordData<B>>, Vec<(Language, u32)>) {
+) -> (Vec<WordData<B>>, Vec<(ScriptLanguage, u32)>) {
     let (words, langs_count) = fulltext_langs(ch_iter);
     let langs = langs_filter_best_sorted::<FILTER>(langs_count);
 
