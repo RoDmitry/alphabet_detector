@@ -1,5 +1,5 @@
 use crate::{
-    lang_arr_default, langs_filter_best, langs_filter_best_sorted, langs_filter_max,
+    langs_filter_best, langs_filter_best_sorted, langs_filter_max, slang_arr_default,
     word_iter::{self, WordBuf},
     ScriptLanguage, ScriptLanguageArr, WordLangsData,
 };
@@ -26,7 +26,7 @@ pub fn fulltext_langs<B: WordBuf>(
     ch_iter: impl Iterator<Item = (usize, char)>,
 ) -> (Vec<WordData<B>>, ScriptLanguageArr<u32>) {
     let mut words = Vec::new();
-    let mut langs_count: ScriptLanguageArr<u32> = lang_arr_default();
+    let mut langs_count: ScriptLanguageArr<u32> = slang_arr_default();
 
     let found_words = word_iter::from_ch_iter(ch_iter);
     for wld in found_words {

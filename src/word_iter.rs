@@ -1,7 +1,7 @@
 use crate::{
     ch_norm_iter::{self, CharData},
-    lang::{script_char_to_langs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
-    lang_arr_default, CharNormalizingIterator, ScriptLanguage, ScriptLanguageArr,
+    lang::{script_char_to_slangs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
+    slang_arr_default, CharNormalizingIterator, ScriptLanguage, ScriptLanguageArr,
 };
 use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
@@ -79,8 +79,8 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> From<CharNormalizingIterator<I>>
             word_start_index: Default::default(),
             not_saved_word_end_index: Default::default(),
             prev_char_script: Script::Common,
-            word_langs_cnt: lang_arr_default(),
-            word_common_langs_cnt: lang_arr_default(),
+            word_langs_cnt: slang_arr_default(),
+            word_common_langs_cnt: slang_arr_default(),
             res: None,
         }
     }
@@ -109,7 +109,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
     fn save_word(&mut self) {
         if !self.word_buf.is_empty() {
             for (lang, cnt) in
-                ::core::mem::replace(&mut self.word_common_langs_cnt, lang_arr_default())
+                ::core::mem::replace(&mut self.word_common_langs_cnt, slang_arr_default())
                     .into_iter()
                     .enumerate()
             {
@@ -120,7 +120,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
             self.res = Some(WordLangsData {
                 buf: ::core::mem::take(&mut self.word_buf),
                 range: self.word_start_index..self.not_saved_word_end_index,
-                langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, lang_arr_default()),
+                langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, slang_arr_default()),
             });
             // resets temp variables by taking
         }
@@ -137,7 +137,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 break;
             };
 
-            let langs = script_char_to_langs(script, ch);
+            let langs = script_char_to_slangs(script, ch);
 
             let langs_not_intersect = if self.prev_char_script != script {
                 !(ch == '-' || {

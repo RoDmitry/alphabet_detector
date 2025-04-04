@@ -6,8 +6,8 @@ use ::std::{
     sync::{Arc, Mutex},
 };
 use alphabet_detector::{
-    ch_norm_iter, lang_arr_default, read_iter::ReadCharsChunks, script_char_to_langs, str_to_langs,
-    CharData, Language,
+    ch_norm_iter, lang_arr_default, read_iter::ReadCharsChunks, script_char_to_slangs,
+    str_to_langs, CharData, Language,
 };
 use clap::Parser;
 
@@ -31,14 +31,11 @@ fn main() {
             let path = path.unwrap();
             let file_name = path.file_name().into_string().unwrap();
             println!("*{}* New", file_name);
-            let [thread_lang, alph] = file_name.split('_').collect::<Vec<_>>()[..] else {
-                unreachable!()
-            };
             let thread_lang = match Language::from_str(&file_name) {
                 Ok(l) => l,
                 _ => {
-                    let Ok(l) = Language::from_str(thread_lang) else {
-                        panic!("*{}* Not found lang: {}", file_name, thread_lang);
+                    let Ok(l) = Language::from_str(file_name.split('_').next().unwrap()) else {
+                        panic!("*{}* Not found lang", file_name);
                     };
                     l
                 }
@@ -48,18 +45,11 @@ fn main() {
                 let lang_seen = guard.get_mut(thread_lang as usize).unwrap();
                 if *lang_seen {
                     drop(guard);
-                    panic!("*{}* Have already seen lang: {}", file_name, thread_lang);
+                    panic!("*{}* Have already seen lang: {:?}", file_name, thread_lang);
                 }
                 *lang_seen = true;
             }
 
-            let thread_langs = str_to_langs(alph);
-            if !thread_langs.contains(&thread_lang) {
-                panic!(
-                    "*{}* Not found lang: {thread_lang} in {:?}",
-                    file_name, thread_langs
-                );
-            };
             // TODO: rm this filter
             /* if !matches!(thread_lang, Language::English) {
                 return;
@@ -79,7 +69,7 @@ fn main() {
             let mut not_found_chars: ahash::AHashMap<Language, ahash::AHashMap<char, usize>> =
                 Default::default();
             for CharData { script, ch, .. } in ch_norm_iter::from_ch_iter(ch_iter) {
-                let langs = script_char_to_langs(script, ch);
+                let langs = script_char_to_slangs(script, ch);
                 let mut has_lang = false;
                 for &l in langs {
                     has_lang |= l == thread_lang;
@@ -87,7 +77,7 @@ fn main() {
                 }
 
                 if has_lang {
-                    if langs != script_char_to_langs(script, char::default()) {
+                    if langs != script_char_to_slangs(script, char::default()) {
                         *found_chars.entry(ch).or_default() += 1;
                     }
                 } else {

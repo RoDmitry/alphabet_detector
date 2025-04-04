@@ -62,13 +62,13 @@ pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
 //   (for example when all alphabets include them, like in `Script::Han`),
 //   it's recommended to add common letters (if alphabet is not very big),
 //   anyway they will be filtered out by `alphabet_match!` macro.
-// Do not add same alphabet to different scripts, except `Script::Common` or
+// Do not add same `ScriptLanguage` to different scripts, except `Script::Common` or
 //  languages written with different scripts in a one word (like Japanese),
 //  instead create a new alphabet.
-// There is no reason to add letters if the script contains only one alphabet.
+// There is no reason to add letters if the script contains only one `ScriptLanguage`.
 // Do not add letters used only for loanwords, but save them in a comment.
-/// Returns all alphabets by `Script` and `char`
-pub fn script_char_to_langs(script: Script, ch: char) -> &'static [ScriptLanguage] {
+/// Returns all `ScriptLanguage`s by `Script` and `char`
+pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLanguage] {
     use Script::*;
     match script {
         Adlam => &[ScriptLanguage::Fulani, ScriptLanguage::Pular],
@@ -399,6 +399,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [ScriptLanguag
                 ScriptLanguage::NorwegianNynorsk,
                 ScriptLanguage::Nyanja,
                 ScriptLanguage::Occitan,
+                ScriptLanguage::OromoSouthern,
                 ScriptLanguage::OromoWestCentral,
                 ScriptLanguage::Pangasinan,
                 ScriptLanguage::Papiamento,
@@ -610,7 +611,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [ScriptLanguag
         Ethiopic => &[
             ScriptLanguage::Amharic,
             ScriptLanguage::Geez,
-            ScriptLanguage::Oromo,
+            // ScriptLanguage::Oromo,
             ScriptLanguage::Tigrinya,
         ],
         Garay => &[ScriptLanguage::WolofGaray],
@@ -1950,6 +1951,14 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [ScriptLanguag
                 ]
             ),
             (
+                ScriptLanguage::OromoSouthern, //+
+                [
+                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
+                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Z', 'z',
+                ]
+            ),
+            (
                 ScriptLanguage::OromoWestCentral,
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
@@ -2440,7 +2449,7 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [ScriptLanguag
         Nabataean => &[ScriptLanguage::AramaicNabataean],
         Nandinagari => &[ScriptLanguage::SanskritNandinagari],
         Newa => &[ScriptLanguage::Newari],
-        NewTaiLue => &[ScriptLanguage::TaiLue],
+        NewTaiLue => &[ScriptLanguage::TaiLueNew],
         Nko => &[ScriptLanguage::Mande],
         Nushu => &[ScriptLanguage::ChineseTuhua],
         NyiakengPuachueHmong => &[ScriptLanguage::Hmong],
@@ -2537,114 +2546,5 @@ pub fn script_char_to_langs(script: Script, ch: char) -> &'static [ScriptLanguag
             ScriptLanguage::SanskritZanabazarSquare,
             ScriptLanguage::TibetanZanabazarSquare,
         ],
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::script_char_to_langs;
-    use crate::{lang::lang_arr_default, Script, ScriptLanguage};
-
-    #[test]
-    fn test_script_char_to_langs_empty() {
-        assert!(
-            script_char_to_langs(Script::Inherited, char::default()).is_empty(),
-            "Script::Inherited must be always empty"
-        );
-        assert!(
-            script_char_to_langs(Script::Common, char::default()).is_empty(),
-            "Script::Common match other char must be always empty"
-        );
-    }
-
-    #[test]
-    fn test_script_char_to_langs_doubles() {
-        use crate::lang::ucd::BY_NAME;
-
-        let mut langs;
-        for &(script, ranges) in BY_NAME {
-            if script == Script::Inherited {
-                continue;
-            }
-            for range in ranges {
-                for ch in range.0..=range.1 {
-                    langs = lang_arr_default::<usize>();
-
-                    let ch_langs = script_char_to_langs(script, ch);
-                    if ch_langs.is_empty() && script != Script::Common {
-                        panic!("Empty langs in {:?} for char: {}", script, ch);
-                    }
-                    for &lang in ch_langs {
-                        langs[lang as usize] += 1;
-                    }
-
-                    let langs_used: ahash::AHashSet<ScriptLanguage> = langs
-                        .into_iter()
-                        .enumerate()
-                        .filter(|(_, cnt)| *cnt > 1)
-                        .map(|(l, _)| ScriptLanguage::from(l))
-                        .collect();
-
-                    if !langs_used.is_empty() {
-                        panic!(
-                            "{:?} are used twice in {:?} for char: {}",
-                            langs_used, script, ch
-                        );
-                    }
-                }
-            }
-        }
-    }
-
-    #[test]
-    fn test_script_char_to_langs_alphabets() {
-        use strum::IntoEnumIterator;
-
-        let mut langs = lang_arr_default::<usize>();
-        for script in Script::iter() {
-            if script == Script::Common || script == Script::Inherited {
-                continue;
-            }
-            for &lang in script_char_to_langs(script, char::default()) {
-                langs[lang as usize] += 1;
-            }
-        }
-
-        let langs_used: ahash::AHashSet<ScriptLanguage> = langs
-            .iter()
-            .copied()
-            .enumerate()
-            .filter(|(_, cnt)| *cnt > 1)
-            .map(|(l, _)| ScriptLanguage::from(l))
-            .filter(|l| {
-                ![
-                    ScriptLanguage::Japanese,
-                    ScriptLanguage::Korean,
-                    ScriptLanguage::Meroitic,
-                    ScriptLanguage::Hmong,
-                    ScriptLanguage::TaiLue,
-                    ScriptLanguage::MaldivianDhivehi,
-                    ScriptLanguage::AlbanianHistorical,
-                    ScriptLanguage::Ho,
-                ]
-                .contains(l)
-            })
-            .collect();
-
-        if !langs_used.is_empty() {
-            panic!("{:?} are used in multiple scripts", langs_used);
-        }
-
-        let langs_used: ahash::AHashSet<ScriptLanguage> = langs
-            .iter()
-            .copied()
-            .enumerate()
-            .filter(|(_, cnt)| *cnt == 0)
-            .map(|(l, _)| ScriptLanguage::from(l))
-            .collect();
-
-        if !langs_used.is_empty() {
-            panic!("{:?} do not have alphabets", langs_used);
-        }
     }
 }

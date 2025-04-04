@@ -3,6 +3,8 @@ use debug_unsafe::slice::SliceGetter;
 use strum_macros::{EnumIter, EnumString, IntoStaticStr};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, EnumIter, EnumString, IntoStaticStr)]
+#[strum(const_into_str)]
+// #[strum(ascii_case_insensitive)]
 pub enum Script {
     Adlam,
     Ahom,
@@ -226,7 +228,7 @@ struct RangeScript {
 const RANGE_SCRIPT_DEFAULT: RangeScript = RangeScript {
     range_start: char::MAX,
     range_end: char::MAX,
-    script: unsafe { ::core::mem::transmute(0_u8) },
+    script: unsafe { ::core::mem::transmute::<u8, Script>(0) },
 };
 
 /* #[const_trait]

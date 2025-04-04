@@ -4,7 +4,7 @@ use proc_macro2::{Ident, Span, TokenTree};
 use quote::quote;
 use syn::{Data, DeriveInput, Error, Fields, Meta};
 
-const NAME: &'static str = "scriptlang";
+const NAME: &str = "slang";
 
 pub(super) fn script_lang_derive_inner(
     input: DeriveInput,
@@ -49,12 +49,6 @@ pub(super) fn script_lang_derive_inner(
             while let Some(tt) = tokens.next() {
                 if let TokenTree::Ident(i) = tt {
                     match i.to_string().as_str() {
-                        "lang" => {
-                            skip_eq(i, &mut tokens)?;
-                            if let Some(TokenTree::Ident(v)) = tokens.next() {
-                                language = Some(v.to_string());
-                            }
-                        }
                         "script" => {
                             skip_eq(i, &mut tokens)?;
                             match tokens.next() {
@@ -71,6 +65,12 @@ pub(super) fn script_lang_derive_inner(
                                     ))
                                 }
                                 _ => {}
+                            }
+                        }
+                        "lang" => {
+                            skip_eq(i, &mut tokens)?;
+                            if let Some(TokenTree::Ident(v)) = tokens.next() {
+                                language = Some(v.to_string());
                             }
                         }
                         v => {
@@ -124,7 +124,7 @@ pub(super) fn script_lang_derive_inner(
                 )
             });
             match_from_str.push(quote! {
-                v if eq_str(v, ::concat_const::concat!(
+                v if ::concat_const::eq_str(v, ::concat_const::concat!(
                     Language::#lang.into_str(),
                     "_",
                     Script::#scr.into_str()
@@ -147,7 +147,7 @@ pub(super) fn script_lang_derive_inner(
                 )
             });
             match_from_str.push(quote! {
-                v if eq_str(v, ::concat_const::concat!(
+                v if ::concat_const::eq_str(v, ::concat_const::concat!(
                     Language::#lang.into_str(), "_", #scr
                 )) => ::core::option::Option::Some(#name::#ident #params)
             });
@@ -166,7 +166,7 @@ pub(super) fn script_lang_derive_inner(
                 #name::#ident #params => Language::#lang.into_str()
             });
             match_from_str.push(quote! {
-                v if eq_str(v, Language::#lang.into_str()) => ::core::option::Option::Some(#name::#ident #params)
+                v if ::concat_const::eq_str(v, Language::#lang.into_str()) => ::core::option::Option::Some(#name::#ident #params)
             });
             /* match_to_display.push(quote! {
                 #name::#ident #params => ::core::fmt::Display::fmt(<&'static str>::from(Language::#lang), f)
@@ -219,19 +219,19 @@ pub(super) fn script_lang_derive_inner(
         } */
         impl #impl_generics #name #ty_generics #where_clause {
             #[inline]
-            const fn into_script_str(self) -> &'static str {
+            pub const fn into_script_str(self) -> &'static str {
                 match self {
                     #(#match_to_script_str),*
                 }
             }
             #[inline]
-            const fn into_str(self) -> &'static str {
+            pub const fn into_str(self) -> &'static str {
                 match self {
                     #(#match_to_str),*
                 }
             }
             #[inline]
-            const fn from_str(s: &str) -> Option<Self> {
+            pub const fn from_str(s: &str) -> Option<Self> {
                 match s {
                     #(#match_from_str),*
                 }

@@ -1,10 +1,11 @@
-use super::{script_char_to_langs, Script};
+use super::{script_char_to_slangs, Language, Script};
 use crate::isocode::{IsoCode639_1, IsoCode639_3};
 use ::std::fmt::Debug;
 use ahash::AHashSet;
+use alphabet_match_macro::ScriptLanguage;
 use serde::{Deserialize, Serialize};
 use strum::{EnumCount, IntoEnumIterator};
-use strum_macros::{EnumCount as EnumCountMacro, EnumIter, EnumString};
+use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 
 /// An int representation is unstable and can be changed anytime,
 /// not safe to store in a serialized form,
@@ -22,644 +23,795 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter, EnumString};
     Deserialize,
     EnumCountMacro,
     EnumIter,
-    EnumString,
-    strum_macros::Display,
+    ScriptLanguage,
 )]
 // #[serde(rename_all(serialize = "UPPERCASE", deserialize = "UPPERCASE"))]
-// #[strum(ascii_case_insensitive)]
+// serde ascii_case_insensitive?
 #[cfg_attr(
     feature = "python",
     pyo3::prelude::pyclass(eq, eq_int, frozen, hash, ord)
-)] /* rename_all = "UPPERCASE" */
+)]
 #[non_exhaustive]
 #[repr(usize)]
 pub enum ScriptLanguage {
-    /// Latin
-    #[strum(serialize = "ace_Latn")]
+    #[slang(script = Latin)]
     Acehnese,
-    #[strum(serialize = "ace_Arab")]
+    #[slang(script = Arabic, lang = Acehnese)]
     AcehneseJawi,
-    #[strum(serialize = "afr")]
+    #[slang(script = Latin)]
     Afrikaans,
+    #[slang(script = Ahom)]
     Ahom,
-    #[strum(serialize = "aka")]
+    #[slang(script = Latin)]
     Akan,
+    #[slang(script = Cuneiform)]
     Akkadian,
     AlbanianHistorical,
-    /// Latin
-    #[strum(serialize = "als")]
+    #[slang(script = Latin)]
     AlbanianTosk,
+    #[slang(script = Vithkuqi, lang = AlbanianTosk)]
     AlbanianToskVithkuqi,
-    #[strum(serialize = "amh")]
+    #[slang(script = Ethiopic)]
     Amharic,
+    #[slang(script = Cypriot)]
     AncientGreek,
+    #[slang(script = Batak)]
     Angkola,
-    #[strum(serialize = "arb")]
+    #[slang(script = Arabic)]
     Arabic,
-    #[strum(serialize = "arz")]
+    #[slang(script = Arabic)]
     ArabicEgyptian,
-    #[strum(serialize = "acm")]
+    #[slang(script = Arabic)]
     ArabicMesopotamian,
-    #[strum(serialize = "ary")]
+    #[slang(script = Arabic)]
     ArabicMoroccan,
-    #[strum(serialize = "ars")]
+    #[slang(script = Arabic)]
     ArabicNajdi,
-    #[strum(serialize = "apc")]
+    #[slang(script = Arabic)]
     ArabicNorthLevantine,
-    #[strum(serialize = "acq")]
+    #[slang(script = Arabic)]
     ArabicSouthernYemeni,
-    #[strum(serialize = "ajp")]
+    #[slang(script = Arabic)]
     ArabicSouthLevantine,
-    #[strum(serialize = "aeb")]
+    #[slang(script = Arabic)]
     ArabicTunisian,
+    #[slang(script = Hatran)]
     AramaicHatran,
+    #[slang(script = ImperialAramaic)]
     AramaicImperial,
+    #[slang(script = Mandaic)]
     AramaicMandaic,
+    #[slang(script = Nabataean)]
     AramaicNabataean,
+    #[slang(script = Palmyrene)]
     AramaicPalmyrene,
+    #[slang(script = Syriac)]
     AramaicSyriac,
-    #[strum(serialize = "hye")]
+    #[slang(script = Armenian)]
     Armenian,
-    #[strum(serialize = "asm")]
+    #[slang(script = Bengali)]
     Assamese,
-    #[strum(serialize = "ast")]
+    #[slang(script = Latin)]
     Asturian,
+    #[slang(script = Avestan)]
     Avestan,
-    #[strum(serialize = "awa")]
+    #[slang(script = Devanagari)]
     Awadhi,
-    #[strum(serialize = "ayr")]
+    #[slang(script = Latin)]
     AymaraCentral,
-    /// Latin
-    #[strum(serialize = "azj")]
+    #[slang(script = Latin)]
     AzerbaijaniNorth,
-    /// Arabic
-    #[strum(serialize = "azb")]
+    #[slang(script = Arabic)]
     AzerbaijaniSouth,
-    /// Latin
-    #[strum(serialize = "ban")]
+    #[slang(script = Latin)]
     Balinese,
+    #[slang(script = Balinese, lang = Balinese)]
     BalineseBalinese,
-    #[strum(serialize = "bam")]
+    #[slang(script = Latin)]
     Bambara,
+    #[slang(script = Bamum)]
     Bamum,
-    /// Latin
-    #[strum(serialize = "bjn_Latn")]
+    #[slang(script = Latin)]
     Banjar,
-    #[strum(serialize = "bjn_Arab")]
+    #[slang(script = Arabic, lang = Banjar)]
     BanjarJawi,
+    #[slang(script = KiratRai)]
     Bantawa,
-    #[strum(serialize = "bak")]
+    #[slang(script = Cyrillic)]
     Bashkir,
-    #[strum(serialize = "eus")]
+    #[slang(script = Latin)]
     Basque,
+    #[slang(script = BassaVah)]
     Bassa,
-    #[strum(serialize = "bel")]
+    #[slang(script = Cyrillic)]
     Belarusian,
-    #[strum(serialize = "bem")]
+    #[slang(script = Latin)]
     Bemba,
-    #[strum(serialize = "ben")]
+    #[slang(script = Bengali)]
     Bengali,
+    #[slang(script = Tifinagh)]
     Berber,
+    #[slang(script = Bhaiksuki)]
     Bhaiksuki,
-    /// Devanagari
-    #[strum(serialize = "bho")]
+    #[slang(script = Devanagari)]
     Bhojpuri,
+    #[slang(script = Kaithi, lang = Bhojpuri)]
     BhojpuriKaithi,
+    #[slang(script = Bengali)]
     BishnupriyaManipuri,
-    #[strum(serialize = "bos")]
+    #[slang(script = Latin)]
     Bosnian,
     /// any language adapted to Braille
+    #[slang(script = Braille)]
     Braille,
+    #[slang(script = Marchen)]
     BuddhistMarchen,
-    /// Latin
-    #[strum(serialize = "bug")]
+    #[slang(script = Latin)]
     Buginese,
+    #[slang(script = Buginese, lang = Buginese)]
     BugineseBuginese,
+    #[slang(script = Buhid)]
     Buhid,
-    #[strum(serialize = "bul")]
+    #[slang(script = Cyrillic)]
     Bulgarian,
-    #[strum(serialize = "mya")]
+    #[slang(script = Myanmar)]
     Burmese,
+    #[slang(script = Carian)]
     Carian,
-    #[strum(serialize = "cat")]
+    #[slang(script = Latin)]
     Catalan,
+    #[slang(script = CaucasianAlbanian)]
     CaucasianAlbanian,
-    #[strum(serialize = "ceb")]
+    #[slang(script = Latin)]
     Cebuano,
+    #[slang(script = Chakma)]
     Chakma,
+    #[slang(script = Cham)]
     Cham,
+    #[slang(script = Cherokee)]
     Cherokee,
-    #[strum(serialize = "hne")]
+    #[slang(script = Devanagari)]
     Chhattisgarhi,
-    #[strum(serialize = "yue_Hant")]
+    #[slang(script = "Hant", lang = ChineseCantonese)]
     ChineseCantoneseTraditional,
+    #[slang(script = Bopomofo, lang = ChineseMandarin)]
     ChineseMandarinBopomofo,
-    #[strum(serialize = "zho_Hans")]
+    #[slang(script = "Hans", lang = Chinese)]
     ChineseSimplified,
-    #[strum(serialize = "zho_Hant")]
+    #[slang(script = "Hant", lang = Chinese)]
     ChineseTraditional,
+    #[slang(script = Nushu)]
     ChineseTuhua,
-    #[strum(serialize = "cjk")]
+    #[slang(script = Latin)]
     Chokwe,
+    #[slang(script = Chorasmian)]
     Chorasmian,
+    #[slang(script = Coptic)]
     Coptic,
+    #[slang(script = CanadianAboriginal)]
     Cree,
-    #[strum(serialize = "hat")]
+    #[slang(script = Latin)]
     CreoleHaitian,
-    #[strum(serialize = "hrv")]
+    #[slang(script = Latin)]
     Croatian,
     /// used in ancient Cyprus
+    #[slang(script = CyproMinoan)]
     CyproMinoan,
-    #[strum(serialize = "ces")]
+    #[slang(script = Latin)]
     Czech,
-    #[strum(serialize = "dan")]
+    #[slang(script = Latin)]
     Danish,
-    #[strum(serialize = "dik")]
+    #[slang(script = Latin)]
     DinkaSouthwestern,
+    #[slang(script = Dogra)]
     Dogri,
+    #[slang(script = Devanagari, lang = Dogri)]
     DogriDevanagari,
+    #[slang(script = Arabic, lang = Dogri)]
     DogriPersoArabic,
+    #[slang(script = Takri, lang = Dogri)]
     DogriTakri,
-    #[strum(serialize = "nld")]
+    #[slang(script = Latin)]
     Dutch,
-    #[strum(serialize = "dyu")]
+    #[slang(script = Latin)]
     Dyula,
-    #[strum(serialize = "dzo")]
+    #[slang(script = Tibetan)]
     Dzongkha,
+    #[slang(script = EgyptianHieroglyphs)]
     EgyptianHieroglyphs,
+    #[slang(script = Elymaic)]
     Elymaic,
-    #[strum(serialize = "eng")]
+    #[slang(script = Latin)]
     English,
     /// shorthand systems for English
+    #[slang(script = Duployan)]
     EnglishDuployan,
+    #[slang(script = Deseret)]
     EnglishMormon,
+    #[slang(script = Shavian)]
     EnglishPhonetic,
-    #[strum(serialize = "epo")]
+    #[slang(script = Latin)]
     Esperanto,
-    #[strum(serialize = "est")]
+    #[slang(script = Latin)]
     Estonian,
+    #[slang(script = OldItalic)]
     Etruscan,
-    #[strum(serialize = "ewe")]
+    #[slang(script = Latin)]
     Ewe,
-    #[strum(serialize = "fao")]
+    #[slang(script = Latin)]
     Faroese,
-    #[strum(serialize = "fij")]
+    #[slang(script = Latin)]
     Fijian,
-    #[strum(serialize = "fin")]
+    #[slang(script = Latin)]
     Finnish,
-    #[strum(serialize = "fon")]
+    #[slang(script = Latin)]
     Fon,
-    #[strum(serialize = "fra")]
+    #[slang(script = Latin)]
     French,
+    #[slang(script = Duployan)]
     FrenchDuployan,
-    #[strum(serialize = "fur")]
+    #[slang(script = Latin)]
     Friulian,
+    #[slang(script = Adlam)]
     Fulani,
-    #[strum(serialize = "fuv")]
+    #[slang(script = Latin)]
     FulfuldeNigerian,
-    #[strum(serialize = "gla")]
+    #[slang(script = Latin)]
     GaelicScottish,
-    #[strum(serialize = "glg")]
+    #[slang(script = Latin)]
     Galician,
-    #[strum(serialize = "lug")]
+    #[slang(script = Latin)]
     Ganda,
+    #[slang(script = Kharoshthi)]
     Gandhari,
+    #[slang(script = Ethiopic)]
     Geez,
-    #[strum(serialize = "kat")]
+    #[slang(script = Georgian)]
     Georgian,
-    #[strum(serialize = "deu")]
+    #[slang(script = Latin)]
     German,
+    #[slang(script = GunjalaGondi, lang = Gondi)]
     GondiGunjala,
+    #[slang(script = MasaramGondi, lang = Gondi)]
     GondiMasaram,
+    #[slang(script = Gothic)]
     Gothic,
-    #[strum(serialize = "ell")]
+    #[slang(script = Greek)]
     Greek,
-    #[strum(serialize = "grn")]
+    #[slang(script = Latin)]
     Guarani,
-    #[strum(serialize = "guj")]
+    #[slang(script = Gujarati)]
     Gujarati,
+    #[slang(script = GurungKhema)]
     Gurung,
+    #[slang(script = Hanunoo)]
     Hanunoo,
-    #[strum(serialize = "hau")]
+    #[slang(script = Latin)]
     Hausa,
+    #[slang(script = Latin)]
     Hawaiian,
-    #[strum(serialize = "heb")]
+    #[slang(script = Hebrew)]
     Hebrew,
+    #[slang(script = Samaritan)]
     HebrewSamaritan,
-    /// Devanagari
-    #[strum(serialize = "hin")]
+    #[slang(script = Devanagari)]
     Hindi,
+    #[slang(script = Kaithi, lang = Hindi)]
     HindiKaithi,
+    #[slang(script = Mahajani, lang = Hindi)]
     HindiMahajani,
+    #[slang(script = Cuneiform)]
     Hittite,
     Hmong,
     Ho,
-    #[strum(serialize = "hun")]
+    #[slang(script = Latin)]
     Hungarian,
-    #[strum(serialize = "isl")]
+    #[slang(script = Latin)]
     Icelandic,
-    #[strum(serialize = "ibo")]
+    #[slang(script = Latin)]
     Igbo,
-    #[strum(serialize = "ilo")]
+    #[slang(script = Latin)]
     Ilocano,
-    #[strum(serialize = "ind")]
+    #[slang(script = Latin)]
     Indonesian,
+    #[slang(script = CanadianAboriginal)]
     Inuktitut,
-    #[strum(serialize = "gle")]
+    #[slang(script = Latin)]
     Irish,
-    #[strum(serialize = "ita")]
+    #[slang(script = Latin)]
     Italian,
-    #[strum(serialize = "jpn")]
     Japanese,
-    /// Latin
-    #[strum(serialize = "jav")]
+    #[slang(script = Latin)]
     Javanese,
+    #[slang(script = Javanese, lang = Javanese)]
     JavaneseJavanese,
-    #[strum(serialize = "kac")]
+    #[slang(script = Latin)]
     Jingpho,
-    #[strum(serialize = "kbp")]
+    #[slang(script = Latin)]
     Kabiye,
-    #[strum(serialize = "kea")]
+    #[slang(script = Latin)]
     Kabuverdianu,
-    #[strum(serialize = "kab")]
+    #[slang(script = Latin)]
     Kabyle,
-    #[strum(serialize = "kam")]
+    #[slang(script = Latin)]
     Kamba,
-    #[strum(serialize = "kan")]
+    #[slang(script = Kannada)]
     Kannada,
+    #[slang(script = TuluTigalari, lang = Kannada)]
     KannadaTuluTigalari,
-    #[strum(serialize = "knc_Latn")]
+    #[slang(script = Latin)]
     KanuriCentral,
-    #[strum(serialize = "knc_Arab")]
+    #[slang(script = Arabic, lang = KanuriCentral)]
     KanuriCentralAjami,
+    #[slang(script = Batak)]
     Karo,
-    /// Arabic
-    #[strum(serialize = "kas_Arab")]
+    #[slang(script = Arabic)]
     Kashmiri,
-    #[strum(serialize = "kas_Deva")]
+    #[slang(script = Devanagari, lang = Kashmiri)]
     KashmiriDevanagari,
+    #[slang(script = Sharada, lang = Kashmiri)]
     KashmiriSharada,
+    #[slang(script = Takri, lang = Kashmiri)]
     KashmiriTakri,
+    #[slang(script = KayahLi)]
     KayahLi,
-    #[strum(serialize = "kaz")]
+    #[slang(script = Cyrillic)]
     Kazakh,
+    #[slang(script = KhitanSmallScript)]
     Khitan,
-    #[strum(serialize = "khm")]
+    #[slang(script = Khmer)]
     Khmer,
+    #[slang(script = Khojki)]
     Khoja,
-    #[strum(serialize = "kon")]
+    #[slang(script = Latin)]
     Kikongo,
-    #[strum(serialize = "kik")]
+    #[slang(script = Latin)]
     Kikuyu,
-    #[strum(serialize = "kmb")]
+    #[slang(script = Latin)]
     Kimbundu,
-    #[strum(serialize = "kin")]
+    #[slang(script = Latin)]
     Kinyarwanda,
-    #[strum(serialize = "kor")]
     Korean,
-    /// Arabic
-    #[strum(serialize = "ckb")]
+    #[slang(script = Arabic)]
     KurdishCentral,
-    /// Latin
-    #[strum(serialize = "kmr")]
+    #[slang(script = Latin)]
     KurdishNorthern,
-    /// Arabic
+    #[slang(script = Arabic)]
     KurdishSouthern,
+    #[slang(script = Yezidi)]
     KurdishYezidi,
-    #[strum(serialize = "kir")]
+    #[slang(script = Cyrillic)]
     Kyrgyz,
-    #[strum(serialize = "lao")]
+    #[slang(script = Lao)]
     Lao,
+    #[slang(script = TaiTham, lang = Lao)]
     LaoTaiTham,
-    #[strum(serialize = "ltg")]
+    #[slang(script = Latin)]
     Latgalian,
+    #[slang(script = Latin)]
     Latin,
-    #[strum(serialize = "lvs")]
+    #[slang(script = Latin)]
     Latvian,
+    #[slang(script = Lepcha)]
     Lepcha,
-    #[strum(serialize = "lij")]
+    #[slang(script = Latin)]
     Ligurian,
+    #[slang(script = Limbu)]
     Limbu,
-    #[strum(serialize = "lim")]
+    #[slang(script = Latin)]
     Limburgish,
-    #[strum(serialize = "lin")]
+    #[slang(script = Latin)]
     Lingala,
+    #[slang(script = Lisu)]
     Lisu,
-    #[strum(serialize = "lit")]
+    #[slang(script = Latin)]
     Lithuanian,
-    #[strum(serialize = "lmo")]
+    #[slang(script = Latin)]
     Lombard,
-    #[strum(serialize = "lua")]
+    #[slang(script = Latin)]
     LubaKasai,
-    #[strum(serialize = "luo")]
+    #[slang(script = Latin)]
     Luo,
+    #[slang(script = AnatolianHieroglyphs)]
     Luwian,
-    #[strum(serialize = "ltz")]
+    #[slang(script = Latin)]
     Luxembourgish,
+    #[slang(script = Lycian)]
     Lycian,
+    #[slang(script = Lydian)]
     Lydian,
-    #[strum(serialize = "mkd")]
+    #[slang(script = Cyrillic)]
     Macedonian,
-    /// Devanagari
-    #[strum(serialize = "mag")]
+    #[slang(script = Devanagari)]
     Magahi,
+    #[slang(script = Kaithi, lang = Magahi)]
     MagahiKaithi,
-    /// Devanagari
-    #[strum(serialize = "mai")]
+    #[slang(script = Devanagari)]
     Maithili,
+    #[slang(script = Kaithi, lang = Maithili)]
     MaithiliKaithi,
+    #[slang(script = Tirhuta, lang = Maithili)]
     MaithiliTirhuta,
+    #[slang(script = Makasar)]
     Makasar,
+    #[slang(script = Buginese)]
     Makassarese,
-    #[strum(serialize = "zsm")]
+    #[slang(script = Latin)]
     Malay,
-    #[strum(serialize = "mal")]
+    #[slang(script = Malayalam)]
     Malayalam,
     MaldivianDhivehi,
-    #[strum(serialize = "plt")]
+    #[slang(script = Latin)]
     MalgasyPlateau,
-    #[strum(serialize = "mlt")]
+    #[slang(script = Latin)]
     Maltese,
+    #[slang(script = Mandaic)]
     Mandaic,
+    #[slang(script = Batak)]
     Mandailing,
+    #[slang(script = Nko)]
     Mande,
+    #[slang(script = MeeteiMayek)]
     ManipuriMeetei,
-    #[strum(serialize = "mri")]
+    #[slang(script = Latin)]
     Maori,
-    /// Devanagari
-    #[strum(serialize = "mar")]
+    #[slang(script = Devanagari)]
     Marathi,
+    #[slang(script = Brahmi, lang = Marathi)]
     MarathiBrahmi,
+    #[slang(script = Modi, lang = Marathi)]
     MarathiModi,
+    #[slang(script = Mahajani)]
     Marwari,
+    #[slang(script = Medefaidrin)]
     Medefaidrin,
-    #[strum(serialize = "mni")]
+    #[slang(script = Bengali)]
     Meitei,
+    #[slang(script = MendeKikakui)]
     Mende,
     Meroitic,
+    #[slang(script = InscriptionalPahlavi, lang = MiddlePersian)]
     MiddlePersianInscriptionalPahlavi,
+    #[slang(script = Manichaean, lang = MiddlePersian)]
     MiddlePersianManichaean,
+    #[slang(script = PsalterPahlavi, lang = MiddlePersian)]
     MiddlePersianPsalterPahlavi,
-    #[strum(serialize = "min")]
+    #[slang(script = Latin)]
     Minangkabau,
+    #[slang(script = LinearA)]
     Minoan,
-    #[strum(serialize = "lus")]
+    #[slang(script = Latin)]
     Mizo,
-    /// Cyrillic
-    #[strum(serialize = "khk")]
+    #[slang(script = Cyrillic)]
     MongolianHalh,
+    #[slang(script = Mongolian, lang = MongolianHalh)]
     MongolianHalhMongolian,
+    #[slang(script = PhagsPa, lang = MongolianHalh)]
     MongolianHalhPhagsPa,
+    #[slang(script = Soyombo, lang = MongolianHalh)]
     MongolianHalhSoyombo,
+    #[slang(script = ZanabazarSquare, lang = MongolianHalh)]
     MongolianHalhZanabazarSquare,
-    #[strum(serialize = "mos")]
+    #[slang(script = Latin)]
     Mossi,
+    #[slang(script = Mro)]
     Mro,
+    #[slang(script = NagMundari)]
     Mundari,
+    #[slang(script = LinearB)]
     MycenaeanGreek,
-    #[strum(serialize = "npi")]
+    #[slang(script = Devanagari)]
     Nepali,
+    #[slang(script = Newa)]
     Newari,
+    #[slang(script = TaiTham)]
     NorthernThai,
-    #[strum(serialize = "nob")]
+    #[slang(script = Latin)]
     NorwegianBokmal,
-    #[strum(serialize = "nno")]
+    #[slang(script = Latin)]
     NorwegianNynorsk,
-    #[strum(serialize = "nus")]
+    #[slang(script = Latin)]
     Nuer,
-    #[strum(serialize = "nya")]
+    #[slang(script = Latin)]
     Nyanja,
-    #[strum(serialize = "oci")]
+    #[slang(script = Latin)]
     Occitan,
-    #[strum(serialize = "ory")]
+    #[slang(script = Oriya)]
     Odia,
+    #[slang(script = CanadianAboriginal)]
     Ojibwe,
+    #[slang(script = Cyrillic)]
     OldChurchSlavonic,
+    #[slang(script = Glagolitic, lang = OldChurchSlavonic)]
     OldChurchSlavonicGlagolitic,
+    #[slang(script = Runic)]
     OldEnglish,
+    #[slang(script = OldHungarian)]
     OldHungarian,
+    #[slang(script = Ogham)]
     OldIrish,
+    #[slang(script = Kawi)]
     OldJavanese,
+    #[slang(script = OldPermic)]
     OldKomi,
+    #[slang(script = Runic)]
     OldNorse,
+    #[slang(script = OldNorthArabian)]
     OldNorthArabian,
+    #[slang(script = OldPersian)]
     OldPersian,
+    #[slang(script = OldSogdian)]
     OldSogdian,
+    #[slang(script = OldSouthArabian)]
     OldSouthArabian,
+    #[slang(script = OldTurkic)]
     OldTurkic,
+    #[slang(script = OldUyghur)]
     OldUyghur,
-    Oromo,
-    #[strum(serialize = "gaz")]
+    #[slang(script = Latin)]
+    OromoSouthern,
+    #[slang(script = Latin)]
     OromoWestCentral,
+    #[slang(script = Osage)]
     Osage,
+    #[slang(script = OldItalic)]
     Oscan,
+    #[slang(script = Batak)]
     Pakpak,
-    #[strum(serialize = "pag")]
+    #[slang(script = Latin)]
     Pangasinan,
-    #[strum(serialize = "pap")]
+    #[slang(script = Latin)]
     Papiamento,
+    #[slang(script = InscriptionalParthian)]
     Parthian,
+    #[slang(script = Arabic)]
     Pashto,
-    #[strum(serialize = "pbt")]
+    #[slang(script = Arabic)]
     PashtoSouthern,
-    /// Afghani
-    #[strum(serialize = "prs")]
+    #[slang(script = Arabic)]
     PersianDari,
-    /// Iranian
-    #[strum(serialize = "pes")]
+    #[slang(script = Arabic)]
     PersianWestern,
+    #[slang(script = Phoenician)]
     Phoenician,
-    #[strum(serialize = "pol")]
+    #[slang(script = Latin)]
     Polish,
-    #[strum(serialize = "por")]
+    #[slang(script = Latin)]
     Portuguese,
+    #[slang(script = Brahmi)]
     Prakrit,
+    #[slang(script = Adlam)]
     Pular,
-    /// Gurmukhi
-    #[strum(serialize = "pan")]
+    #[slang(script = Gurmukhi)]
     PunjabiEastern,
+    #[slang(script = Mahajani, lang = PunjabiEastern)]
     PunjabiEasternMahajani,
+    #[slang(script = Arabic, lang = PunjabiEastern)]
     PunjabiEasternShahmukhi,
-    #[strum(serialize = "quy")]
+    #[slang(script = Latin)]
     QuechuaAyacucho,
+    #[slang(script = Rejang)]
     Rejang,
+    #[slang(script = HanifiRohingya)]
     Rohingya,
-    #[strum(serialize = "ron")]
+    #[slang(script = Latin)]
     Romanian,
-    #[strum(serialize = "run")]
+    #[slang(script = Latin)]
     Rundi,
-    #[strum(serialize = "rus")]
+    #[slang(script = Cyrillic)]
     Russian,
-    #[strum(serialize = "smo")]
+    #[slang(script = Latin)]
     Samoan,
-    #[strum(serialize = "sag")]
+    #[slang(script = Latin)]
     Sango,
-    /// Devanagari
-    #[strum(serialize = "san")]
+    #[slang(script = Devanagari)]
     Sanskrit,
+    #[slang(script = Brahmi, lang = Sanskrit)]
     SanskritBrahmi,
+    #[slang(script = Grantha, lang = Sanskrit)]
     SanskritGrantha,
+    #[slang(script = Kawi, lang = Sanskrit)]
     SanskritKawi,
+    #[slang(script = Nandinagari, lang = Sanskrit)]
     SanskritNandinagari,
+    #[slang(script = Sharada, lang = Sanskrit)]
     SanskritSharada,
+    #[slang(script = Siddham, lang = Sanskrit)]
     SanskritSiddham,
+    #[slang(script = Soyombo, lang = Sanskrit)]
     SanskritSoyombo,
+    #[slang(script = TuluTigalari, lang = Sanskrit)]
     SanskritTuluTigalari,
+    #[slang(script = ZanabazarSquare, lang = Sanskrit)]
     SanskritZanabazarSquare,
-    #[strum(serialize = "sat")]
+    #[slang(script = OlChiki)]
     Santali,
+    #[slang(script = Multani)]
     Saraiki,
-    #[strum(serialize = "srd")]
+    #[slang(script = Latin)]
     Sardinian,
+    #[slang(script = Saurashtra)]
     Saurashtra,
-    #[strum(serialize = "nso")]
+    #[slang(script = Latin)]
     Sepedi,
-    #[strum(serialize = "srp")]
+    #[slang(script = Cyrillic)]
     Serbian,
-    #[strum(serialize = "sot")]
+    #[slang(script = Latin)]
     Sesotho,
-    #[strum(serialize = "shn")]
+    #[slang(script = Myanmar)]
     Shan,
-    #[strum(serialize = "sna")]
+    #[slang(script = Latin)]
     Shona,
-    #[strum(serialize = "scn")]
+    #[slang(script = Latin)]
     Sicilian,
+    #[slang(script = SignWriting)]
     Signlanguages,
-    #[strum(serialize = "szl")]
+    #[slang(script = Latin)]
     Silesian,
+    #[slang(script = Batak)]
     Simalungun,
-    /// Arabic
-    #[strum(serialize = "snd")]
+    #[slang(script = Arabic)]
     Sindhi,
+    #[slang(script = Devanagari, lang = Sindhi)]
     SindhiDevanagari,
+    #[slang(script = Khojki, lang = Sindhi)]
     SindhiKhojki,
+    #[slang(script = Khudawadi, lang = Sindhi)]
     SindhiKhudawadi,
-    #[strum(serialize = "sin")]
+    #[slang(script = Sinhala)]
     Sinhala,
-    #[strum(serialize = "slk")]
+    #[slang(script = Latin)]
     Slovak,
-    #[strum(serialize = "slv")]
+    #[slang(script = Latin)]
     Slovene,
+    #[slang(script = Sogdian)]
     Sogdian,
+    #[slang(script = Manichaean, lang = Sogdian)]
     SogdianManichaean,
-    /// Latin
-    #[strum(serialize = "som")]
+    #[slang(script = Latin)]
     Somali,
+    #[slang(script = Osmanya, lang = Somali)]
     SomaliOsmanya,
+    #[slang(script = SoraSompeng)]
     Sora,
-    #[strum(serialize = "spa")]
+    #[slang(script = Latin)]
     Spanish,
+    #[slang(script = Cuneiform)]
     Sumerian,
-    /// Latin
-    #[strum(serialize = "sun")]
+    #[slang(script = Latin)]
     Sundanese,
+    #[slang(script = Sundanese, lang = Sundanese)]
     SundaneseSundanese,
+    #[slang(script = Sunuwar)]
     Sunuwar,
-    #[strum(serialize = "swh")]
+    #[slang(script = Latin)]
     Swahili,
-    #[strum(serialize = "ssw")]
+    #[slang(script = Latin)]
     Swati,
-    #[strum(serialize = "swe")]
+    #[slang(script = Latin)]
     Swedish,
+    #[slang(script = SylotiNagri)]
     Sylheti,
+    #[slang(script = Syriac)]
     Syriac,
-    /// Latin
-    #[strum(serialize = "tgl")]
+    #[slang(script = Latin)]
     Tagalog,
+    #[slang(script = Tagalog, lang = Tagalog)]
     TagalogTagalog,
+    #[slang(script = Tagbanwa)]
     Tagbanwa,
+    #[slang(script = TaiViet)]
     TaiDam,
+    #[slang(script = TaiViet)]
     TaiDon,
+    #[slang(script = TaiLe)]
     TaiLe,
+    #[slang(script = TaiTham)]
     TaiLue,
-    #[strum(serialize = "tgk")]
+    #[slang(script = NewTaiLue, lang = TaiLue)]
+    TaiLueNew,
+    #[slang(script = Cyrillic)]
     Tajik,
-    #[strum(serialize = "taq_Latn")]
+    #[slang(script = Latin, lang = Tamasheq)]
     TamasheqLatin,
-    #[strum(serialize = "taq_Tfng")]
+    #[slang(script = Tifinagh, lang = Tamasheq)]
     TamasheqTifinagh,
-    #[strum(serialize = "tzm")]
+    #[slang(script = Tifinagh)]
     TamazightCentralAtlas,
-    /// Script: Tamil
-    #[strum(serialize = "tam")]
+    #[slang(script = Tamil)]
     Tamil,
+    #[slang(script = Grantha, lang = Tamil)]
     TamilGrantha,
+    #[slang(script = Tangsa)]
     Tangsa,
+    #[slang(script = Tangut)]
     Tangut,
-    #[strum(serialize = "tat")]
+    #[slang(script = Cyrillic)]
     Tatar,
-    #[strum(serialize = "crh")]
+    #[slang(script = Latin)]
     TatarCrimean,
-    #[strum(serialize = "tel")]
+    #[slang(script = Telugu)]
     Telugu,
-    #[strum(serialize = "tha")]
+    #[slang(script = Thai)]
     Thai,
-    #[strum(serialize = "bod")]
+    #[slang(script = Tibetan)]
     Tibetan,
+    #[slang(script = PhagsPa, lang = Tibetan)]
     TibetanPhagsPa,
+    #[slang(script = Soyombo, lang = Tibetan)]
     TibetanSoyombo,
+    #[slang(script = ZanabazarSquare, lang = Tibetan)]
     TibetanZanabazarSquare,
-    #[strum(serialize = "tir")]
+    #[slang(script = Ethiopic)]
     Tigrinya,
+    #[slang(script = Batak)]
     Toba,
-    #[strum(serialize = "tpi")]
+    #[slang(script = Latin)]
     TokPisin,
+    #[slang(script = Toto)]
     Toto,
-    #[strum(serialize = "tso")]
+    #[slang(script = Latin)]
     Tsonga,
-    #[strum(serialize = "tsn")]
+    #[slang(script = Latin)]
     Tswana,
+    #[slang(script = TuluTigalari)]
     Tulu,
-    #[strum(serialize = "tum")]
+    #[slang(script = Latin)]
     Tumbuka,
-    #[strum(serialize = "tur")]
+    #[slang(script = Latin)]
     Turkish,
-    #[strum(serialize = "tuk")]
+    #[slang(script = Latin)]
     Turkmen,
-    #[strum(serialize = "twi")]
+    #[slang(script = Latin)]
     Twi,
+    #[slang(script = Ugaritic)]
     Ugaritic,
-    #[strum(serialize = "ukr")]
+    #[slang(script = Cyrillic)]
     Ukrainian,
+    #[slang(script = OldItalic)]
     Umbrian,
-    #[strum(serialize = "umb")]
+    #[slang(script = Latin)]
     Umbundu,
-    #[strum(serialize = "urd")]
+    #[slang(script = Arabic)]
     Urdu,
-    #[strum(serialize = "uig")]
+    #[slang(script = Arabic)]
     Uyghur,
-    #[strum(serialize = "uzn")]
+    #[slang(script = Latin)]
     UzbekNorthern,
+    #[slang(script = Vai)]
     Vai,
-    #[strum(serialize = "vec")]
+    #[slang(script = Latin)]
     Venetian,
-    #[strum(serialize = "vie")]
+    #[slang(script = Latin)]
     Vietnamese,
+    #[slang(script = Wancho)]
     Wancho,
-    #[strum(serialize = "war")]
+    #[slang(script = Latin)]
     Waray,
-    #[strum(serialize = "cym")]
+    #[slang(script = Latin)]
     Welsh,
-    /// Latin
-    #[strum(serialize = "wol")]
+    #[slang(script = Latin)]
     Wolof,
+    #[slang(script = Garay, lang = Wolof)]
     WolofGaray,
-    #[strum(serialize = "xho")]
+    #[slang(script = Latin)]
     Xhosa,
+    #[slang(script = Yi)]
     Yi,
-    #[strum(serialize = "ydd")]
+    #[slang(script = Hebrew)]
     YiddishEastern,
-    #[strum(serialize = "yor")]
+    #[slang(script = Latin)]
     Yoruba,
+    #[slang(script = PauCinHau)]
     ZoLanguages,
-    #[strum(serialize = "zul")]
+    #[slang(script = Latin)]
     Zulu,
 }
 
 // const SCRIPT_LANGUAGE_COUNT: usize = ::core::mem::variant_count::<ScriptLanguage>();
 pub type ScriptLanguageArr<T> = [T; ScriptLanguage::COUNT];
 #[inline(always)]
-pub fn lang_arr_default<T: Default + Copy>() -> ScriptLanguageArr<T> {
+pub fn slang_arr_default<T: Default + Copy>() -> ScriptLanguageArr<T> {
     [Default::default(); ScriptLanguage::COUNT]
 }
 
@@ -686,7 +838,7 @@ impl ScriptLanguage {
     /// Returns all languages supporting selected `Script`
     #[inline]
     pub fn all_with_script(script: Script) -> &'static [ScriptLanguage] {
-        script_char_to_langs(script, char::default())
+        script_char_to_slangs(script, char::default())
     }
 
     /// Returns a set of all supported spoken languages.
@@ -881,58 +1033,5 @@ impl ScriptLanguage {
             Zulu => IsoCode639_3::ZUL,
             _ => IsoCode639_3::SQI,
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::ScriptLanguage::*;
-    use ::core::str::FromStr;
-
-    #[test]
-    fn test_language_max_value() {
-        for lang in ScriptLanguage::iter() {
-            assert!(
-                (lang as usize) < ScriptLanguage::COUNT,
-                "Language value >= it's count"
-            );
-        }
-    }
-
-    #[test]
-    fn test_language_order() {
-        let mut lang_prev = format!("{:?}", ScriptLanguage::iter().next().unwrap()).to_lowercase();
-        for lang in ScriptLanguage::iter() {
-            let lang = format!("{lang:?}").to_lowercase();
-            assert!(
-                lang_prev <= lang,
-                "Language wrong order: {lang_prev} > {lang}"
-            );
-            lang_prev = lang;
-        }
-    }
-
-    #[test]
-    fn test_language_to_string() {
-        assert_eq!(English.to_string(), "eng");
-    }
-
-    #[test]
-    fn test_language_from_str() {
-        let language = ScriptLanguage::from_str("eng").unwrap();
-        assert_eq!(language, English);
-    }
-
-    #[test]
-    fn test_language_serialize() {
-        let serialized = serde_json::to_string(&English).unwrap();
-        assert_eq!(serialized, "\"English\"");
-    }
-
-    #[test]
-    fn test_language_deserialize() {
-        let deserialized = serde_json::from_str::<ScriptLanguage>("\"English\"").unwrap();
-        assert_eq!(deserialized, English);
     }
 }

@@ -21,7 +21,7 @@ fn expand() {
     alphabet_match!([(SomeEnum::A, ['a', 'b', 'c']), (SomeEnum::B, ['a', 'c']),]);
 }
 
-#[proc_macro_derive(ScriptLanguage, attributes(scriptlang))]
+#[proc_macro_derive(ScriptLanguage, attributes(slang))]
 pub fn script_lang_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input);
     let tokens = script_lang_derive::script_lang_derive_inner(input)
