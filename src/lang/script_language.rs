@@ -14,10 +14,10 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
     Clone,
     Copy,
     Debug,
-    Eq,
     PartialEq,
-    Ord,
+    Eq,
     PartialOrd,
+    Ord,
     Hash,
     Serialize,
     Deserialize,
@@ -813,6 +813,10 @@ pub type ScriptLanguageArr<T> = [T; ScriptLanguage::COUNT];
 #[inline(always)]
 pub fn slang_arr_default<T: Default + Copy>() -> ScriptLanguageArr<T> {
     [Default::default(); ScriptLanguage::COUNT]
+}
+#[inline]
+pub fn slang_arr_default_nc<T: Default>() -> ScriptLanguageArr<T> {
+    ::core::array::from_fn(|_| Default::default())
 }
 
 impl From<usize> for ScriptLanguage {

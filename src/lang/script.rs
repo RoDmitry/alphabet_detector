@@ -1,8 +1,23 @@
 use ::core::cmp::Ordering;
 use debug_unsafe::slice::SliceGetter;
+use serde::{Deserialize, Serialize};
 use strum_macros::{EnumIter, EnumString, IntoStaticStr};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, EnumIter, EnumString, IntoStaticStr)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    Serialize,
+    Deserialize,
+    EnumIter,
+    EnumString,
+    IntoStaticStr,
+)]
 #[strum(const_into_str)]
 // #[strum(ascii_case_insensitive)]
 pub enum Script {
