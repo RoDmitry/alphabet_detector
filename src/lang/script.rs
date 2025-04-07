@@ -21,6 +21,7 @@ use strum_macros::{EnumIter, EnumString, IntoStaticStr};
 #[strum(const_into_str)]
 // #[strum(ascii_case_insensitive)]
 pub enum Script {
+    #[strum(serialize = "Adlm")]
     Adlam,
     Ahom,
     AnatolianHieroglyphs,
@@ -32,6 +33,7 @@ pub enum Script {
     Balinese,
     Bamum,
     BassaVah,
+    #[strum(serialize = "Batk")]
     Batak,
     #[strum(serialize = "Beng")]
     Bengali,
@@ -39,6 +41,7 @@ pub enum Script {
     Bopomofo,
     Brahmi,
     Braille,
+    #[strum(serialize = "Bugi")]
     Buginese,
     Buhid,
     CanadianAboriginal,
@@ -50,19 +53,25 @@ pub enum Script {
     Chorasmian,
     Common,
     Coptic,
+    #[strum(serialize = "Xsux")]
     Cuneiform,
     Cypriot,
+    #[strum(serialize = "Cpmn")]
     CyproMinoan,
     #[strum(serialize = "Cyrl")]
     Cyrillic,
+    #[strum(serialize = "Dsrt")]
     Deseret,
     #[strum(serialize = "Deva")]
     Devanagari,
     DivesAkuru,
     Dogra,
+    #[strum(serialize = "Dupl")]
     Duployan,
+    #[strum(serialize = "Egyp")]
     EgyptianHieroglyphs,
     Elbasan,
+    #[strum(serialize = "Elym")]
     Elymaic,
     #[strum(serialize = "Ethi")]
     Ethiopic,
@@ -70,6 +79,7 @@ pub enum Script {
     #[strum(serialize = "Geor")]
     Georgian,
     Glagolitic,
+    #[strum(serialize = "Goth")]
     Gothic,
     Grantha,
     #[strum(serialize = "Grek")]
@@ -79,11 +89,13 @@ pub enum Script {
     GunjalaGondi,
     #[strum(serialize = "Guru")]
     Gurmukhi,
+    #[strum(serialize = "Gukh")]
     GurungKhema,
     #[strum(serialize = "Hani")]
     Han,
     #[strum(serialize = "Hang")]
     Hangul,
+    #[strum(serialize = "Rohg")]
     HanifiRohingya,
     Hanunoo,
     Hatran,
@@ -100,8 +112,11 @@ pub enum Script {
     Kannada,
     Katakana,
     Kawi,
+    #[strum(serialize = "Kali")]
     KayahLi,
+    #[strum(serialize = "Khar")]
     Kharoshthi,
+    #[strum(serialize = "Kits")]
     KhitanSmallScript,
     #[strum(serialize = "Khmr")]
     Khmer,
@@ -112,14 +127,21 @@ pub enum Script {
     Lao,
     #[strum(serialize = "Latn")]
     Latin,
+    #[strum(serialize = "Lepc")]
     Lepcha,
     Limbu,
+    #[strum(serialize = "Lina")]
     LinearA,
+    #[strum(serialize = "Linb")]
     LinearB,
+    #[strum(serialize = "Lisu")]
     Lisu,
+    #[strum(serialize = "Lyci")]
     Lycian,
+    #[strum(serialize = "Lydi")]
     Lydian,
     Mahajani,
+    #[strum(serialize = "Maka")]
     Makasar,
     #[strum(serialize = "Mlym")]
     Malayalam,
@@ -128,67 +150,98 @@ pub enum Script {
     Marchen,
     MasaramGondi,
     Medefaidrin,
+    #[strum(serialize = "Mtei")]
     MeeteiMayek,
+    #[strum(serialize = "Mend")]
     MendeKikakui,
+    #[strum(serialize = "Merc")]
     MeroiticCursive,
+    #[strum(serialize = "Mero")]
     MeroiticHieroglyphs,
     Miao,
     Modi,
     Mongolian,
+    #[strum(serialize = "Mroo")]
     Mro,
+    #[strum(serialize = "Mult")]
     Multani,
     #[strum(serialize = "Mymr")]
     Myanmar,
     Nabataean,
+    #[strum(serialize = "Nagm")]
     NagMundari,
     Nandinagari,
+    #[strum(serialize = "Newa")]
     Newa,
     NewTaiLue,
+    #[strum(serialize = "Nkoo")]
     Nko,
     Nushu,
     NyiakengPuachueHmong,
     Ogham,
     #[strum(serialize = "Olck")]
     OlChiki,
+    #[strum(serialize = "Hung")]
     OldHungarian,
+    #[strum(serialize = "Ital")]
     OldItalic,
+    #[strum(serialize = "Narb")]
     OldNorthArabian,
+    #[strum(serialize = "Perm")]
     OldPermic,
+    #[strum(serialize = "Xpeo")]
     OldPersian,
+    #[strum(serialize = "Sogo")]
     OldSogdian,
+    #[strum(serialize = "Sarb")]
     OldSouthArabian,
+    #[strum(serialize = "Orkh")]
     OldTurkic,
+    #[strum(serialize = "Ougr")]
     OldUyghur,
+    #[strum(serialize = "Onao")]
     OlOnal,
     #[strum(serialize = "Orya")]
     Oriya,
+    #[strum(serialize = "Osge")]
     Osage,
     Osmanya,
     PahawhHmong,
     Palmyrene,
+    #[strum(serialize = "Pauc")]
     PauCinHau,
     PhagsPa,
+    #[strum(serialize = "Phnx")]
     Phoenician,
     PsalterPahlavi,
+    #[strum(serialize = "Rjng")]
     Rejang,
     Runic,
     Samaritan,
+    #[strum(serialize = "Saur")]
     Saurashtra,
     Sharada,
+    #[strum(serialize = "Shaw")]
     Shavian,
     Siddham,
+    #[strum(serialize = "Sgnw")]
     SignWriting,
     #[strum(serialize = "Sinh")]
     Sinhala,
+    #[strum(serialize = "Sogd")]
     Sogdian,
+    #[strum(serialize = "Sora")]
     SoraSompeng,
     Soyombo,
     Sundanese,
+    #[strum(serialize = "Sunu")]
     Sunuwar,
+    #[strum(serialize = "Sylo")]
     SylotiNagri,
     Syriac,
     Tagalog,
     Tagbanwa,
+    #[strum(serialize = "Tale")]
     TaiLe,
     TaiTham,
     TaiViet,
@@ -196,6 +249,7 @@ pub enum Script {
     #[strum(serialize = "Taml")]
     Tamil,
     Tangsa,
+    #[strum(serialize = "Tang")]
     Tangut,
     #[strum(serialize = "Telu")]
     Telugu,
@@ -208,14 +262,21 @@ pub enum Script {
     Tifinagh,
     Tirhuta,
     Todhri,
+    #[strum(serialize = "Toto")]
     Toto,
+    #[strum(serialize = "Tutg")]
     TuluTigalari,
+    #[strum(serialize = "Ugar")]
     Ugaritic,
+    #[strum(serialize = "Vaii")]
     Vai,
     Vithkuqi,
+    #[strum(serialize = "Wcho")]
     Wancho,
     WarangCiti,
+    #[strum(serialize = "Yezi")]
     Yezidi,
+    #[strum(serialize = "Yiii")]
     Yi,
     ZanabazarSquare,
 }

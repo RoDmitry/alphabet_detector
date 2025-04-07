@@ -3,25 +3,25 @@ use strum::{EnumCount, IntoEnumIterator};
 use ScriptLanguage::*;
 
 #[test]
-fn test_max_value() {
-    for lang in ScriptLanguage::iter() {
-        assert!(
-            (lang as usize) < ScriptLanguage::COUNT,
-            "Language value >= it's count"
-        );
-    }
-}
-
-#[test]
 fn test_order() {
     let mut lang_prev = format!("{:?}", ScriptLanguage::iter().next().unwrap()).to_lowercase();
     for lang in ScriptLanguage::iter() {
         let lang = format!("{lang:?}").to_lowercase();
         assert!(
             lang_prev <= lang,
-            "Language wrong order: {lang_prev} > {lang}"
+            "ScriptLanguage wrong order: {lang_prev} > {lang}"
         );
         lang_prev = lang;
+    }
+}
+
+#[test]
+fn test_max_value() {
+    for lang in ScriptLanguage::iter() {
+        assert!(
+            (lang as usize) < ScriptLanguage::COUNT,
+            "Language value >= it's count"
+        );
     }
 }
 

@@ -42,7 +42,12 @@ pub enum ScriptLanguage {
     Akan,
     #[slang(script = Cuneiform)]
     Akkadian,
-    AlbanianHistorical,
+    /// Historical
+    #[slang(script = Elbasan, lang = Albanian)]
+    AlbanianElbasan,
+    /// Historical
+    #[slang(script = Todhri, lang = Albanian)]
+    AlbanianTodhri,
     #[slang(script = Latin)]
     AlbanianTosk,
     #[slang(script = Vithkuqi, lang = AlbanianTosk)]
@@ -51,6 +56,10 @@ pub enum ScriptLanguage {
     Amharic,
     #[slang(script = Cypriot)]
     AncientGreek,
+    #[slang(script = OldNorthArabian)]
+    AncientNorthArabian,
+    #[slang(script = OldSouthArabian)]
+    AncientSouthArabian,
     #[slang(script = Batak)]
     Angkola,
     #[slang(script = Arabic)]
@@ -71,6 +80,8 @@ pub enum ScriptLanguage {
     ArabicSouthLevantine,
     #[slang(script = Arabic)]
     ArabicTunisian,
+    #[slang(script = Elymaic)]
+    AramaicElymaic,
     #[slang(script = Hatran)]
     AramaicHatran,
     #[slang(script = ImperialAramaic)]
@@ -81,6 +92,8 @@ pub enum ScriptLanguage {
     AramaicNabataean,
     #[slang(script = Palmyrene)]
     AramaicPalmyrene,
+    #[slang(script = Samaritan)]
+    AramaicSamaritan,
     #[slang(script = Syriac)]
     AramaicSyriac,
     #[slang(script = Armenian)]
@@ -125,14 +138,12 @@ pub enum ScriptLanguage {
     Bemba,
     #[slang(script = Bengali)]
     Bengali,
-    #[slang(script = Tifinagh)]
-    Berber,
-    #[slang(script = Bhaiksuki)]
-    Bhaiksuki,
     #[slang(script = Devanagari)]
     Bhojpuri,
     #[slang(script = Kaithi, lang = Bhojpuri)]
     BhojpuriKaithi,
+    #[slang(script = OlOnal)]
+    Bhumij,
     #[slang(script = Bengali)]
     BishnupriyaManipuri,
     #[slang(script = Latin)]
@@ -140,8 +151,6 @@ pub enum ScriptLanguage {
     /// any language adapted to Braille
     #[slang(script = Braille)]
     Braille,
-    #[slang(script = Marchen)]
-    BuddhistMarchen,
     #[slang(script = Latin)]
     Buginese,
     #[slang(script = Buginese, lang = Buginese)]
@@ -163,7 +172,9 @@ pub enum ScriptLanguage {
     #[slang(script = Chakma)]
     Chakma,
     #[slang(script = Cham)]
-    Cham,
+    ChamEastern,
+    #[slang(script = Cham)]
+    ChamWestern,
     #[slang(script = Cherokee)]
     Cherokee,
     #[slang(script = Devanagari)]
@@ -182,6 +193,10 @@ pub enum ScriptLanguage {
     Chokwe,
     #[slang(script = Chorasmian)]
     Chorasmian,
+    #[slang(script = Cyrillic, lang = ChurchSlavonic)]
+    ChurchSlavonicOld,
+    #[slang(script = Glagolitic, lang = ChurchSlavonic)]
+    ChurchSlavonicOldGlagolitic,
     #[slang(script = Coptic)]
     Coptic,
     #[slang(script = CanadianAboriginal)]
@@ -190,19 +205,21 @@ pub enum ScriptLanguage {
     CreoleHaitian,
     #[slang(script = Latin)]
     Croatian,
-    /// used in ancient Cyprus
-    #[slang(script = CyproMinoan)]
-    CyproMinoan,
     #[slang(script = Latin)]
     Czech,
     #[slang(script = Latin)]
     Danish,
+    #[slang(script = Thaana)]
+    Dhivehi,
+    /// Historical
+    #[slang(script = DivesAkuru, lang = Dhivehi)]
+    DhivehiDivesAkuru,
     #[slang(script = Latin)]
     DinkaSouthwestern,
-    #[slang(script = Dogra)]
+    #[slang(script = Devanagari)]
     Dogri,
-    #[slang(script = Devanagari, lang = Dogri)]
-    DogriDevanagari,
+    #[slang(script = Dogra, lang = Dogri)]
+    DogriDogra,
     #[slang(script = Arabic, lang = Dogri)]
     DogriPersoArabic,
     #[slang(script = Takri, lang = Dogri)]
@@ -215,17 +232,15 @@ pub enum ScriptLanguage {
     Dzongkha,
     #[slang(script = EgyptianHieroglyphs)]
     EgyptianHieroglyphs,
-    #[slang(script = Elymaic)]
-    Elymaic,
     #[slang(script = Latin)]
     English,
+    #[slang(script = Deseret, lang = English)]
+    EnglishDeseret,
     /// shorthand systems for English
-    #[slang(script = Duployan)]
+    #[slang(script = Duployan, lang = English)]
     EnglishDuployan,
-    #[slang(script = Deseret)]
-    EnglishMormon,
-    #[slang(script = Shavian)]
-    EnglishPhonetic,
+    #[slang(script = Shavian, lang = English)]
+    EnglishShavian,
     #[slang(script = Latin)]
     Esperanto,
     #[slang(script = Latin)]
@@ -244,7 +259,7 @@ pub enum ScriptLanguage {
     Fon,
     #[slang(script = Latin)]
     French,
-    #[slang(script = Duployan)]
+    #[slang(script = Duployan, lang = French)]
     FrenchDuployan,
     #[slang(script = Latin)]
     Friulian,
@@ -278,8 +293,8 @@ pub enum ScriptLanguage {
     Guarani,
     #[slang(script = Gujarati)]
     Gujarati,
-    #[slang(script = GurungKhema)]
-    Gurung,
+    #[slang(script = GurungKhema, lang = Gurung)]
+    GurungKhema,
     #[slang(script = Hanunoo)]
     Hanunoo,
     #[slang(script = Latin)]
@@ -298,10 +313,18 @@ pub enum ScriptLanguage {
     HindiMahajani,
     #[slang(script = Cuneiform)]
     Hittite,
-    Hmong,
-    Ho,
+    #[slang(script = Miao, lang = Hmong)]
+    HmongMiao,
+    #[slang(script = NyiakengPuachueHmong, lang = Hmong)]
+    HmongNyiakengPuachue,
+    #[slang(script = PahawhHmong, lang = Hmong)]
+    HmongPahawh,
+    #[slang(script = WarangCiti, lang = Ho)]
+    HoWarangCiti,
     #[slang(script = Latin)]
     Hungarian,
+    #[slang(script = OldHungarian, lang = Hungarian)]
+    HungarianOld,
     #[slang(script = Latin)]
     Icelandic,
     #[slang(script = Latin)]
@@ -351,15 +374,15 @@ pub enum ScriptLanguage {
     #[slang(script = Takri, lang = Kashmiri)]
     KashmiriTakri,
     #[slang(script = KayahLi)]
-    KayahLi,
+    KayahEastern,
+    #[slang(script = KayahLi)]
+    KayahWestern,
     #[slang(script = Cyrillic)]
     Kazakh,
     #[slang(script = KhitanSmallScript)]
     Khitan,
     #[slang(script = Khmer)]
     Khmer,
-    #[slang(script = Khojki)]
-    Khoja,
     #[slang(script = Latin)]
     Kikongo,
     #[slang(script = Latin)]
@@ -368,16 +391,20 @@ pub enum ScriptLanguage {
     Kimbundu,
     #[slang(script = Latin)]
     Kinyarwanda,
+    #[slang(script = OldPermic, lang = Komi)]
+    KomiOldPermic,
     #[slang(script = "Kore")]
     Korean,
     #[slang(script = Arabic)]
     KurdishCentral,
     #[slang(script = Latin)]
     KurdishNorthern,
+    #[slang(script = Yezidi, lang = KurdishNorthern)]
+    KurdishNorthernYezidi,
     #[slang(script = Arabic)]
     KurdishSouthern,
-    #[slang(script = Yezidi)]
-    KurdishYezidi,
+    #[slang(script = Khojki, lang = Kutchi)]
+    KutchiKhojki,
     #[slang(script = Cyrillic)]
     Kyrgyz,
     #[slang(script = Lao)]
@@ -404,14 +431,18 @@ pub enum ScriptLanguage {
     Lisu,
     #[slang(script = Latin)]
     Lithuanian,
+    #[slang(script = Yi)]
+    Loloish,
     #[slang(script = Latin)]
     Lombard,
     #[slang(script = Latin)]
     LubaKasai,
     #[slang(script = Latin)]
     Luo,
+    #[slang(script = Cuneiform)]
+    LuwianCuneiform,
     #[slang(script = AnatolianHieroglyphs)]
-    Luwian,
+    LuwianHieroglyphic,
     #[slang(script = Latin)]
     Luxembourgish,
     #[slang(script = Lycian)]
@@ -430,27 +461,26 @@ pub enum ScriptLanguage {
     MaithiliKaithi,
     #[slang(script = Tirhuta, lang = Maithili)]
     MaithiliTirhuta,
-    #[slang(script = Makasar)]
-    Makasar,
-    #[slang(script = Buginese)]
-    Makassarese,
+    #[slang(script = Buginese, lang = Makassarese)]
+    MakassareseBuginese,
+    /// Historical
+    #[slang(script = Makasar, lang = Makassarese)]
+    MakassareseMakasar,
     #[slang(script = Latin)]
     Malay,
     #[slang(script = Malayalam)]
     Malayalam,
-    MaldivianDhivehi,
     #[slang(script = Latin)]
     MalgasyPlateau,
     #[slang(script = Latin)]
     Maltese,
-    #[slang(script = Mandaic)]
-    Mandaic,
-    #[slang(script = Batak)]
+    #[slang(script = Latin)]
     Mandailing,
+    /// Historical
+    #[slang(script = Batak, lang = Mandailing)]
+    MandailingBatak,
     #[slang(script = Nko)]
-    Mande,
-    #[slang(script = MeeteiMayek)]
-    ManipuriMeetei,
+    Manding,
     #[slang(script = Latin)]
     Maori,
     #[slang(script = Devanagari)]
@@ -463,21 +493,28 @@ pub enum ScriptLanguage {
     Marwari,
     #[slang(script = Medefaidrin)]
     Medefaidrin,
-    #[slang(script = Bengali)]
-    Meitei,
+    #[slang(script = Bengali, lang = Meitei)]
+    MeiteiBengali,
+    #[slang(script = MeeteiMayek, lang = Meitei)]
+    MeiteiMeeteiMayek,
     #[slang(script = MendeKikakui)]
     Mende,
-    Meroitic,
-    #[slang(script = InscriptionalPahlavi, lang = MiddlePersian)]
-    MiddlePersianInscriptionalPahlavi,
-    #[slang(script = Manichaean, lang = MiddlePersian)]
+    #[slang(script = MeroiticCursive, lang = Meroitic)]
+    MeroiticCursive,
+    #[slang(script = MeroiticHieroglyphs, lang = Meroitic)]
+    MeroiticHieroglyphs,
+    #[slang(script = Manichaean)]
     MiddlePersianManichaean,
-    #[slang(script = PsalterPahlavi, lang = MiddlePersian)]
-    MiddlePersianPsalterPahlavi,
+    #[slang(script = InscriptionalPahlavi, lang = MiddlePersianPahlavi)]
+    MiddlePersianPahlaviInscriptional,
+    #[slang(script = PsalterPahlavi, lang = MiddlePersianPahlavi)]
+    MiddlePersianPahlaviPsalter,
     #[slang(script = Latin)]
     Minangkabau,
-    #[slang(script = LinearA)]
+    #[slang(script = CyproMinoan)]
     Minoan,
+    #[slang(script = LinearA)]
+    MinoanLinearA,
     #[slang(script = Latin)]
     Mizo,
     #[slang(script = Cyrillic)]
@@ -501,7 +538,7 @@ pub enum ScriptLanguage {
     #[slang(script = Devanagari)]
     Nepali,
     #[slang(script = Newa)]
-    Newari,
+    Newar,
     #[slang(script = TaiTham)]
     NorthernThai,
     #[slang(script = Latin)]
@@ -518,30 +555,16 @@ pub enum ScriptLanguage {
     Odia,
     #[slang(script = CanadianAboriginal)]
     Ojibwe,
-    #[slang(script = Cyrillic)]
-    OldChurchSlavonic,
-    #[slang(script = Glagolitic, lang = OldChurchSlavonic)]
-    OldChurchSlavonicGlagolitic,
     #[slang(script = Runic)]
     OldEnglish,
-    #[slang(script = OldHungarian)]
-    OldHungarian,
     #[slang(script = Ogham)]
     OldIrish,
     #[slang(script = Kawi)]
     OldJavanese,
-    #[slang(script = OldPermic)]
-    OldKomi,
     #[slang(script = Runic)]
     OldNorse,
-    #[slang(script = OldNorthArabian)]
-    OldNorthArabian,
     #[slang(script = OldPersian)]
     OldPersian,
-    #[slang(script = OldSogdian)]
-    OldSogdian,
-    #[slang(script = OldSouthArabian)]
-    OldSouthArabian,
     #[slang(script = OldTurkic)]
     OldTurkic,
     #[slang(script = OldUyghur)]
@@ -563,8 +586,6 @@ pub enum ScriptLanguage {
     #[slang(script = InscriptionalParthian)]
     Parthian,
     #[slang(script = Arabic)]
-    Pashto,
-    #[slang(script = Arabic)]
     PashtoSouthern,
     #[slang(script = Arabic)]
     PersianDari,
@@ -578,8 +599,10 @@ pub enum ScriptLanguage {
     Portuguese,
     #[slang(script = Brahmi)]
     Prakrit,
-    #[slang(script = Adlam)]
+    #[slang(script = Latin)]
     Pular,
+    #[slang(script = Adlam, lang = Pular)]
+    PularAdlam,
     #[slang(script = Gurmukhi)]
     PunjabiEastern,
     #[slang(script = Mahajani, lang = PunjabiEastern)]
@@ -588,8 +611,9 @@ pub enum ScriptLanguage {
     PunjabiEasternShahmukhi,
     #[slang(script = Latin)]
     QuechuaAyacucho,
-    #[slang(script = Rejang)]
-    Rejang,
+    /// Historical
+    #[slang(script = Rejang, lang = Rejang)]
+    RejangRejang,
     #[slang(script = HanifiRohingya)]
     Rohingya,
     #[slang(script = Latin)]
@@ -604,6 +628,8 @@ pub enum ScriptLanguage {
     Sango,
     #[slang(script = Devanagari)]
     Sanskrit,
+    #[slang(script = Bhaiksuki, lang = Sanskrit)]
+    SanskritBhaiksuki,
     #[slang(script = Brahmi, lang = Sanskrit)]
     SanskritBrahmi,
     #[slang(script = Grantha, lang = Sanskrit)]
@@ -624,12 +650,16 @@ pub enum ScriptLanguage {
     SanskritZanabazarSquare,
     #[slang(script = OlChiki)]
     Santali,
-    #[slang(script = Multani)]
+    #[slang(script = Arabic)]
     Saraiki,
+    #[slang(script = Multani, lang = Saraiki)]
+    SaraikiMultani,
     #[slang(script = Latin)]
     Sardinian,
-    #[slang(script = Saurashtra)]
-    Saurashtra,
+    #[slang(script = Devanagari, lang = Saurashtra)]
+    SaurashtraDevanagari,
+    #[slang(script = Saurashtra, lang = Saurashtra)]
+    SaurashtraSaurashtra,
     #[slang(script = Latin)]
     Sepedi,
     #[slang(script = Cyrillic)]
@@ -643,7 +673,7 @@ pub enum ScriptLanguage {
     #[slang(script = Latin)]
     Sicilian,
     #[slang(script = SignWriting)]
-    Signlanguages,
+    SignLanguages,
     #[slang(script = Latin)]
     Silesian,
     #[slang(script = Batak)]
@@ -666,6 +696,8 @@ pub enum ScriptLanguage {
     Sogdian,
     #[slang(script = Manichaean, lang = Sogdian)]
     SogdianManichaean,
+    #[slang(script = OldSogdian, lang = Sogdian)]
+    SogdianOld,
     #[slang(script = Latin)]
     Somali,
     #[slang(script = Osmanya, lang = Somali)]
@@ -690,8 +722,6 @@ pub enum ScriptLanguage {
     Swedish,
     #[slang(script = SylotiNagri)]
     Sylheti,
-    #[slang(script = Syriac)]
-    Syriac,
     #[slang(script = Latin)]
     Tagalog,
     #[slang(script = Tagalog, lang = Tagalog)]
@@ -702,12 +732,12 @@ pub enum ScriptLanguage {
     TaiDam,
     #[slang(script = TaiViet)]
     TaiDon,
-    #[slang(script = TaiLe)]
-    TaiLe,
     #[slang(script = TaiTham)]
     TaiLue,
     #[slang(script = NewTaiLue, lang = TaiLue)]
     TaiLueNew,
+    #[slang(script = TaiLe)]
+    TaiNuea,
     #[slang(script = Cyrillic)]
     Tajik,
     #[slang(script = Latin, lang = Tamasheq)]
@@ -728,6 +758,8 @@ pub enum ScriptLanguage {
     Tatar,
     #[slang(script = Latin)]
     TatarCrimean,
+    #[slang(script = PauCinHau)]
+    Tedim,
     #[slang(script = Telugu)]
     Telugu,
     #[slang(script = Thai)]
@@ -743,7 +775,7 @@ pub enum ScriptLanguage {
     #[slang(script = Ethiopic)]
     Tigrinya,
     #[slang(script = Batak)]
-    Toba,
+    TobaBatak,
     #[slang(script = Latin)]
     TokPisin,
     #[slang(script = Toto)]
@@ -752,8 +784,10 @@ pub enum ScriptLanguage {
     Tsonga,
     #[slang(script = Latin)]
     Tswana,
-    #[slang(script = TuluTigalari)]
+    #[slang(script = Kannada, lang = Tulu)]
     Tulu,
+    #[slang(script = TuluTigalari, lang = Tulu)]
+    TuluTigalari,
     #[slang(script = Latin)]
     Tumbuka,
     #[slang(script = Latin)]
@@ -782,8 +816,10 @@ pub enum ScriptLanguage {
     Venetian,
     #[slang(script = Latin)]
     Vietnamese,
-    #[slang(script = Wancho)]
+    #[slang(script = Devanagari)]
     Wancho,
+    #[slang(script = Wancho, lang = Wancho)]
+    WanchoWancho,
     #[slang(script = Latin)]
     Waray,
     #[slang(script = Latin)]
@@ -794,14 +830,12 @@ pub enum ScriptLanguage {
     WolofGaray,
     #[slang(script = Latin)]
     Xhosa,
-    #[slang(script = Yi)]
-    Yi,
     #[slang(script = Hebrew)]
     YiddishEastern,
     #[slang(script = Latin)]
     Yoruba,
-    #[slang(script = PauCinHau)]
-    ZoLanguages,
+    #[slang(script = Marchen)]
+    Zhangzhung,
     #[slang(script = Latin)]
     Zulu,
 }
@@ -1015,8 +1049,8 @@ impl ScriptLanguage {
 
     #[inline(always)]
     pub fn from_usize_unchecked(v: usize) -> Self {
-        debug_assert!(v < ScriptLanguage::COUNT);
-        unsafe { ::core::mem::transmute(v) }
+        debug_assert!(v < Self::COUNT);
+        unsafe { ::core::mem::transmute::<usize, Self>(v) }
     }
 }
 
@@ -1026,9 +1060,9 @@ macro_rules! impl_try_from {
             type Error = &'static str;
 
             #[inline]
-            fn try_from(v: $t) -> Result<ScriptLanguage, Self::Error> {
-                if v < ScriptLanguage::COUNT as $t {
-                    Ok(unsafe { ::core::mem::transmute(v as usize) })
+            fn try_from(v: $t) -> Result<Self, Self::Error> {
+                if v < Self::COUNT as $t {
+                    Ok(unsafe { ::core::mem::transmute::<usize, Self>(v as usize) })
                 } else {
                     Err(concat_const::concat!(
                         "value > ",
