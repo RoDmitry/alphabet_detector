@@ -135,13 +135,13 @@ fn main() {
                 .into_iter()
                 .enumerate()
                 .filter(|(_, cnt)| *cnt > lang_count)
-                .map(|(l, _)| ScriptLanguage::from(l))
+                .map(|(l, _)| ScriptLanguage::from_usize_unchecked(l))
                 .collect();
 
             let top_lang_chars: ahash::AHashMap<_, _> = not_found_chars
                 .iter()
                 .filter(|(_, c)| !c.is_empty())
-                .map(|(l, c)| (ScriptLanguage::from(*l), c))
+                .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(*l), c))
                 .filter(|(l, _)| top_langs.contains(l))
                 .map(|(l, c)| {
                     (l, {
@@ -161,7 +161,7 @@ fn main() {
             let not_found_chars: ahash::AHashSet<_> = not_found_chars
                 .into_iter()
                 .filter(|(_, c)| !c.is_empty())
-                .map(|(l, c)| (ScriptLanguage::from(l), c))
+                .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(l), c))
                 .filter(|(l, _)| thread_langs.contains(l))
                 .map(|(_, c)| c.into_iter())
                 .flatten()

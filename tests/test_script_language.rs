@@ -64,11 +64,11 @@ fn test_from_str() {
 #[test]
 fn test_serialize() {
     let serialized = serde_json::to_string(&English).unwrap();
-    assert_eq!(serialized, "\"English\"");
+    assert_eq!(serialized, "\"eng_Latn\"");
 }
 
 #[test]
 fn test_deserialize() {
-    let deserialized = serde_json::from_str::<ScriptLanguage>("\"English\"").unwrap();
+    let deserialized = serde_json::from_str::<ScriptLanguage>("\"eng_Latn\"").unwrap();
     assert_eq!(deserialized, English);
 }

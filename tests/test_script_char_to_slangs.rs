@@ -38,7 +38,7 @@ fn test_doubles() {
                     .into_iter()
                     .enumerate()
                     .filter(|(_, cnt)| *cnt > 1)
-                    .map(|(l, _)| ScriptLanguage::from(l))
+                    .map(|(l, _)| ScriptLanguage::from_usize_unchecked(l))
                     .collect();
 
                 if !langs_used.is_empty() {
@@ -70,7 +70,7 @@ fn test_alphabets() {
         .iter()
         .enumerate()
         .filter(|(_, scrs)| scrs.is_empty())
-        .map(|(l, _)| ScriptLanguage::from(l))
+        .map(|(l, _)| ScriptLanguage::from_usize_unchecked(l))
         .collect();
 
     if !slangs_used.is_empty() {
@@ -81,7 +81,7 @@ fn test_alphabets() {
         .iter()
         .enumerate()
         .filter(|(_, scrs)| scrs.len() > 1)
-        .map(|(sl, _)| ScriptLanguage::from(sl))
+        .map(|(sl, _)| ScriptLanguage::from_usize_unchecked(sl))
         .filter(|&sl| <Option<Script>>::from(sl).is_some())
         .collect();
 
@@ -93,7 +93,7 @@ fn test_alphabets() {
         .iter()
         .enumerate()
         .filter(|(_, scrs)| scrs.len() == 1)
-        .map(|(sl, _)| ScriptLanguage::from(sl))
+        .map(|(sl, _)| ScriptLanguage::from_usize_unchecked(sl))
         .filter(|&sl| <Option<Script>>::from(sl).is_none() && sl.into_script_str().is_empty())
         .collect();
 

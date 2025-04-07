@@ -25,7 +25,8 @@ pub(super) fn script_lang_derive_inner(
     let mut match_to_script = Vec::new();
     let mut match_to_script_str = Vec::new();
     let mut match_to_str = Vec::new();
-    let mut match_from_str = Vec::new();
+    let mut match_from_bytes = Vec::new();
+    let mut str_variants = Vec::new();
     // let mut match_to_display = Vec::new();
     let mut lang_to_script_langs: AHashMap<String, Vec<_>> = AHashMap::new();
 
@@ -123,12 +124,17 @@ pub(super) fn script_lang_derive_inner(
                     Script::#scr.into_str()
                 )
             });
-            match_from_str.push(quote! {
-                v if ::concat_const::eq_str(v, ::concat_const::concat!(
-                    Language::#lang.into_str(),
-                    "_",
-                    Script::#scr.into_str()
+            match_from_bytes.push(quote! {
+                v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
+                    Language::#lang.into_str().as_bytes(),
+                    b"_",
+                    Script::#scr.into_str().as_bytes()
                 )) => ::core::option::Option::Some(#name::#ident #params)
+            });
+            str_variants.push(quote! {
+                ::concat_const::concat!(
+                    Language::#lang.into_str(), "_", Script::#scr.into_str()
+                )
             });
             /* match_to_display.push(quote! {
                 #name::#ident #params => {
@@ -146,10 +152,13 @@ pub(super) fn script_lang_derive_inner(
                     Language::#lang.into_str(), "_", #scr
                 )
             });
-            match_from_str.push(quote! {
-                v if ::concat_const::eq_str(v, ::concat_const::concat!(
-                    Language::#lang.into_str(), "_", #scr
+            match_from_bytes.push(quote! {
+                v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
+                    Language::#lang.into_str().as_bytes(), b"_", #scr.as_bytes()
                 )) => ::core::option::Option::Some(#name::#ident #params)
+            });
+            str_variants.push(quote! {
+                ::concat_const::concat!(Language::#lang.into_str(), "_", #scr)
             });
             /* match_to_display.push(quote! {
                 #name::#ident #params => {
@@ -165,8 +174,14 @@ pub(super) fn script_lang_derive_inner(
             match_to_str.push(quote! {
                 #name::#ident #params => Language::#lang.into_str()
             });
-            match_from_str.push(quote! {
-                v if ::concat_const::eq_str(v, Language::#lang.into_str()) => ::core::option::Option::Some(#name::#ident #params)
+            match_from_bytes.push(quote! {
+                v if ::concat_const::eq_bytes(
+                    v,
+                    Language::#lang.into_str().as_bytes()
+                ) => ::core::option::Option::Some(#name::#ident #params)
+            });
+            str_variants.push(quote! {
+                Language::#lang.into_str()
             });
             /* match_to_display.push(quote! {
                 #name::#ident #params => ::core::fmt::Display::fmt(<&'static str>::from(Language::#lang), f)
@@ -179,7 +194,7 @@ pub(super) fn script_lang_derive_inner(
         quote! { Language::#l => &[#(#v),*] }
     });
     match_to_script.push(quote! { _ => ::core::option::Option::None });
-    match_from_str.push(quote! { _ => ::core::option::Option::None });
+    match_from_bytes.push(quote! { _ => ::core::option::Option::None });
 
     Ok(quote! {
         impl #impl_generics From<#name #ty_generics> for Language #where_clause {
@@ -218,6 +233,8 @@ pub(super) fn script_lang_derive_inner(
             }
         } */
         impl #impl_generics #name #ty_generics #where_clause {
+            const VARIANTS: &'static [&'static str] = &[#(#str_variants),*];
+
             #[inline]
             pub const fn into_script_str(self) -> &'static str {
                 match self {
@@ -231,10 +248,14 @@ pub(super) fn script_lang_derive_inner(
                 }
             }
             #[inline]
-            pub const fn from_str(s: &str) -> Option<Self> {
-                match s {
-                    #(#match_from_str),*
+            pub const fn from_bytes(v: &[u8]) -> Option<Self> {
+                match v {
+                    #(#match_from_bytes),*
                 }
+            }
+            #[inline]
+            pub const fn from_str(s: &str) -> Option<Self> {
+                Self::from_bytes(s.as_bytes())
             }
         }
     })

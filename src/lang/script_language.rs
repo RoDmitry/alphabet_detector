@@ -1,15 +1,15 @@
 use super::{script_char_to_slangs, Language, Script};
 use crate::isocode::{IsoCode639_1, IsoCode639_3};
+use ::core::fmt;
 use ::std::fmt::Debug;
 use ahash::AHashSet;
 use alphabet_match_macro::ScriptLanguage;
-use serde::{Deserialize, Serialize};
 use strum::{EnumCount, IntoEnumIterator};
 use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 
-/// An int representation is unstable and can be changed anytime,
-/// not safe to store in a serialized form,
-/// instead use string representation or create your own enum
+const ENUM_NAME: &str = "ScriptLanguage";
+
+/// Enum value-names or int representation is unstable and can be changed anytime
 #[derive(
     Clone,
     Copy,
@@ -19,14 +19,10 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
     PartialOrd,
     Ord,
     Hash,
-    Serialize,
-    Deserialize,
     EnumCountMacro,
     EnumIter,
     ScriptLanguage,
 )]
-// #[serde(rename_all(serialize = "UPPERCASE", deserialize = "UPPERCASE"))]
-// serde ascii_case_insensitive?
 #[cfg_attr(
     feature = "python",
     pyo3::prelude::pyclass(eq, eq_int, frozen, hash, ord)
@@ -810,30 +806,6 @@ pub enum ScriptLanguage {
     Zulu,
 }
 
-// const SCRIPT_LANGUAGE_COUNT: usize = ::core::mem::variant_count::<ScriptLanguage>();
-pub type ScriptLanguageArr<T> = [T; ScriptLanguage::COUNT];
-#[inline(always)]
-pub fn slang_arr_default<T: Default + Copy>() -> ScriptLanguageArr<T> {
-    [Default::default(); ScriptLanguage::COUNT]
-}
-#[inline]
-pub fn slang_arr_default_nc<T: Default>() -> ScriptLanguageArr<T> {
-    ::core::array::from_fn(|_| Default::default())
-}
-
-impl From<usize> for ScriptLanguage {
-    #[inline(always)]
-    fn from(v: usize) -> Self {
-        unsafe { ::core::mem::transmute(v) }
-    }
-}
-
-/* impl Display for Alphabet {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "{self:?}")
-    }
-} */
-
 impl ScriptLanguage {
     /// Returns an iterator of all languages
     #[inline]
@@ -1040,4 +1012,125 @@ impl ScriptLanguage {
             _ => IsoCode639_3::SQI,
         }
     }
+
+    #[inline(always)]
+    pub fn from_usize_unchecked(v: usize) -> Self {
+        debug_assert!(v < ScriptLanguage::COUNT);
+        unsafe { ::core::mem::transmute(v) }
+    }
+}
+
+macro_rules! impl_try_from {
+    ($($t:ty)*) => {$(
+        impl TryFrom<$t> for ScriptLanguage {
+            type Error = &'static str;
+
+            #[inline]
+            fn try_from(v: $t) -> Result<ScriptLanguage, Self::Error> {
+                if v < ScriptLanguage::COUNT as $t {
+                    Ok(unsafe { ::core::mem::transmute(v as usize) })
+                } else {
+                    Err(concat_const::concat!(
+                        "value > ",
+                        concat_const::int!(ScriptLanguage::COUNT as i128)
+                    ))
+                }
+            }
+        }
+    )*};
+}
+
+impl_try_from!(u16 u32 usize u64 u128);
+
+/* impl Display for ScriptLanguage {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f, "{self:?}")
+    }
+} */
+
+impl serde::Serialize for ScriptLanguage {
+    #[inline]
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serde::Serializer::serialize_unit_variant(
+            serializer,
+            ENUM_NAME,
+            *self as u32,
+            self.into_str(),
+        )
+    }
+}
+
+impl<'de> serde::Deserialize<'de> for ScriptLanguage {
+    #[inline]
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        #[doc(hidden)]
+        struct ScriptLanguageValueVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for ScriptLanguageValueVisitor {
+            type Value = ScriptLanguage;
+
+            fn expecting(&self, __formatter: &mut fmt::Formatter) -> fmt::Result {
+                fmt::Formatter::write_str(__formatter, "variant identifier")
+            }
+
+            #[inline]
+            fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Self::Value::try_from(v).map_err(|_| {
+                    serde::de::Error::invalid_value(
+                        serde::de::Unexpected::Unsigned(v),
+                        &concat_const::concat!(
+                            "variant index 0 <= i < ",
+                            concat_const::int!(ScriptLanguage::COUNT as i128)
+                        ),
+                    )
+                })
+            }
+
+            #[inline]
+            fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Self::Value::from_str(v)
+                    .ok_or_else(|| serde::de::Error::unknown_variant(v, Self::Value::VARIANTS))
+            }
+
+            #[inline]
+            fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Self::Value::from_bytes(v).ok_or_else(|| {
+                    serde::de::Error::unknown_variant(
+                        &serde::__private::from_utf8_lossy(v),
+                        Self::Value::VARIANTS,
+                    )
+                })
+            }
+        }
+
+        serde::Deserializer::deserialize_identifier(deserializer, ScriptLanguageValueVisitor)
+    }
+}
+
+// const SCRIPT_LANGUAGE_COUNT: usize = ::core::mem::variant_count::<ScriptLanguage>();
+pub type ScriptLanguageArr<T> = [T; ScriptLanguage::COUNT];
+
+#[inline(always)]
+pub fn slang_arr_default<T: Default + Copy>() -> ScriptLanguageArr<T> {
+    [Default::default(); ScriptLanguage::COUNT]
+}
+
+#[inline]
+pub fn slang_arr_default_nc<T: Default>() -> ScriptLanguageArr<T> {
+    ::core::array::from_fn(|_| Default::default())
 }

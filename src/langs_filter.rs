@@ -15,7 +15,7 @@ pub fn langs_filter_max(
             .into_iter()
             .enumerate()
             .filter(move |(_, cnt)| *cnt == lang_count_max)
-            .map(|(l, _)| ScriptLanguage::from(l)),
+            .map(|(l, _)| ScriptLanguage::from_usize_unchecked(l)),
         lang_count_max,
     )
 }
@@ -32,7 +32,7 @@ pub fn langs_filter_best<const FILTER: u32>(
         .into_iter()
         .enumerate()
         .filter(move |(_, cnt)| *cnt > lang_count_filter)
-        .map(|(l, cnt)| (ScriptLanguage::from(l), cnt))
+        .map(|(l, cnt)| (ScriptLanguage::from_usize_unchecked(l), cnt))
 }
 
 pub fn langs_filter_best_sorted<const FILTER: u32>(
