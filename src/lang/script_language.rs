@@ -320,6 +320,7 @@ pub enum ScriptLanguage {
     Irish,
     #[slang(script = Latin)]
     Italian,
+    #[slang(script = "Jpan")]
     Japanese,
     #[slang(script = Latin)]
     Javanese,
@@ -371,6 +372,7 @@ pub enum ScriptLanguage {
     Kimbundu,
     #[slang(script = Latin)]
     Kinyarwanda,
+    #[slang(script = "Kore")]
     Korean,
     #[slang(script = Arabic)]
     KurdishCentral,
