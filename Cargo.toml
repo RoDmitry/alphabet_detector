@@ -32,7 +32,7 @@ members = ["macros"]
 
 [dependencies]
 ahash = "0.8"
-alphabet_match_macro = { path = "macros", version = "0.2" }
+alphabet_detector_macros = { path = "macros", version = "0.3" }
 concat_const = "0.2"
 debug_unsafe = "0.1"
 icu_normalizer = "2.0.0-beta2"

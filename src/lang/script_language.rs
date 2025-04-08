@@ -1,7 +1,7 @@
 use super::{script_char_to_slangs, Language, Script};
 use ::core::fmt;
 use ::std::fmt::Debug;
-use alphabet_match_macro::ScriptLanguage;
+use alphabet_detector_macros::ScriptLanguage;
 use strum::{EnumCount, IntoEnumIterator};
 use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 
