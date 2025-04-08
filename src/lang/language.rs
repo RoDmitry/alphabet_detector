@@ -136,7 +136,7 @@ pub enum Language {
     BishnupriyaManipuri,
     #[strum(serialize = "bos")]
     Bosnian,
-    /// Macro, any language adapted to Braille
+    /// Group, any language adapted to Braille
     #[strum(serialize = "brai")]
     Braille,
     #[strum(serialize = "bug")]
@@ -194,6 +194,8 @@ pub enum Language {
     Danish,
     #[strum(serialize = "div")]
     Dhivehi,
+    #[strum(serialize = "luo")]
+    Dholuo,
     #[strum(serialize = "dik")]
     DinkaSouthwestern,
     #[strum(serialize = "doi")]
@@ -379,8 +381,6 @@ pub enum Language {
     Lombard,
     #[strum(serialize = "lua")]
     LubaKasai,
-    #[strum(serialize = "luo")]
-    Luo,
     #[strum(serialize = "xlu")]
     LuwianCuneiform,
     #[strum(serialize = "hlu")]

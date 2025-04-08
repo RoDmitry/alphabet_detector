@@ -194,7 +194,7 @@ pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLangua
                 [
                     'ا', 'ب', 'پ', 'ت', 'ٹ', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ڈ', 'ذ', 'ر', 'ڑ', 'ز',
                     'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن',
-                    'و', 'ہ', 'ء', 'ی', 'ے', 'ﺉ', 'ڒ', 'ئ', 'ھ'
+                    'ں', 'و', 'ہ', 'ء', 'ی', 'ے', 'ﺉ', 'ڒ', 'ئ', 'ھ'
                 ]
             ),
             (
@@ -267,7 +267,7 @@ pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLangua
                 [
                     'ا', 'ب', 'پ', 'ت', 'ٹ', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ڈ', 'ذ', 'ر', 'ڑ', 'ز',
                     'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن',
-                    'و', 'ہ', 'ء', 'ی', 'ے', 'ڧ', 'ئ', 'ه', 'ھ', 'ي'
+                    'ں', 'و', 'ہ', 'ء', 'ی', 'ے', 'ڧ', 'ئ', 'ه', 'ھ', 'ي'
                 ]
             ),
             (
@@ -352,6 +352,7 @@ pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLangua
                 ScriptLanguage::Chokwe,
                 ScriptLanguage::CreoleHaitian,
                 ScriptLanguage::Danish,
+                ScriptLanguage::Dholuo,
                 ScriptLanguage::Dutch,
                 ScriptLanguage::Dyula,
                 ScriptLanguage::English,
@@ -388,7 +389,6 @@ pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLangua
                 ScriptLanguage::Lingala,
                 ScriptLanguage::Lombard,
                 ScriptLanguage::LubaKasai,
-                ScriptLanguage::Luo,
                 ScriptLanguage::Luxembourgish,
                 ScriptLanguage::Malay,
                 ScriptLanguage::MalgasyPlateau,
@@ -1309,6 +1309,14 @@ pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLangua
                 ]
             ),
             (
+                ScriptLanguage::Dholuo, //++
+                [
+                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
+                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z',
+                ]
+            ),
+            (
                 ScriptLanguage::DinkaSouthwestern, //++
                 #[rustfmt::skip]
                 [
@@ -1802,14 +1810,6 @@ pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLangua
                     'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y',
                     'y', /*unverified*/
                     'Z', 'z', 'Î', 'î', 'Ê', 'ê',
-                ]
-            ),
-            (
-                ScriptLanguage::Luo,
-                [
-                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
-                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y'
                 ]
             ),
             (

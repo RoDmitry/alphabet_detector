@@ -4,11 +4,13 @@ use ::std::{
     io::BufReader,
     sync::{Arc, Mutex},
 };
+use ahash::{AHashMap, AHashSet};
 use alphabet_detector::{
-    ch_norm_iter, read_iter::ReadCharsChunks, script_char_to_slangs, slang_arr_default, CharData,
-    Script, ScriptLanguage,
+    ch_norm_iter, read_iter::ReadCharsChunks, script_char_to_slangs, slang_arr_default,
+    slang_arr_default_nc, CharData, Script, ScriptLanguage, ScriptLanguageArr,
 };
 use clap::Parser;
+use debug_unsafe::slice::SliceGetter;
 
 #[derive(Parser)]
 #[command(version, about)]
@@ -30,15 +32,8 @@ fn main() {
             let path = path.unwrap();
             let file_name = path.file_name().into_string().unwrap();
             println!("*{}* New", file_name);
-            let thread_lang = match ScriptLanguage::from_str(&file_name) {
-                Some(l) => l,
-                _ => {
-                    let Some(l) = ScriptLanguage::from_str(file_name.split('_').next().unwrap())
-                    else {
-                        panic!("*{}* Not found lang", file_name);
-                    };
-                    l
-                }
+            let Some(thread_lang) = ScriptLanguage::from_str(&file_name) else {
+                panic!("*{}* Not found lang", file_name);
             };
             {
                 let mut guard = langs_seen.lock().unwrap();
@@ -69,9 +64,9 @@ fn main() {
             let ch_iter = file.chars_chunks(b'\n').map(|v| (0, v.unwrap()));
 
             let mut langs_count = slang_arr_default::<usize>();
-            let mut found_chars: ahash::AHashMap<char, usize> = Default::default();
-            let mut not_found_chars: ahash::AHashMap<ScriptLanguage, ahash::AHashMap<char, usize>> =
-                Default::default();
+            let mut found_chars: AHashMap<char, usize> = Default::default();
+            let mut not_found_chars: ScriptLanguageArr<AHashMap<char, usize>> =
+                slang_arr_default_nc();
             for CharData { script, ch, .. } in ch_norm_iter::from_ch_iter(ch_iter) {
                 let langs = script_char_to_slangs(script, ch);
                 let mut has_lang = false;
@@ -86,7 +81,10 @@ fn main() {
                     }
                 } else {
                     for &l in langs {
-                        *not_found_chars.entry(l).or_default().entry(ch).or_default() += 1;
+                        *not_found_chars
+                            .get_safe_unchecked_mut(l as usize)
+                            .entry(ch)
+                            .or_default() += 1;
                     }
                 }
             }
@@ -100,15 +98,15 @@ fn main() {
 
             let count_diff = lang_count_max - lang_count;
             let count_percent_diff = (count_diff * 100) as f64 / lang_count_max as f64;
-            /* if count_percent_diff < 0.1 {
+            if count_percent_diff == 0.0 {
                 println!(
                     "*{}* {:?} within error bounds {}",
                     file_name, thread_lang, count_percent_diff
                 );
                 return;
-            } */
+            }
 
-            let mut found_chars_new: ahash::AHashMap<char, usize> = Default::default();
+            let mut found_chars_new: AHashMap<char, usize> = Default::default();
             for (ch, cnt) in found_chars {
                 let ch_lowered = ch.to_lowercase().next().unwrap();
                 let v = found_chars_new.entry(ch_lowered).or_default();
@@ -131,17 +129,18 @@ fn main() {
             langs.sort_by(|a, b| b.1.cmp(&a.1));
             println!("*{}* {:?} langs {:?}", file_name, thread_lang, langs); */
 
-            let top_langs: ahash::AHashSet<ScriptLanguage> = langs_count
+            let top_langs: AHashSet<ScriptLanguage> = langs_count
                 .into_iter()
                 .enumerate()
                 .filter(|(_, cnt)| *cnt > lang_count)
                 .map(|(l, _)| ScriptLanguage::from_usize_unchecked(l))
                 .collect();
 
-            let top_lang_chars: ahash::AHashMap<_, _> = not_found_chars
+            let top_lang_chars: AHashMap<_, _> = not_found_chars
                 .iter()
+                .enumerate()
                 .filter(|(_, c)| !c.is_empty())
-                .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(*l), c))
+                .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(l), c))
                 .filter(|(l, _)| top_langs.contains(l))
                 .map(|(l, c)| {
                     (l, {
@@ -158,8 +157,9 @@ fn main() {
                 file_name, thread_lang, top_lang_chars
             );
 
-            let not_found_chars: ahash::AHashSet<_> = not_found_chars
+            let not_found_chars: AHashSet<_> = not_found_chars
                 .into_iter()
+                .enumerate()
                 .filter(|(_, c)| !c.is_empty())
                 .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(l), c))
                 .filter(|(l, _)| thread_langs.contains(l))

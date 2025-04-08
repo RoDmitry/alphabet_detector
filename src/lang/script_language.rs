@@ -215,6 +215,8 @@ pub enum ScriptLanguage {
     #[slang(script = DivesAkuru, lang = Dhivehi)]
     DhivehiDivesAkuru,
     #[slang(script = Latin)]
+    Dholuo,
+    #[slang(script = Latin)]
     DinkaSouthwestern,
     #[slang(script = Devanagari)]
     Dogri,
@@ -437,8 +439,6 @@ pub enum ScriptLanguage {
     Lombard,
     #[slang(script = Latin)]
     LubaKasai,
-    #[slang(script = Latin)]
-    Luo,
     #[slang(script = Cuneiform)]
     LuwianCuneiform,
     #[slang(script = AnatolianHieroglyphs)]
