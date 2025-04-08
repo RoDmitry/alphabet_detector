@@ -1,8 +1,6 @@
 use super::{script_char_to_slangs, Language, Script};
-use crate::isocode::{IsoCode639_1, IsoCode639_3};
 use ::core::fmt;
 use ::std::fmt::Debug;
-use ahash::AHashSet;
 use alphabet_match_macro::ScriptLanguage;
 use strum::{EnumCount, IntoEnumIterator};
 use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
@@ -841,210 +839,16 @@ pub enum ScriptLanguage {
 }
 
 impl ScriptLanguage {
-    /// Returns an iterator of all languages
+    /// Returns an iterator of all `ScriptLanguage`s
     #[inline]
-    pub fn all() -> impl Iterator<Item = ScriptLanguage> {
-        ScriptLanguage::iter()
+    pub fn all() -> impl Iterator<Item = Self> {
+        Self::iter()
     }
 
-    /// Returns all languages supporting selected `Script`
+    /// Returns all `ScriptLanguage`s supporting selected `Script`
     #[inline]
-    pub fn all_with_script(script: Script) -> &'static [ScriptLanguage] {
+    pub fn all_with_script(script: Script) -> &'static [Self] {
         script_char_to_slangs(script, char::default())
-    }
-
-    /// Returns a set of all supported spoken languages.
-    #[deprecated]
-    pub fn all_spoken_ones() -> AHashSet<ScriptLanguage> {
-        ScriptLanguage::iter()
-            .filter(|it| it != &ScriptLanguage::Latin)
-            .collect()
-    }
-
-    /// Returns the language associated with the ISO 639-1 code
-    /// passed to this method.
-    #[deprecated]
-    pub fn from_iso_code_639_1(iso_code: &IsoCode639_1) -> ScriptLanguage {
-        ScriptLanguage::iter()
-            .find(|it| &it.iso_code_639_1() == iso_code)
-            .unwrap()
-    }
-
-    /// Returns the language associated with the ISO 639-3 code
-    /// passed to this method.
-    #[deprecated]
-    pub fn from_iso_code_639_3(iso_code: &IsoCode639_3) -> ScriptLanguage {
-        ScriptLanguage::iter()
-            .find(|it| &it.iso_code_639_3() == iso_code)
-            .unwrap()
-    }
-
-    /// Returns the ISO 639-1 code of this language.
-    #[deprecated]
-    pub fn iso_code_639_1(&self) -> IsoCode639_1 {
-        use ScriptLanguage::*;
-        match self {
-            Afrikaans => IsoCode639_1::AF,
-            AlbanianTosk => IsoCode639_1::SQ, // invalid
-            Arabic => IsoCode639_1::AR,
-            Armenian => IsoCode639_1::HY,
-            AzerbaijaniNorth => IsoCode639_1::AZ,
-            Basque => IsoCode639_1::EU,
-            Belarusian => IsoCode639_1::BE,
-            Bengali => IsoCode639_1::BN,
-            Bosnian => IsoCode639_1::BS,
-            Bulgarian => IsoCode639_1::BG,
-            Catalan => IsoCode639_1::CA,
-            ChineseSimplified => IsoCode639_1::ZH,
-            Croatian => IsoCode639_1::HR,
-            Czech => IsoCode639_1::CS,
-            Danish => IsoCode639_1::DA,
-            Dutch => IsoCode639_1::NL,
-            English => IsoCode639_1::EN,
-            Esperanto => IsoCode639_1::EO,
-            Estonian => IsoCode639_1::ET,
-            Finnish => IsoCode639_1::FI,
-            French => IsoCode639_1::FR,
-            Ganda => IsoCode639_1::LG,
-            Georgian => IsoCode639_1::KA,
-            German => IsoCode639_1::DE,
-            Greek => IsoCode639_1::EL,
-            Gujarati => IsoCode639_1::GU,
-            Hebrew => IsoCode639_1::HE,
-            Hindi => IsoCode639_1::HI,
-            Hungarian => IsoCode639_1::HU,
-            Icelandic => IsoCode639_1::IS,
-            Indonesian => IsoCode639_1::ID,
-            Irish => IsoCode639_1::GA,
-            Italian => IsoCode639_1::IT,
-            Japanese => IsoCode639_1::JA,
-            Kazakh => IsoCode639_1::KK,
-            Korean => IsoCode639_1::KO,
-            Latin => IsoCode639_1::LA,
-            Latvian => IsoCode639_1::LV,
-            Lithuanian => IsoCode639_1::LT,
-            Macedonian => IsoCode639_1::MK,
-            Malay => IsoCode639_1::MS,
-            Maori => IsoCode639_1::MI,
-            Marathi => IsoCode639_1::MR,
-            MongolianHalh => IsoCode639_1::MN,
-            NorwegianBokmal => IsoCode639_1::NB,
-            NorwegianNynorsk => IsoCode639_1::NN,
-            PersianWestern => IsoCode639_1::FA,
-            Polish => IsoCode639_1::PL,
-            Portuguese => IsoCode639_1::PT,
-            PunjabiEastern => IsoCode639_1::PA,
-            Romanian => IsoCode639_1::RO,
-            Russian => IsoCode639_1::RU,
-            Serbian => IsoCode639_1::SR,
-            Shona => IsoCode639_1::SN,
-            Slovak => IsoCode639_1::SK,
-            Slovene => IsoCode639_1::SL,
-            Somali => IsoCode639_1::SO,
-            Sesotho => IsoCode639_1::ST,
-            Spanish => IsoCode639_1::ES,
-            Swahili => IsoCode639_1::SW,
-            Swedish => IsoCode639_1::SV,
-            Tagalog => IsoCode639_1::TL,
-            Tamil => IsoCode639_1::TA,
-            Telugu => IsoCode639_1::TE,
-            Thai => IsoCode639_1::TH,
-            Tsonga => IsoCode639_1::TS,
-            Tswana => IsoCode639_1::TN,
-            Turkish => IsoCode639_1::TR,
-            Ukrainian => IsoCode639_1::UK,
-            Urdu => IsoCode639_1::UR,
-            Vietnamese => IsoCode639_1::VI,
-            Welsh => IsoCode639_1::CY,
-            Xhosa => IsoCode639_1::XH,
-            Yoruba => IsoCode639_1::YO,
-            Zulu => IsoCode639_1::ZU,
-            _ => IsoCode639_1::SQ,
-        }
-    }
-
-    /// Returns the ISO 639-3 code of this language.
-    #[deprecated]
-    pub fn iso_code_639_3(&self) -> IsoCode639_3 {
-        use ScriptLanguage::*;
-        match self {
-            Afrikaans => IsoCode639_3::AFR,
-            AlbanianTosk => IsoCode639_3::SQI,
-            Arabic => IsoCode639_3::ARA,
-            Armenian => IsoCode639_3::HYE,
-            AzerbaijaniNorth => IsoCode639_3::AZE,
-            Basque => IsoCode639_3::EUS,
-            Belarusian => IsoCode639_3::BEL,
-            Bengali => IsoCode639_3::BEN,
-            Bosnian => IsoCode639_3::BOS,
-            Bulgarian => IsoCode639_3::BUL,
-            Catalan => IsoCode639_3::CAT,
-            ChineseSimplified => IsoCode639_3::ZHO,
-            Croatian => IsoCode639_3::HRV,
-            Czech => IsoCode639_3::CES,
-            Danish => IsoCode639_3::DAN,
-            Dutch => IsoCode639_3::NLD,
-            English => IsoCode639_3::ENG,
-            Esperanto => IsoCode639_3::EPO,
-            Estonian => IsoCode639_3::EST,
-            Finnish => IsoCode639_3::FIN,
-            French => IsoCode639_3::FRA,
-            Ganda => IsoCode639_3::LUG,
-            Georgian => IsoCode639_3::KAT,
-            German => IsoCode639_3::DEU,
-            Greek => IsoCode639_3::ELL,
-            Gujarati => IsoCode639_3::GUJ,
-            Hebrew => IsoCode639_3::HEB,
-            Hindi => IsoCode639_3::HIN,
-            Hungarian => IsoCode639_3::HUN,
-            Icelandic => IsoCode639_3::ISL,
-            Indonesian => IsoCode639_3::IND,
-            Irish => IsoCode639_3::GLE,
-            Italian => IsoCode639_3::ITA,
-            Japanese => IsoCode639_3::JPN,
-            Kazakh => IsoCode639_3::KAZ,
-            Korean => IsoCode639_3::KOR,
-            Latin => IsoCode639_3::LAT,
-            Latvian => IsoCode639_3::LAV,
-            Lithuanian => IsoCode639_3::LIT,
-            Macedonian => IsoCode639_3::MKD,
-            Malay => IsoCode639_3::MSA,
-            Maori => IsoCode639_3::MRI,
-            Marathi => IsoCode639_3::MAR,
-            MongolianHalh => IsoCode639_3::MON,
-            NorwegianBokmal => IsoCode639_3::NOB,
-            NorwegianNynorsk => IsoCode639_3::NNO,
-            PersianWestern => IsoCode639_3::FAS,
-            Polish => IsoCode639_3::POL,
-            Portuguese => IsoCode639_3::POR,
-            PunjabiEastern => IsoCode639_3::PAN,
-            Romanian => IsoCode639_3::RON,
-            Russian => IsoCode639_3::RUS,
-            Serbian => IsoCode639_3::SRP,
-            Shona => IsoCode639_3::SNA,
-            Slovak => IsoCode639_3::SLK,
-            Slovene => IsoCode639_3::SLV,
-            Somali => IsoCode639_3::SOM,
-            Sesotho => IsoCode639_3::SOT,
-            Spanish => IsoCode639_3::SPA,
-            Swahili => IsoCode639_3::SWA,
-            Swedish => IsoCode639_3::SWE,
-            Tagalog => IsoCode639_3::TGL,
-            Tamil => IsoCode639_3::TAM,
-            Telugu => IsoCode639_3::TEL,
-            Thai => IsoCode639_3::THA,
-            Tsonga => IsoCode639_3::TSO,
-            Tswana => IsoCode639_3::TSN,
-            Turkish => IsoCode639_3::TUR,
-            Ukrainian => IsoCode639_3::UKR,
-            Urdu => IsoCode639_3::URD,
-            Vietnamese => IsoCode639_3::VIE,
-            Welsh => IsoCode639_3::CYM,
-            Xhosa => IsoCode639_3::XHO,
-            Yoruba => IsoCode639_3::YOR,
-            Zulu => IsoCode639_3::ZUL,
-            _ => IsoCode639_3::SQI,
-        }
     }
 
     #[inline(always)]
