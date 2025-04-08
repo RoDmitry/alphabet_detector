@@ -6,10 +6,7 @@ fn test_order() {
     let mut scr_prev = format!("{:?}", Script::iter().next().unwrap()).to_lowercase();
     for scr in Script::iter() {
         let scr = format!("{scr:?}").to_lowercase();
-        assert!(
-            scr_prev <= scr,
-            "Script wrong order: {scr_prev} > {scr}"
-        );
+        assert!(scr_prev <= scr, "Script wrong order: {scr_prev} > {scr}");
         scr_prev = scr;
     }
 }

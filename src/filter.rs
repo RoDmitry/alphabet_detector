@@ -1,14 +1,16 @@
 use crate::{ScriptLanguage, ScriptLanguageArr};
 
-pub fn langs_count_max(langs_cnt: &ScriptLanguageArr<u32>) -> u32 {
+#[inline]
+pub fn slangs_count_max(langs_cnt: &ScriptLanguageArr<u32>) -> u32 {
     langs_cnt.iter().fold(1, |acc, &cnt| acc.max(cnt))
 }
 
-/// only top languages are retained
-pub fn langs_filter_max(
+/// only top `ScriptLanguage`s are retained
+#[inline]
+pub fn filter_max(
     langs_cnt: ScriptLanguageArr<u32>,
 ) -> (impl Iterator<Item = ScriptLanguage>, u32) {
-    let lang_count_max = langs_count_max(&langs_cnt);
+    let lang_count_max = slangs_count_max(&langs_cnt);
 
     (
         langs_cnt
@@ -20,13 +22,15 @@ pub fn langs_filter_max(
     )
 }
 
-/// < `FILTER`% margin for an error
-/// `FILTER` = 95 is recommended
-pub fn langs_filter_best<const FILTER: u32>(
+/// only top (100 - `PERCENT`)% `ScriptLanguage`s are retained.
+/// less then (100 - `PERCENT`)% margin for an error.
+/// `PERCENT` = 95 is recommended
+#[inline]
+pub fn filter_with_margin<const PERCENT: u32>(
     langs_cnt: ScriptLanguageArr<u32>,
 ) -> impl Iterator<Item = (ScriptLanguage, u32)> {
-    assert!(FILTER < 100);
-    let lang_count_filter = langs_count_max(&langs_cnt) * FILTER / 100;
+    assert!(PERCENT < 100);
+    let lang_count_filter = slangs_count_max(&langs_cnt) * PERCENT / 100;
 
     langs_cnt
         .into_iter()
@@ -35,10 +39,14 @@ pub fn langs_filter_best<const FILTER: u32>(
         .map(|(l, cnt)| (ScriptLanguage::from_usize_unchecked(l), cnt))
 }
 
-pub fn langs_filter_best_sorted<const FILTER: u32>(
+/// only top (100 - `PERCENT`)% `ScriptLanguage`s are retained, then sorted.
+/// less then (100 - `PERCENT`)% margin for an error.
+/// `PERCENT` = 95 is recommended
+#[inline]
+pub fn filter_with_margin_sorted<const PERCENT: u32>(
     langs_cnt: ScriptLanguageArr<u32>,
 ) -> Vec<(ScriptLanguage, u32)> {
-    let mut res: Vec<_> = langs_filter_best::<FILTER>(langs_cnt).collect();
+    let mut res: Vec<_> = filter_with_margin::<PERCENT>(langs_cnt).collect();
     res.sort_unstable_by(|a, b| b.1.cmp(&a.1));
     res
 }

@@ -1,20 +1,20 @@
 use crate::{
-    langs_filter_best, langs_filter_best_sorted, langs_filter_max, slang_arr_default,
-    word_iter::{self, WordBuf},
-    ScriptLanguage, ScriptLanguageArr, WordLangsData,
+    filter_max, filter_with_margin, filter_with_margin_sorted, slang_arr_default,
+    words::{self, WordBuf},
+    ScriptLanguage, ScriptLanguageArr, WordLang,
 };
 use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
 
-#[derive(Debug)]
-pub struct WordData<B: WordBuf> {
+#[derive(Clone, Debug)]
+pub struct Word<B: WordBuf> {
     pub buf: B,
     pub range: Range<usize>,
 }
 
-impl<B: WordBuf> From<WordLangsData<B>> for WordData<B> {
+impl<B: WordBuf> From<WordLang<B>> for Word<B> {
     #[inline(always)]
-    fn from(v: WordLangsData<B>) -> Self {
+    fn from(v: WordLang<B>) -> Self {
         Self {
             buf: v.buf,
             range: v.range,
@@ -22,54 +22,58 @@ impl<B: WordBuf> From<WordLangsData<B>> for WordData<B> {
     }
 }
 
-pub fn fulltext_langs<B: WordBuf>(
-    ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<WordData<B>>, ScriptLanguageArr<u32>) {
+/// all words detection summed up
+pub fn fulltext<B: WordBuf>(
+    char_indices: impl Iterator<Item = (usize, char)>,
+) -> (Vec<Word<B>>, ScriptLanguageArr<u32>) {
     let mut words = Vec::new();
     let mut langs_count: ScriptLanguageArr<u32> = slang_arr_default();
 
-    let found_words = word_iter::from_ch_iter(ch_iter);
+    let found_words = words::from_ch_ind(char_indices);
     for wld in found_words {
-        // let (langs, count_max) = langs_filter_max(wd.langs_cnt); // worse at detecting
+        // let (langs, count_max) = filter_max(wld.langs_cnt); // worse at detecting
         for (lang, cnt) in wld.langs_cnt.into_iter().enumerate() {
-            let v = langs_count.get_safe_unchecked_mut(lang);
-            *v += cnt;
+            *langs_count.get_safe_unchecked_mut(lang) += cnt;
         }
-        words.push(WordData::from(wld));
+        words.push(Word::from(wld));
     }
 
     (words, langs_count)
 }
 
-/// uses `langs_filter_max`
-pub fn fulltext_langs_max<B: WordBuf>(
-    ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<WordData<B>>, impl Iterator<Item = ScriptLanguage>, u32) {
-    let (words, langs_count) = fulltext_langs(ch_iter);
-    let (langs, cnt) = langs_filter_max(langs_count);
+/// all words detection summed up, then filtered by max ([`filter_max`](fn.filter_max.html)
+pub fn fulltext_filter_max<B: WordBuf>(
+    char_indices: impl Iterator<Item = (usize, char)>,
+) -> (Vec<Word<B>>, impl Iterator<Item = ScriptLanguage>, u32) {
+    let (words, langs_count) = fulltext(char_indices);
+    let (langs, cnt) = filter_max(langs_count);
 
     (words, langs, cnt)
 }
 
-/// uses `langs_filter_best`.
+/// all words detection summed up, then filtered with margin percent
+/// ([`filter_with_margin`](fn.filter_with_margin.html)).
+/// less then (100 - `PERCENT`)% margin for an error.
+/// `PERCENT` = 95 is recommended.
 /// Recommended
-pub fn fulltext_langs_best<B: WordBuf, const FILTER: u32>(
-    ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (
-    Vec<WordData<B>>,
-    impl Iterator<Item = (ScriptLanguage, u32)>,
-) {
-    let (words, langs_count) = fulltext_langs(ch_iter);
-    let langs = langs_filter_best::<FILTER>(langs_count);
+pub fn fulltext_filter_with_margin<B: WordBuf, const PERCENT: u32>(
+    char_indices: impl Iterator<Item = (usize, char)>,
+) -> (Vec<Word<B>>, impl Iterator<Item = (ScriptLanguage, u32)>) {
+    let (words, langs_count) = fulltext(char_indices);
+    let langs = filter_with_margin::<PERCENT>(langs_count);
 
     (words, langs)
 }
 
-pub fn fulltext_langs_best_sorted<B: WordBuf, const FILTER: u32>(
-    ch_iter: impl Iterator<Item = (usize, char)>,
-) -> (Vec<WordData<B>>, Vec<(ScriptLanguage, u32)>) {
-    let (words, langs_count) = fulltext_langs(ch_iter);
-    let langs = langs_filter_best_sorted::<FILTER>(langs_count);
+/// all words detection summed up, then filtered with margin percent
+/// ([`filter_with_margin_sorted`](fn.filter_with_margin_sorted.html)), then sorted.
+/// less then (100 - `PERCENT`)% margin for an error.
+/// `PERCENT` = 95 is recommended.
+pub fn fulltext_filter_with_margin_sorted<B: WordBuf, const PERCENT: u32>(
+    char_indices: impl Iterator<Item = (usize, char)>,
+) -> (Vec<Word<B>>, Vec<(ScriptLanguage, u32)>) {
+    let (words, langs_count) = fulltext(char_indices);
+    let langs = filter_with_margin_sorted::<PERCENT>(langs_count);
 
     (words, langs)
 }

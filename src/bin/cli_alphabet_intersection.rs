@@ -6,7 +6,7 @@ use ::std::{
 };
 use ahash::{AHashMap, AHashSet};
 use alphabet_detector::{
-    ch_norm_iter, read_iter::ReadCharsChunks, script_char_to_slangs, slang_arr_default,
+    ch_norm, reader::ReadCharsChunks, script_char_to_slangs, slang_arr_default,
     slang_arr_default_nc, CharData, Script, ScriptLanguage, ScriptLanguageArr,
 };
 use clap::Parser;
@@ -67,7 +67,7 @@ fn main() {
             let mut found_chars: AHashMap<char, usize> = Default::default();
             let mut not_found_chars: ScriptLanguageArr<AHashMap<char, usize>> =
                 slang_arr_default_nc();
-            for CharData { script, ch, .. } in ch_norm_iter::from_ch_iter(ch_iter) {
+            for CharData { script, ch, .. } in ch_norm::from_ch_ind(ch_iter) {
                 let langs = script_char_to_slangs(script, ch);
                 let mut has_lang = false;
                 for &l in langs {
@@ -109,8 +109,7 @@ fn main() {
             let mut found_chars_new: AHashMap<char, usize> = Default::default();
             for (ch, cnt) in found_chars {
                 let ch_lowered = ch.to_lowercase().next().unwrap();
-                let v = found_chars_new.entry(ch_lowered).or_default();
-                *v += cnt;
+                *found_chars_new.entry(ch_lowered).or_default() += cnt;
             }
             let mut found_chars_new = found_chars_new.into_iter().collect::<Vec<_>>();
             found_chars_new.sort_by(|a, b| a.1.cmp(&b.1));
@@ -145,7 +144,7 @@ fn main() {
                 .map(|(l, c)| {
                     (l, {
                         let mut res = c.into_iter().collect::<Vec<_>>();
-                        res.sort_by(|a, b| b.1.cmp(&a.1));
+                        res.sort_by(|a, b| b.1.cmp(a.1));
                         res.truncate(10);
                         res
                     })
@@ -163,8 +162,7 @@ fn main() {
                 .filter(|(_, c)| !c.is_empty())
                 .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(l), c))
                 .filter(|(l, _)| thread_langs.contains(l))
-                .map(|(_, c)| c.into_iter())
-                .flatten()
+                .flat_map(|(_, c)| c.into_iter())
                 .collect();
             let mut not_found_chars: Vec<_> = not_found_chars
                 .into_iter()

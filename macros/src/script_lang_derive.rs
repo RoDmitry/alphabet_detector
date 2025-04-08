@@ -64,9 +64,7 @@ pub(super) fn script_lang_derive_inner(
                                         format!("Unexpected \"{}\"", tt),
                                     ))
                                 }
-                                _ => {
-                                    return Err(Error::new(i.span(), format!("No script provided")))
-                                }
+                                _ => return Err(Error::new(i.span(), "No script provided")),
                             }
                         }
                         "lang" => {

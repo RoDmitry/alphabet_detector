@@ -1,4 +1,4 @@
-use alphabet_detector::{ch_norm_iter, fulltext_langs, fulltext_langs_best, fulltext_langs_max};
+use alphabet_detector::{ch_norm, fulltext, fulltext_filter_max, fulltext_filter_with_margin};
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 const SENTENCES: &[&str] = &[
@@ -22,34 +22,35 @@ const SENTENCES: &[&str] = &[
 
 fn benchmark(c: &mut Criterion) {
     let mut group1 = c.benchmark_group("Sentences");
-    group1.bench_function("fulltext_langs", |bencher| {
+    group1.bench_function("fulltext", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let data = fulltext_langs::<Vec<char>>(sentence.char_indices());
+                let data = fulltext::<Vec<char>>(sentence.char_indices());
                 black_box(data);
             });
         });
     });
-    group1.bench_function("fulltext_langs_best", |bencher| {
+    group1.bench_function("fulltext_filter_with_margin", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let data = fulltext_langs_best::<Vec<char>, 95>(sentence.char_indices());
+                let data = fulltext_filter_with_margin::<Vec<char>, 95>(sentence.char_indices());
+                #[allow(unused_must_use)]
                 black_box(data);
             });
         });
     });
-    group1.bench_function("fulltext_langs_max", |bencher| {
+    group1.bench_function("fulltext_filter_max", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let data = fulltext_langs_max::<Vec<char>>(sentence.char_indices());
+                let data = fulltext_filter_max::<Vec<char>>(sentence.char_indices());
                 let _ = black_box(data);
             });
         });
     });
-    group1.bench_function("ch_norm_iter", |bencher| {
+    group1.bench_function("ch_norm", |bencher| {
         bencher.iter(|| {
             SENTENCES.iter().for_each(|sentence| {
-                let chars = ch_norm_iter::from_ch_iter(sentence.char_indices());
+                let chars = ch_norm::from_ch_ind(sentence.char_indices());
                 for ch in chars {
                     black_box(ch);
                 }
@@ -65,7 +66,7 @@ fn benchmark_compose(c: &mut Criterion) {
     let mut group1 = c.benchmark_group("Char compose");
     group1.bench_function("run", |bencher| {
         bencher.iter(|| {
-            let chars = ch_norm_iter::from_ch_iter(TO_COMPOSE.char_indices());
+            let chars = ch_norm::from_ch_ind(TO_COMPOSE.char_indices());
             for ch in chars {
                 black_box(ch);
             }

@@ -19,7 +19,7 @@ use rstest::*;
     case("aﬃ", vec!('a','f','f','i')),
 )]
 fn test_ch_norm_iter_chars(text: &str, expected_chars: Vec<char>) {
-    let chars: Vec<_> = ch_norm_iter::from_ch_iter(text.char_indices())
+    let chars: Vec<_> = ch_norm::from_ch_ind(text.char_indices())
         .map(|data| data.ch)
         .collect();
 

@@ -53,7 +53,7 @@ use rstest::*;
     // case::hangul3("現代朝鮮語にも存在する上昇二重母音ㅑ", ahashset!("現代朝鮮語にも存在する上昇二重母音", "ㅑ")),
 )]
 fn test_text_to_words(text: &str, expected_words: AHashSet<&str>) {
-    let found_words: Vec<_> = word_iter::from_ch_iter::<String>(text.char_indices())
+    let found_words: Vec<_> = words::from_ch_ind::<String>(text.char_indices())
         .map(|wld| wld.buf)
         .collect();
     let words: AHashSet<&str> = found_words.iter().map(|w| w.as_str()).collect();
@@ -68,7 +68,7 @@ fn test_text_to_words(text: &str, expected_words: AHashSet<&str>) {
     case("oﬃce", 0..6),
 )]
 fn test_word_range(word: &str, expected_range: Range<usize>) {
-    let found_words: Vec<_> = word_iter::from_ch_iter::<String>(word.char_indices()).collect();
+    let found_words: Vec<_> = words::from_ch_ind::<String>(word.char_indices()).collect();
     if found_words.len() > 1 {
         panic!("Not a word: {} got: {:?}", word, found_words);
     }
@@ -83,7 +83,7 @@ fn test_word_range(word: &str, expected_range: Range<usize>) {
     case("Привет John", vec![0..12, 13..17]),
 )]
 fn test_text_ranges(text: &str, expected_ranges: Vec<Range<usize>>) {
-    let found_words: Vec<_> = word_iter::from_ch_iter::<String>(text.char_indices()).collect();
+    let found_words: Vec<_> = words::from_ch_ind::<String>(text.char_indices()).collect();
     assert_eq!(
         found_words.len(),
         expected_ranges.len(),

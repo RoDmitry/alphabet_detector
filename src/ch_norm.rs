@@ -57,10 +57,10 @@ pub struct CharNormalizingIterator<I: Iterator<Item = CharData>> {
 }
 
 #[inline]
-pub fn from_ch_iter(
-    ch_iter: impl Iterator<Item = (usize, char)>,
+pub fn from_ch_ind(
+    char_indices: impl Iterator<Item = (usize, char)>,
 ) -> CharNormalizingIterator<impl Iterator<Item = CharData>> {
-    let mut iter = ch_iter.map(|(ch_idx, ch)| CharData {
+    let mut iter = char_indices.map(|(ch_idx, ch)| CharData {
         script: Script::find(ch),
         idx: ch_idx,
         ch,

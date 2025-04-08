@@ -1,5 +1,5 @@
 use crate::{
-    ch_norm_iter::{self, CharData},
+    ch_norm::{self, CharData},
     lang::{script_char_to_slangs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
     slang_arr_default, CharNormalizingIterator, ScriptLanguage, ScriptLanguageArr,
 };
@@ -67,7 +67,7 @@ pub struct WordIterator<I: Iterator<Item = CharData>, B: WordBuf> {
     prev_char_script: Script,
     word_langs_cnt: ScriptLanguageArr<u32>,
     word_common_langs_cnt: ScriptLanguageArr<u32>,
-    res: Option<WordLangsData<B>>,
+    res: Option<WordLang<B>>,
 }
 
 impl<I: Iterator<Item = CharData>, B: WordBuf> From<CharNormalizingIterator<I>>
@@ -93,15 +93,15 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> From<CharNormalizingIterator<I>>
 { */
 // impl<I: Iterator<Item = CharData>> WordIterator<I> {
 #[inline]
-pub fn from_ch_iter<B: WordBuf>(
-    ch_iter: impl Iterator<Item = (usize, char)>,
+pub fn from_ch_ind<B: WordBuf>(
+    char_indices: impl Iterator<Item = (usize, char)>,
 ) -> WordIterator<impl Iterator<Item = CharData>, B> {
-    let norm_iter = ch_norm_iter::from_ch_iter(ch_iter);
+    let norm_iter = ch_norm::from_ch_ind(char_indices);
     WordIterator::from(norm_iter)
 }
 
-#[derive(Debug)]
-pub struct WordLangsData<B: WordBuf> {
+#[derive(Clone, Debug)]
+pub struct WordLang<B: WordBuf> {
     pub buf: B,
     pub range: Range<usize>,
     pub langs_cnt: ScriptLanguageArr<u32>,
@@ -110,16 +110,12 @@ pub struct WordLangsData<B: WordBuf> {
 impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
     fn save_word(&mut self) {
         if !self.word_buf.is_empty() {
-            for (lang, cnt) in
-                ::core::mem::replace(&mut self.word_common_langs_cnt, slang_arr_default())
-                    .into_iter()
-                    .enumerate()
-            {
-                let v = self.word_langs_cnt.get_safe_unchecked_mut(lang);
-                *v += cnt;
-            }
+            ::core::mem::replace(&mut self.word_common_langs_cnt, slang_arr_default())
+                .into_iter()
+                .enumerate()
+                .for_each(|(lang, cnt)| *self.word_langs_cnt.get_safe_unchecked_mut(lang) += cnt);
 
-            self.res = Some(WordLangsData {
+            self.res = Some(WordLang {
                 buf: ::core::mem::take(&mut self.word_buf),
                 range: self.word_start_index..self.not_saved_word_end_index,
                 langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, slang_arr_default()),
@@ -130,7 +126,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
 }
 
 impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
-    type Item = WordLangsData<B>;
+    type Item = WordLang<B>;
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {
@@ -193,10 +189,8 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 } else {
                     &mut self.word_langs_cnt
                 };
-                let langs_cnt_incr = |lang: ScriptLanguage| {
-                    let v = langs_cnt.get_safe_unchecked_mut(lang as usize);
-                    *v += 1;
-                };
+                let langs_cnt_incr =
+                    |lang: ScriptLanguage| *langs_cnt.get_safe_unchecked_mut(lang as usize) += 1;
                 if ch == '-' {
                     ScriptLanguage::iter().for_each(langs_cnt_incr);
                 } else {
