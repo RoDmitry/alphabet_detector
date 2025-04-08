@@ -1,3 +1,4 @@
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![cfg_attr(feature = "files_read", feature(string_into_chars))]
 
 pub mod ch_norm_iter;

@@ -34,6 +34,8 @@ impl WordBuf for String {
     }
 }
 
+#[cfg_attr(docsrs, doc(cfg(feature = "compact_str")))]
+#[cfg(feature = "compact_str")]
 impl WordBuf for compact_str::CompactString {
     #[inline(always)]
     fn push(&mut self, ch: char) {

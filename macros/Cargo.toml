@@ -2,9 +2,9 @@
 name = "alphabet_match_macro"
 version = "0.2.0"
 authors = ["Dmitry Rodionov <gh@rdmtr.com>"]
-description = "Alphabet match procedural macro"
+description = "Alphabet detector procedural macros"
 repository = "https://github.com/RoDmitry/alphabet_detector"
-exclude = ["tests/*"]
+include = ["src"]
 license = "MIT OR Apache-2.0"
 edition = "2021"
 
