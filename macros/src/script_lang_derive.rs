@@ -27,7 +27,6 @@ pub(super) fn script_lang_derive_inner(
     let mut match_to_str = Vec::new();
     let mut match_from_bytes = Vec::new();
     let mut str_variants = Vec::new();
-    // let mut match_to_display = Vec::new();
     let mut lang_to_script_langs: AHashMap<String, Vec<_>> = AHashMap::new();
 
     for variant in variants {
@@ -122,53 +121,37 @@ pub(super) fn script_lang_derive_inner(
             match_to_str.push(quote! {
                 #name::#ident #params => ::concat_const::concat!(
                     Language::#lang.into_str(),
-                    "_",
                     Script::#scr.into_str()
                 )
             });
             match_from_bytes.push(quote! {
                 v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
                     Language::#lang.into_str().as_bytes(),
-                    b"_",
                     Script::#scr.into_str().as_bytes()
                 )) => ::core::option::Option::Some(#name::#ident #params)
             });
             str_variants.push(quote! {
                 ::concat_const::concat!(
-                    Language::#lang.into_str(), "_", Script::#scr.into_str()
+                    Language::#lang.into_str(), Script::#scr.into_str()
                 )
             });
-            /* match_to_display.push(quote! {
-                #name::#ident #params => {
-                    ::core::fmt::Display::fmt(<&'static str>::from(Language::#lang), f)?;
-                    ::core::fmt::Display::fmt("_", f)?;
-                    ::core::fmt::Display::fmt(<&'static str>::from(Script::#scr), f)
-                }
-            }); */
         } else if let Some(scr) = script_str {
             match_to_script_str.push(quote! {
                 #name::#ident #params => #scr
             });
             match_to_str.push(quote! {
                 #name::#ident #params => ::concat_const::concat!(
-                    Language::#lang.into_str(), "_", #scr
+                    Language::#lang.into_str(), #scr
                 )
             });
             match_from_bytes.push(quote! {
                 v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
-                    Language::#lang.into_str().as_bytes(), b"_", #scr.as_bytes()
+                    Language::#lang.into_str().as_bytes(), #scr.as_bytes()
                 )) => ::core::option::Option::Some(#name::#ident #params)
             });
             str_variants.push(quote! {
-                ::concat_const::concat!(Language::#lang.into_str(), "_", #scr)
+                ::concat_const::concat!(Language::#lang.into_str(), #scr)
             });
-            /* match_to_display.push(quote! {
-                #name::#ident #params => {
-                    ::core::fmt::Display::fmt(<&'static str>::from(Language::#lang), f)?;
-                    ::core::fmt::Display::fmt("_", f)?;
-                    ::core::fmt::Display::fmt(#scr, f)
-                }
-            }); */
         } else {
             match_to_script_str.push(quote! {
                 #name::#ident #params => ""
@@ -185,9 +168,6 @@ pub(super) fn script_lang_derive_inner(
             str_variants.push(quote! {
                 Language::#lang.into_str()
             });
-            /* match_to_display.push(quote! {
-                #name::#ident #params => ::core::fmt::Display::fmt(<&'static str>::from(Language::#lang), f)
-            }); */
         }
     }
 
@@ -223,17 +203,6 @@ pub(super) fn script_lang_derive_inner(
                 }
             }
         }
-        /* impl #impl_generics ::core::fmt::Display for #name #ty_generics #where_clause {
-            #[inline]
-            fn fmt(
-                &self,
-                f: &mut ::core::fmt::Formatter,
-            ) -> ::core::result::Result<(), ::core::fmt::Error> {
-                match *self {
-                    #(#match_to_display),*
-                }
-            }
-        } */
         impl #impl_generics #name #ty_generics #where_clause {
             const VARIANTS: &'static [&'static str] = &[#(#str_variants),*];
 
