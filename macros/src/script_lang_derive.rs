@@ -51,7 +51,7 @@ pub(super) fn script_lang_derive_inner(
                 if let TokenTree::Ident(i) = tt {
                     match i.to_string().as_str() {
                         "script" => {
-                            skip_eq(i, &mut tokens)?;
+                            skip_eq(&i, &mut tokens)?;
                             match tokens.next() {
                                 Some(TokenTree::Ident(v)) => {
                                     script = Some(quote! { #v });
@@ -65,11 +65,13 @@ pub(super) fn script_lang_derive_inner(
                                         format!("Unexpected \"{}\"", tt),
                                     ))
                                 }
-                                _ => {}
+                                _ => {
+                                    return Err(Error::new(i.span(), format!("No script provided")))
+                                }
                             }
                         }
                         "lang" => {
-                            skip_eq(i, &mut tokens)?;
+                            skip_eq(&i, &mut tokens)?;
                             if let Some(TokenTree::Ident(v)) = tokens.next() {
                                 language = Some(v.to_string());
                             }

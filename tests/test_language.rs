@@ -15,7 +15,7 @@ fn test_order() {
 }
 
 #[test]
-fn test_language_str() {
+fn test_str() {
     for lang in Language::iter() {
         assert!(
             !lang.into_str().chars().any(|ch| !ch.is_ascii_lowercase())
