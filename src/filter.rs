@@ -5,7 +5,7 @@ pub fn slangs_count_max(langs_cnt: &ScriptLanguageArr<u32>) -> u32 {
     langs_cnt.iter().fold(1, |acc, &cnt| acc.max(cnt))
 }
 
-/// only top `ScriptLanguage`s are retained
+/// Only top `ScriptLanguage`s are retained
 #[inline]
 pub fn filter_max(
     langs_cnt: ScriptLanguageArr<u32>,
@@ -22,8 +22,8 @@ pub fn filter_max(
     )
 }
 
-/// only top (100 - `PERCENT`)% `ScriptLanguage`s are retained.
-/// less then (100 - `PERCENT`)% margin for an error.
+/// Only top (100 - `PERCENT`)% `ScriptLanguage`s are retained.
+/// Less then (100 - `PERCENT`)% margin for an error.
 /// `PERCENT` = 95 is recommended
 #[inline]
 pub fn filter_with_margin<const PERCENT: u32>(
@@ -39,8 +39,8 @@ pub fn filter_with_margin<const PERCENT: u32>(
         .map(|(l, cnt)| (ScriptLanguage::from_usize_unchecked(l), cnt))
 }
 
-/// only top (100 - `PERCENT`)% `ScriptLanguage`s are retained, then sorted.
-/// less then (100 - `PERCENT`)% margin for an error.
+/// Only top (100 - `PERCENT`)% `ScriptLanguage`s are retained, then sorted.
+/// Less then (100 - `PERCENT`)% margin for an error.
 /// `PERCENT` = 95 is recommended
 #[inline]
 pub fn filter_with_margin_sorted<const PERCENT: u32>(

@@ -8,9 +8,10 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 const ENUM_NAME: &str = "ScriptLanguage";
 
 /// Language + script.
-/// Value-names not always represent a script used, so a "default" script can be changed, string
-/// representation (const [`into_str`](#method.into_str)/[`from_str`](#method.into_str)) is more
-/// stable.
+/// Value-names not always represent a script used, so a "default" script can be changed,
+/// string representation (const
+/// [`into_str`](enum.ScriptLanguage.html#method.into_str)/[`from_str`](enum.ScriptLanguage.html#method.from_str))
+/// is more stable.
 /// Int representation is unstable and can be changed anytime.
 #[derive(
     Clone,
