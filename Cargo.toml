@@ -1,12 +1,12 @@
 [package]
 name = "alphabet_detector"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["Dmitry Rodionov <gh@rdmtr.com>"]
 description = "Natural language alphabet detection library"
 documentation = "https://docs.rs/alphabet_detector/"
 repository = "https://github.com/RoDmitry/alphabet_detector"
 categories = ["text-processing"]
-keywords = ["language", "detect", "match", "text", "word"]
+keywords = ["language", "match", "split", "text", "word"]
 include = ["src"]
 readme = "README.md"
 license = "MIT OR Apache-2.0"
@@ -43,6 +43,7 @@ strum_macros = "0.27"
 # optional
 clap = { version = "4", features = ["derive"], optional = true }
 compact_str = { version = "0.9", optional = true }
+pyo3 = { version = "0.24", optional = true }
 threadpool = { version = "1", optional = true }
 
 [dev-dependencies]
@@ -53,5 +54,5 @@ serde_json = "1"
 cli_alphabet_intersection = ["files_read", "clap", "threadpool"]
 compact_str = ["dep:compact_str"]
 files_read = []
-python = []
+python = ["pyo3"]
 test_chars = []
