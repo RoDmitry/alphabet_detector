@@ -845,7 +845,7 @@ pub enum ScriptLanguage {
 
 impl ScriptLanguage {
     /// Returns an iterator of all `ScriptLanguage`s
-    #[inline]
+    #[inline(always)]
     pub fn all() -> impl Iterator<Item = Self> {
         Self::iter()
     }
