@@ -45,7 +45,7 @@ impl<R: Read + BufRead> Iterator for ReadCharsChunksIter<R> {
     }
 }
 
-pub trait ReadCharsChunks {
+pub trait ReadCharsChunks: Sized {
     type Output;
 
     fn chars_chunks(self, read_until: u8) -> Self::Output;
