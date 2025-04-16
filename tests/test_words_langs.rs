@@ -211,11 +211,17 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
 fn test_word_multiple_langs(expected_language: ScriptLanguage, word: &str) {
     let found_words: Vec<_> = words::from_ch_ind::<String>(word.char_indices()).collect();
     if found_words.len() > 1 {
-        panic!("Not a word '{}' got {:?}", word, found_words);
+        panic!(
+            "{:?} Not a word '{}' got {:?}",
+            expected_language, word, found_words
+        );
     }
     let languages: AHashSet<_> = filter_max(found_words[0].langs_cnt).0.collect();
     if languages.len() == 1 {
-        panic!("Unique word '{}'", word);
+        panic!(
+            "{:?} Unique word '{}', got {:?}",
+            expected_language, word, languages
+        );
     }
 
     assert!(

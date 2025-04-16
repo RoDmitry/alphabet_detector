@@ -88,7 +88,7 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
         #[cfg(all(debug_assertions, feature = "test_chars"))]
         {
             let chars = [#(#chars),*];
-            test_chars(&chars);
+            test_chars(script, &chars);
         }
         match ch {
             #(#arms)*

@@ -2,18 +2,26 @@ use crate::lang::{char_compose_custom, Script};
 use icu_normalizer::properties::CanonicalCompositionBorrowed;
 
 #[cfg(all(debug_assertions, feature = "test_chars"))]
-pub(crate) fn test_chars(chars: &[char]) {
+pub(crate) fn test_chars(script: Script, chars: &[char]) {
     let decomp_nfd = icu_normalizer::DecomposingNormalizerBorrowed::new_nfd();
     let composer = CanonicalCompositionBorrowed::new();
-    for &raw_ch in chars {
-        let raw_ch_str = raw_ch.to_string();
-        let decomp = decomp_nfd.normalize(&raw_ch_str);
+    for &ch in chars {
+        let ch_script = Script::find(ch);
+        assert_eq!(ch_script, script, "char '{ch}'");
+
+        let ch_str = ch.to_string();
+        let decomp = decomp_nfd.normalize(&ch_str);
         let mut decomp_chars = decomp.chars();
-        let mut ch = decomp_chars.next().unwrap();
+        let mut recomp_ch = decomp_chars.next().unwrap();
         for c in decomp_chars {
-            ch = char_compose(&composer, ch, c);
+            recomp_ch = char_compose(&composer, recomp_ch, c);
         }
-        assert_eq!(ch, raw_ch, "decomp '{:?}'", decomp.chars());
+        assert_eq!(
+            recomp_ch,
+            ch,
+            "script: {script:?}, char: '{ch}', decomp '{:?}'",
+            decomp.chars()
+        );
     }
 }
 

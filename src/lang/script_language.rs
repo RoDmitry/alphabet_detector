@@ -200,6 +200,8 @@ pub enum ScriptLanguage {
     ChurchSlavonicOld,
     #[slang(script = Glagolitic, lang = ChurchSlavonic)]
     ChurchSlavonicOldGlagolitic,
+    #[slang(script = Cyrillic)]
+    Chuvash,
     #[slang(script = Coptic)]
     Coptic,
     #[slang(script = CanadianAboriginal)]

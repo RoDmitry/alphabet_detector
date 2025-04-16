@@ -180,6 +180,8 @@ pub enum Language {
     Chorasmian,
     #[strum(serialize = "chu")]
     ChurchSlavonic,
+    #[strum(serialize = "chv")]
+    Chuvash,
     #[strum(serialize = "cop")]
     Coptic,
     #[strum(serialize = "cre")]
