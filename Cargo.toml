@@ -1,6 +1,6 @@
 [package]
 name = "alphabet_detector"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Dmitry Rodionov <gh@rdmtr.com>"]
 description = "Natural language alphabet detection library"
 documentation = "https://docs.rs/alphabet_detector/"
