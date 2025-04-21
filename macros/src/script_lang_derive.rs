@@ -23,8 +23,9 @@ pub(super) fn script_lang_derive_inner(
 
     let mut match_to_language = Vec::new();
     let mut match_to_script = Vec::new();
-    let mut match_to_script_str = Vec::new();
+    let mut match_to_parts = Vec::new();
     let mut match_to_str = Vec::new();
+    let mut match_from_parts = Vec::new();
     let mut match_from_bytes = Vec::new();
     let mut str_variants = Vec::new();
     let mut lang_to_script_langs: AHashMap<String, Vec<_>> = AHashMap::new();
@@ -109,14 +110,17 @@ pub(super) fn script_lang_derive_inner(
         match_to_script.push(quote! {
             #name::#ident #params => Script::#script
         });
-        match_to_script_str.push(quote! {
-            #name::#ident #params => Script::#script.into_str()
+        match_to_parts.push(quote! {
+            #name::#ident #params => (Language::#lang, Script::#script)
         });
         match_to_str.push(quote! {
             #name::#ident #params => ::concat_const::concat!(
                 Language::#lang.into_str(),
                 Script::#script.into_str()
             )
+        });
+        match_from_parts.push(quote! {
+            (Language::#lang, Script::#script) => ::core::option::Option::Some(#name::#ident #params)
         });
         match_from_bytes.push(quote! {
             v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
@@ -135,6 +139,7 @@ pub(super) fn script_lang_derive_inner(
         let l = Ident::new(&lang, Span::call_site());
         quote! { Language::#l => &[#(#v),*] }
     });
+    match_from_parts.push(quote! { _ => ::core::option::Option::None });
     match_from_bytes.push(quote! { _ => ::core::option::Option::None });
 
     Ok(quote! {
@@ -166,15 +171,21 @@ pub(super) fn script_lang_derive_inner(
             const VARIANTS: &'static [&'static str] = &[#(#str_variants),*];
 
             #[inline]
-            pub const fn into_script_str(self) -> &'static str {
+            pub const fn into_parts(self) -> (Language, Script) {
                 match self {
-                    #(#match_to_script_str),*
+                    #(#match_to_parts),*
                 }
             }
             #[inline]
             pub const fn into_str(self) -> &'static str {
                 match self {
                     #(#match_to_str),*
+                }
+            }
+            #[inline]
+            pub const fn from_parts(v: (Language, Script)) -> Option<Self> {
+                match v {
+                    #(#match_from_parts),*
                 }
             }
             #[inline]

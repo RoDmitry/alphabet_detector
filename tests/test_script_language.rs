@@ -50,16 +50,6 @@ fn test_correct_map_to_script() {
 }
 
 #[test]
-fn test_have_scripts() {
-    for slang in ScriptLanguage::iter() {
-        assert!(
-            !slang.into_script_str().is_empty(),
-            "ScriptLanguage {slang:?} no script",
-        );
-    }
-}
-
-#[test]
 fn test_to_string() {
     assert_eq!(English.into_str(), "engLatn");
 }
