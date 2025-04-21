@@ -1,4 +1,4 @@
-use super::{script_char_to_slangs, Language, Script};
+use super::{script_char_to_slangs, Language, Script, UcdScript};
 use ::core::fmt;
 use ::std::fmt::Debug;
 use alphabet_detector_macros::ScriptLanguage;
@@ -182,13 +182,13 @@ pub enum ScriptLanguage {
     Cherokee,
     #[slang(script = Devanagari)]
     Chhattisgarhi,
-    #[slang(script = "Hant", lang = ChineseCantonese)]
+    #[slang(script = HanTraditional, lang = ChineseCantonese)]
     ChineseCantoneseTraditional,
     #[slang(script = Bopomofo, lang = ChineseMandarin)]
     ChineseMandarinBopomofo,
-    #[slang(script = "Hans", lang = Chinese)]
+    #[slang(script = HanSimplified, lang = Chinese)]
     ChineseSimplified,
-    #[slang(script = "Hant", lang = Chinese)]
+    #[slang(script = HanTraditional, lang = Chinese)]
     ChineseTraditional,
     #[slang(script = Nushu)]
     ChineseTuhua,
@@ -346,7 +346,7 @@ pub enum ScriptLanguage {
     Irish,
     #[slang(script = Latin)]
     Italian,
-    #[slang(script = "Jpan")]
+    #[slang(script = Japanese)]
     Japanese,
     #[slang(script = Latin)]
     Javanese,
@@ -400,7 +400,7 @@ pub enum ScriptLanguage {
     Kinyarwanda,
     #[slang(script = OldPermic, lang = Komi)]
     KomiOldPermic,
-    #[slang(script = "Kore")]
+    #[slang(script = Korean)]
     Korean,
     #[slang(script = Arabic)]
     KurdishCentral,
@@ -852,9 +852,9 @@ impl ScriptLanguage {
         Self::iter()
     }
 
-    /// Returns all `ScriptLanguage`s supporting selected `Script`
+    /// Returns all `ScriptLanguage`s supporting selected `UcdScript`
     #[inline]
-    pub fn all_with_script(script: Script) -> &'static [Self] {
+    pub fn all_with_script(script: UcdScript) -> &'static [Self] {
         script_char_to_slangs(script, char::default())
     }
 
@@ -886,6 +886,13 @@ macro_rules! impl_try_from {
 }
 
 impl_try_from!(u16 u32 usize u64 u128);
+
+impl From<ScriptLanguage> for UcdScript {
+    #[inline]
+    fn from(sl: ScriptLanguage) -> Self {
+        UcdScript::from(Script::from(sl))
+    }
+}
 
 /* impl Display for ScriptLanguage {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {

@@ -33,7 +33,6 @@ pub(super) fn script_lang_derive_inner(
         let ident = variant.ident;
         let mut language = None;
         let mut script = None;
-        let mut script_str = None;
 
         let tokens = variant
             .attrs
@@ -54,9 +53,6 @@ pub(super) fn script_lang_derive_inner(
                             match tokens.next() {
                                 Some(TokenTree::Ident(v)) => {
                                     script = Some(quote! { #v });
-                                }
-                                Some(TokenTree::Literal(v)) => {
-                                    script_str = Some(quote! { #v });
                                 }
                                 Some(tt) => {
                                     return Err(Error::new(
@@ -109,71 +105,36 @@ pub(super) fn script_lang_derive_inner(
             #name::#ident #params => Language::#lang
         });
 
-        if let Some(scr) = script {
-            match_to_script.push(quote! {
-                #name::#ident #params => ::core::option::Option::Some(Script::#scr)
-            });
-            match_to_script_str.push(quote! {
-                #name::#ident #params => Script::#scr.into_str()
-            });
-            match_to_str.push(quote! {
-                #name::#ident #params => ::concat_const::concat!(
-                    Language::#lang.into_str(),
-                    Script::#scr.into_str()
-                )
-            });
-            match_from_bytes.push(quote! {
-                v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
-                    Language::#lang.into_str().as_bytes(),
-                    Script::#scr.into_str().as_bytes()
-                )) => ::core::option::Option::Some(#name::#ident #params)
-            });
-            str_variants.push(quote! {
-                ::concat_const::concat!(
-                    Language::#lang.into_str(), Script::#scr.into_str()
-                )
-            });
-        } else if let Some(scr) = script_str {
-            match_to_script_str.push(quote! {
-                #name::#ident #params => #scr
-            });
-            match_to_str.push(quote! {
-                #name::#ident #params => ::concat_const::concat!(
-                    Language::#lang.into_str(), #scr
-                )
-            });
-            match_from_bytes.push(quote! {
-                v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
-                    Language::#lang.into_str().as_bytes(), #scr.as_bytes()
-                )) => ::core::option::Option::Some(#name::#ident #params)
-            });
-            str_variants.push(quote! {
-                ::concat_const::concat!(Language::#lang.into_str(), #scr)
-            });
-        } else {
-            match_to_script_str.push(quote! {
-                #name::#ident #params => ""
-            });
-            match_to_str.push(quote! {
-                #name::#ident #params => Language::#lang.into_str()
-            });
-            match_from_bytes.push(quote! {
-                v if ::concat_const::eq_bytes(
-                    v,
-                    Language::#lang.into_str().as_bytes()
-                ) => ::core::option::Option::Some(#name::#ident #params)
-            });
-            str_variants.push(quote! {
-                Language::#lang.into_str()
-            });
-        }
+        let script = script.ok_or_else(|| Error::new(ident.span(), "No script provided"))?;
+        match_to_script.push(quote! {
+            #name::#ident #params => Script::#script
+        });
+        match_to_script_str.push(quote! {
+            #name::#ident #params => Script::#script.into_str()
+        });
+        match_to_str.push(quote! {
+            #name::#ident #params => ::concat_const::concat!(
+                Language::#lang.into_str(),
+                Script::#script.into_str()
+            )
+        });
+        match_from_bytes.push(quote! {
+            v if ::concat_const::eq_bytes(v, ::concat_const::concat_bytes!(
+                Language::#lang.into_str().as_bytes(),
+                Script::#script.into_str().as_bytes()
+            )) => ::core::option::Option::Some(#name::#ident #params)
+        });
+        str_variants.push(quote! {
+            ::concat_const::concat!(
+                Language::#lang.into_str(), Script::#script.into_str()
+            )
+        });
     }
 
     let match_lang_to_script_langs = lang_to_script_langs.into_iter().map(|(lang, v)| {
         let l = Ident::new(&lang, Span::call_site());
         quote! { Language::#l => &[#(#v),*] }
     });
-    match_to_script.push(quote! { _ => ::core::option::Option::None });
     match_from_bytes.push(quote! { _ => ::core::option::Option::None });
 
     Ok(quote! {
@@ -193,7 +154,7 @@ pub(super) fn script_lang_derive_inner(
                 }
             }
         }
-        impl #impl_generics From<#name #ty_generics> for Option<Script> #where_clause {
+        impl #impl_generics From<#name #ty_generics> for Script #where_clause {
             #[inline]
             fn from(sl: #name) -> Self {
                 match sl {

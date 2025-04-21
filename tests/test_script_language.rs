@@ -1,4 +1,4 @@
-use alphabet_detector::{script_char_to_slangs, Language, Script, ScriptLanguage};
+use alphabet_detector::{script_char_to_slangs, Language, Script, ScriptLanguage, UcdScript};
 use strum::{EnumCount, IntoEnumIterator};
 use ScriptLanguage::*;
 
@@ -41,12 +41,11 @@ fn test_correct_map_to_lang() {
 #[test]
 fn test_correct_map_to_script() {
     for slang in ScriptLanguage::iter() {
-        if let Some(script) = <Option<Script>>::from(slang) {
-            assert!(
-                script_char_to_slangs(script, char::default()).contains(&slang),
-                "ScriptLanguage {slang:?} wrong script: {script:?}",
-            );
-        }
+        let script = Script::from(slang);
+        assert!(
+            script_char_to_slangs(UcdScript::from(script), char::default()).contains(&slang),
+            "ScriptLanguage {slang:?} wrong script: {script:?}",
+        );
     }
 }
 

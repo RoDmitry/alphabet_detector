@@ -1,7 +1,7 @@
+use ::core::cmp::Ordering;
+use debug_unsafe::slice::SliceGetter;
 use serde::{Deserialize, Serialize};
 use strum_macros::{EnumIter, EnumString, IntoStaticStr};
-
-use super::UcdScript;
 
 #[derive(
     Clone,
@@ -20,7 +20,7 @@ use super::UcdScript;
 )]
 #[strum(const_into_str)]
 // #[strum(ascii_case_insensitive)]
-pub enum Script {
+pub enum UcdScript {
     #[strum(serialize = "Adlm")]
     Adlam,
     #[strum(serialize = "Ahom")]
@@ -125,10 +125,6 @@ pub enum Script {
     Hangul,
     #[strum(serialize = "Rohg")]
     HanifiRohingya,
-    #[strum(serialize = "Hans")]
-    HanSimplified,
-    #[strum(serialize = "Hant")]
-    HanTraditional,
     #[strum(serialize = "Hano")]
     Hanunoo,
     #[strum(serialize = "Hatr")]
@@ -145,8 +141,6 @@ pub enum Script {
     InscriptionalPahlavi,
     #[strum(serialize = "Prti")]
     InscriptionalParthian,
-    #[strum(serialize = "Jpan")]
-    Japanese,
     #[strum(serialize = "Java")]
     Javanese,
     #[strum(serialize = "Kthi")]
@@ -171,8 +165,6 @@ pub enum Script {
     Khudawadi,
     #[strum(serialize = "Krai")]
     KiratRai,
-    #[strum(serialize = "Kore")]
-    Korean,
     #[strum(serialize = "Laoo")]
     Lao,
     #[strum(serialize = "Latn")]
@@ -371,184 +363,168 @@ pub enum Script {
     ZanabazarSquare,
 }
 
-impl From<Script> for UcdScript {
-    fn from(s: Script) -> Self {
-        use Script::*;
-        match s {
-            Adlam => UcdScript::Adlam,
-            Ahom => UcdScript::Ahom,
-            AnatolianHieroglyphs => UcdScript::AnatolianHieroglyphs,
-            Arabic => UcdScript::Arabic,
-            Armenian => UcdScript::Armenian,
-            Avestan => UcdScript::Avestan,
-            Balinese => UcdScript::Balinese,
-            Bamum => UcdScript::Bamum,
-            BassaVah => UcdScript::BassaVah,
-            Batak => UcdScript::Batak,
-            Bengali => UcdScript::Bengali,
-            Bhaiksuki => UcdScript::Bhaiksuki,
-            Bopomofo => UcdScript::Bopomofo,
-            Brahmi => UcdScript::Brahmi,
-            Braille => UcdScript::Braille,
-            Buginese => UcdScript::Buginese,
-            Buhid => UcdScript::Buhid,
-            CanadianAboriginal => UcdScript::CanadianAboriginal,
-            Carian => UcdScript::Carian,
-            CaucasianAlbanian => UcdScript::CaucasianAlbanian,
-            Chakma => UcdScript::Chakma,
-            Cham => UcdScript::Cham,
-            Cherokee => UcdScript::Cherokee,
-            Chorasmian => UcdScript::Chorasmian,
-            Common => UcdScript::Common,
-            Coptic => UcdScript::Coptic,
-            Cuneiform => UcdScript::Cuneiform,
-            Cypriot => UcdScript::Cypriot,
-            CyproMinoan => UcdScript::CyproMinoan,
-            Cyrillic => UcdScript::Cyrillic,
-            Deseret => UcdScript::Deseret,
-            Devanagari => UcdScript::Devanagari,
-            DivesAkuru => UcdScript::DivesAkuru,
-            Dogra => UcdScript::Dogra,
-            Duployan => UcdScript::Duployan,
-            EgyptianHieroglyphs => UcdScript::EgyptianHieroglyphs,
-            Elbasan => UcdScript::Elbasan,
-            Elymaic => UcdScript::Elymaic,
-            Ethiopic => UcdScript::Ethiopic,
-            Garay => UcdScript::Garay,
-            Georgian => UcdScript::Georgian,
-            Glagolitic => UcdScript::Glagolitic,
-            Gothic => UcdScript::Gothic,
-            Grantha => UcdScript::Grantha,
-            Greek => UcdScript::Greek,
-            Gujarati => UcdScript::Gujarati,
-            GunjalaGondi => UcdScript::GunjalaGondi,
-            Gurmukhi => UcdScript::Gurmukhi,
-            GurungKhema => UcdScript::GurungKhema,
-            Han => UcdScript::Han,
-            Hangul => UcdScript::Hangul,
-            HanifiRohingya => UcdScript::HanifiRohingya,
-            HanSimplified => UcdScript::Han,
-            HanTraditional => UcdScript::Han,
-            Hanunoo => UcdScript::Hanunoo,
-            Hatran => UcdScript::Hatran,
-            Hebrew => UcdScript::Hebrew,
-            Hiragana => UcdScript::Hiragana,
-            ImperialAramaic => UcdScript::ImperialAramaic,
-            Inherited => UcdScript::Inherited,
-            InscriptionalPahlavi => UcdScript::InscriptionalPahlavi,
-            InscriptionalParthian => UcdScript::InscriptionalParthian,
-            Japanese => UcdScript::Han,
-            Javanese => UcdScript::Javanese,
-            Kaithi => UcdScript::Kaithi,
-            Kannada => UcdScript::Kannada,
-            Katakana => UcdScript::Katakana,
-            Kawi => UcdScript::Kawi,
-            KayahLi => UcdScript::KayahLi,
-            Kharoshthi => UcdScript::Kharoshthi,
-            KhitanSmallScript => UcdScript::KhitanSmallScript,
-            Khmer => UcdScript::Khmer,
-            Khojki => UcdScript::Khojki,
-            Khudawadi => UcdScript::Khudawadi,
-            KiratRai => UcdScript::KiratRai,
-            Korean => UcdScript::Han,
-            Lao => UcdScript::Lao,
-            Latin => UcdScript::Latin,
-            Lepcha => UcdScript::Lepcha,
-            Limbu => UcdScript::Limbu,
-            LinearA => UcdScript::LinearA,
-            LinearB => UcdScript::LinearB,
-            Lisu => UcdScript::Lisu,
-            Lycian => UcdScript::Lycian,
-            Lydian => UcdScript::Lydian,
-            Mahajani => UcdScript::Mahajani,
-            Makasar => UcdScript::Makasar,
-            Malayalam => UcdScript::Malayalam,
-            Mandaic => UcdScript::Mandaic,
-            Manichaean => UcdScript::Manichaean,
-            Marchen => UcdScript::Marchen,
-            MasaramGondi => UcdScript::MasaramGondi,
-            Medefaidrin => UcdScript::Medefaidrin,
-            MeeteiMayek => UcdScript::MeeteiMayek,
-            MendeKikakui => UcdScript::MendeKikakui,
-            MeroiticCursive => UcdScript::MeroiticCursive,
-            MeroiticHieroglyphs => UcdScript::MeroiticHieroglyphs,
-            Miao => UcdScript::Miao,
-            Modi => UcdScript::Modi,
-            Mongolian => UcdScript::Mongolian,
-            Mro => UcdScript::Mro,
-            Multani => UcdScript::Multani,
-            Myanmar => UcdScript::Myanmar,
-            Nabataean => UcdScript::Nabataean,
-            NagMundari => UcdScript::NagMundari,
-            Nandinagari => UcdScript::Nandinagari,
-            Newa => UcdScript::Newa,
-            NewTaiLue => UcdScript::NewTaiLue,
-            Nko => UcdScript::Nko,
-            Nushu => UcdScript::Nushu,
-            NyiakengPuachueHmong => UcdScript::NyiakengPuachueHmong,
-            Ogham => UcdScript::Ogham,
-            OlChiki => UcdScript::OlChiki,
-            OldHungarian => UcdScript::OldHungarian,
-            OldItalic => UcdScript::OldItalic,
-            OldNorthArabian => UcdScript::OldNorthArabian,
-            OldPermic => UcdScript::OldPermic,
-            OldPersian => UcdScript::OldPersian,
-            OldSogdian => UcdScript::OldSogdian,
-            OldSouthArabian => UcdScript::OldSouthArabian,
-            OldTurkic => UcdScript::OldTurkic,
-            OldUyghur => UcdScript::OldUyghur,
-            OlOnal => UcdScript::OlOnal,
-            Oriya => UcdScript::Oriya,
-            Osage => UcdScript::Osage,
-            Osmanya => UcdScript::Osmanya,
-            PahawhHmong => UcdScript::PahawhHmong,
-            Palmyrene => UcdScript::Palmyrene,
-            PauCinHau => UcdScript::PauCinHau,
-            PhagsPa => UcdScript::PhagsPa,
-            Phoenician => UcdScript::Phoenician,
-            PsalterPahlavi => UcdScript::PsalterPahlavi,
-            Rejang => UcdScript::Rejang,
-            Runic => UcdScript::Runic,
-            Samaritan => UcdScript::Samaritan,
-            Saurashtra => UcdScript::Saurashtra,
-            Sharada => UcdScript::Sharada,
-            Shavian => UcdScript::Shavian,
-            Siddham => UcdScript::Siddham,
-            SignWriting => UcdScript::SignWriting,
-            Sinhala => UcdScript::Sinhala,
-            Sogdian => UcdScript::Sogdian,
-            SoraSompeng => UcdScript::SoraSompeng,
-            Soyombo => UcdScript::Soyombo,
-            Sundanese => UcdScript::Sundanese,
-            Sunuwar => UcdScript::Sunuwar,
-            SylotiNagri => UcdScript::SylotiNagri,
-            Syriac => UcdScript::Syriac,
-            Tagalog => UcdScript::Tagalog,
-            Tagbanwa => UcdScript::Tagbanwa,
-            TaiLe => UcdScript::TaiLe,
-            TaiTham => UcdScript::TaiTham,
-            TaiViet => UcdScript::TaiViet,
-            Takri => UcdScript::Takri,
-            Tamil => UcdScript::Tamil,
-            Tangsa => UcdScript::Tangsa,
-            Tangut => UcdScript::Tangut,
-            Telugu => UcdScript::Telugu,
-            Thaana => UcdScript::Thaana,
-            Thai => UcdScript::Thai,
-            Tibetan => UcdScript::Tibetan,
-            Tifinagh => UcdScript::Tifinagh,
-            Tirhuta => UcdScript::Tirhuta,
-            Todhri => UcdScript::Todhri,
-            Toto => UcdScript::Toto,
-            TuluTigalari => UcdScript::TuluTigalari,
-            Ugaritic => UcdScript::Ugaritic,
-            Vai => UcdScript::Vai,
-            Vithkuqi => UcdScript::Vithkuqi,
-            Wancho => UcdScript::Wancho,
-            WarangCiti => UcdScript::WarangCiti,
-            Yezidi => UcdScript::Yezidi,
-            Yi => UcdScript::Yi,
-            ZanabazarSquare => UcdScript::ZanabazarSquare,
+use super::BY_NAME;
+
+const fn char_ranges_count() -> usize {
+    let mut i = 0;
+    let mut cnt = 0;
+    while i < BY_NAME.len() {
+        cnt += BY_NAME[i].1.len();
+        i += 1;
+    }
+
+    cnt
+}
+const LEN: usize = char_ranges_count();
+
+#[derive(Clone, Copy, Debug)]
+struct RangeScript {
+    range_start: char,
+    range_end: char,
+    script: UcdScript,
+}
+const RANGE_SCRIPT_DEFAULT: RangeScript = RangeScript {
+    range_start: char::MAX,
+    range_end: char::MAX,
+    script: unsafe { ::core::mem::transmute::<u8, UcdScript>(0) },
+};
+
+/* #[const_trait]
+trait ConstDefault {
+    fn default<const RUNTIME: bool>() -> Self;
+}
+impl const ConstDefault for RangeScript {
+    fn default() -> Self {
+        RangeScript {
+            range_start: char::MAX,
+            range_end: char::MAX,
+            script: Script::Latin,
+        }
+    }
+} */
+
+const fn char_ranges_array_sorted() -> [RangeScript; LEN] {
+    let mut res: [RangeScript; LEN] = [RANGE_SCRIPT_DEFAULT; LEN];
+
+    // foreach BY_NAME
+    let mut i = 0;
+    while i < BY_NAME.len() {
+        let (script, ranges) = BY_NAME[i];
+        // foreach charset
+        let mut j = 0;
+        while j < ranges.len() {
+            let range = ranges[j];
+            // looking for insertion
+            let mut ins = 0;
+            while ins < LEN {
+                let mut prev = res[ins];
+                if range.0 < prev.range_start {
+                    res[ins] = RangeScript {
+                        range_start: range.0,
+                        range_end: range.1,
+                        script,
+                    };
+                    if prev.range_start == char::MAX {
+                        break;
+                    }
+                    // shifts all elements right
+                    let mut next_ins = ins + 1;
+                    while next_ins < LEN {
+                        let next = res[next_ins];
+                        res[next_ins] = prev;
+                        if next.range_start == char::MAX {
+                            break;
+                        }
+                        prev = next;
+                        next_ins += 1;
+                    }
+                    break;
+                }
+                ins += 1;
+            }
+            j += 1;
+        }
+        i += 1;
+    }
+
+    res
+}
+const CHAR_RANGES_SORTED: [RangeScript; LEN] = char_ranges_array_sorted();
+
+/* #[test]
+fn print_char_ranges_sorted() {
+    panic!("{:?}", CHAR_RANGES_SORTED);
+} */
+
+#[inline(always)]
+fn compare(ra: &RangeScript, ch: char) -> Ordering {
+    if ch < ra.range_start {
+        Ordering::Greater
+    } else if ch > ra.range_end {
+        Ordering::Less
+    } else {
+        Ordering::Equal
+    }
+}
+
+impl UcdScript {
+    pub fn find(ch: char) -> Self {
+        CHAR_RANGES_SORTED
+            .binary_search_by(|ra| compare(ra, ch))
+            .ok()
+            .map(|i| CHAR_RANGES_SORTED.get_safe_unchecked(i).script)
+            // Some unused `Common` ranges in `ucd` are commented out, so it defaults to `Common`
+            .unwrap_or(Self::Common)
+    }
+}
+
+/* pub(crate) fn find_script(ch: char) -> Option<Script> {
+    crate::script::BY_SCRIPT
+        .iter()
+        .find(|(_, chars)| chars.iter().any(|cs| ch > cs.0 || ch <= cs.1))
+        .map(|v| v.0)
+}
+
+pub(crate) fn script_same(script: Script, ch: char) -> bool {
+    crate::script::BY_SCRIPT
+        .iter()
+        .find(|(a, _)| a == &script)
+        .map(|(_, chars)| chars.iter().any(|cs| ch > cs.0 || ch <= cs.1))
+        .unwrap_or_default()
+} */
+/* const fn insertion_sort<const N: usize>(mut arr: [u32; N]) -> [u32; N] {
+    let mut i = 1;
+    while i < N {
+        let mut j = i;
+        while j > 0 && arr[j - 1] > arr[j] {
+            arr.swap(j - 1, j);
+            j -= 1;
+        }
+        i += 1;
+    }
+
+    arr
+} */
+
+#[cfg(test)]
+mod tests {
+    use super::CHAR_RANGES_SORTED;
+
+    #[test]
+    fn test_char_ranges_sorted() {
+        let mut prev = *CHAR_RANGES_SORTED.first().unwrap();
+        for range in CHAR_RANGES_SORTED.into_iter().skip(1) {
+            assert_ne!(range.range_start, char::MAX, "range_start is default");
+            assert_ne!(range.range_end, char::MAX, "range_end is default");
+            assert!(
+                range.range_start <= range.range_end,
+                "range_start > range_end\n{range:?}"
+            );
+            assert!(
+                prev.range_end < range.range_start,
+                "prev.range_end >= range.range_start\nprev: {prev:?}\nrange: {range:?}"
+            );
+            prev = range;
         }
     }
 }

@@ -7,7 +7,7 @@ use ::std::{
 use ahash::{AHashMap, AHashSet};
 use alphabet_detector::{
     ch_norm, reader::ReadCharsChunks, script_char_to_slangs, slang_arr_default,
-    slang_arr_default_nc, CharData, Script, ScriptLanguage, ScriptLanguageArr,
+    slang_arr_default_nc, CharData, ScriptLanguage, ScriptLanguageArr, UcdScript,
 };
 use clap::Parser;
 use debug_unsafe::slice::SliceGetter;
@@ -45,18 +45,16 @@ fn main() {
                 *lang_seen = true;
             }
 
-            let thread_script = <Option<Script>>::from(thread_lang);
-            let thread_langs = thread_script
-                .map(|s| script_char_to_slangs(s, char::default()))
-                .unwrap_or_default();
+            let thread_script = UcdScript::from(thread_lang);
+            let thread_langs = ScriptLanguage::all_with_script(thread_script);
             // TODO: rm this filter
             /* if !matches!(thread_lang, ScriptLanguage::English) {
                 return;
             } */
             // TODO: rm this filter
-            if thread_script != Some(Script::Latin) {
+            /* if thread_script != UcdScript::Latin {
                 return;
-            }
+            } */
 
             println!("*{}* {:?} started", file_name, thread_lang);
 

@@ -1,4 +1,4 @@
-use super::{Script, ScriptLanguage};
+use super::{ScriptLanguage, UcdScript};
 #[cfg(all(debug_assertions, feature = "test_chars"))]
 use crate::ch_norm::test_chars;
 use alphabet_detector_macros::alphabet_match;
@@ -59,17 +59,17 @@ pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
 // How to add a new alphabet:
 // Add all the letters of all the alphabets in the script group.
 //  Even though it's possible to add not all of the letters,
-//   (for example when all alphabets include them, like in `Script::Han`),
+//   (for example when all alphabets include them, like in `UcdScript::Han`),
 //   it's recommended to add common letters (if alphabet is not very big),
 //   anyway they will be filtered out by `alphabet_match!` macro.
-// Do not add same `ScriptLanguage` to different scripts, except `Script::Common` or
+// Do not add same `ScriptLanguage` to different scripts, except `UcdScript::Common` or
 //  languages written with different scripts in a one word (like Japanese),
 //  instead create a new alphabet.
 // There is no reason to add letters if the script contains only one `ScriptLanguage`.
 // Do not add letters used only for loanwords, but save them in a comment.
-/// Returns all `ScriptLanguage`s by `Script` and `char`
-pub fn script_char_to_slangs(script: Script, ch: char) -> &'static [ScriptLanguage] {
-    use Script::*;
+/// Returns all `ScriptLanguage`s by `UcdScript` and `char`
+pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLanguage] {
+    use UcdScript::*;
     match script {
         Adlam => &[ScriptLanguage::Fulani, ScriptLanguage::PularAdlam],
         Ahom => &[ScriptLanguage::Ahom],

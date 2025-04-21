@@ -1,6 +1,6 @@
 use crate::{
     ch_norm::{self, CharData},
-    lang::{script_char_to_slangs, Script, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
+    lang::{script_char_to_slangs, UcdScript, WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE},
     slang_arr_default, CharNormalizingIterator, ScriptLanguage, ScriptLanguageArr,
 };
 use ::core::ops::Range;
@@ -64,7 +64,7 @@ pub struct WordIterator<I: Iterator<Item = CharData>, B: WordBuf> {
     word_buf: B,
     word_start_index: usize,
     not_saved_word_end_index: usize,
-    prev_char_script: Script,
+    prev_char_script: UcdScript,
     word_langs_cnt: ScriptLanguageArr<u32>,
     word_common_langs_cnt: ScriptLanguageArr<u32>,
     res: Option<WordLang<B>>,
@@ -80,7 +80,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> From<CharNormalizingIterator<I>>
             word_buf: Default::default(),
             word_start_index: Default::default(),
             not_saved_word_end_index: Default::default(),
-            prev_char_script: Script::Common,
+            prev_char_script: UcdScript::Common,
             word_langs_cnt: slang_arr_default(),
             word_common_langs_cnt: slang_arr_default(),
             res: None,
@@ -139,7 +139,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
 
             let langs_not_intersect = if self.prev_char_script != script {
                 !(ch == '-' || {
-                    let langs_cnt = if self.prev_char_script == Script::Common {
+                    let langs_cnt = if self.prev_char_script == UcdScript::Common {
                         &self.word_common_langs_cnt
                     } else {
                         &self.word_langs_cnt
@@ -152,9 +152,9 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 false
             };
 
-            let ch_skip = if script == Script::Common {
+            let ch_skip = if script == UcdScript::Common {
                 if langs_not_intersect
-                    || self.prev_char_script == Script::Common
+                    || self.prev_char_script == UcdScript::Common
                         && !WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE.contains(&ch)
                 {
                     true
@@ -163,7 +163,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                     ..
                 }) = self.norm_iter.get_next_char()
                 {
-                    next_char_script == Script::Common
+                    next_char_script == UcdScript::Common
                 } else {
                     true
                 }
@@ -184,7 +184,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 self.not_saved_word_end_index = idx + ch.len_utf8();
                 // lowercase
                 self.word_buf.push(ch.to_lowercase().next().unwrap());
-                let langs_cnt = if script == Script::Common {
+                let langs_cnt = if script == UcdScript::Common {
                     &mut self.word_common_langs_cnt
                 } else {
                     &mut self.word_langs_cnt

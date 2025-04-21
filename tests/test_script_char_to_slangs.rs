@@ -1,17 +1,17 @@
 use alphabet_detector::{
-    script_char_to_slangs, slang_arr_default, ucd::BY_NAME, Script, ScriptLanguage,
+    script_char_to_slangs, slang_arr_default, ucd::BY_NAME, ScriptLanguage, UcdScript,
 };
 use strum::EnumCount;
 
 #[test]
 fn test_empty() {
     assert!(
-        script_char_to_slangs(Script::Inherited, char::default()).is_empty(),
-        "Script::Inherited must be always empty"
+        script_char_to_slangs(UcdScript::Inherited, char::default()).is_empty(),
+        "UcdScript::Inherited must be always empty"
     );
     assert!(
-        script_char_to_slangs(Script::Common, char::default()).is_empty(),
-        "Script::Common match other char must be always empty"
+        script_char_to_slangs(UcdScript::Common, char::default()).is_empty(),
+        "UcdScript::Common match other char must be always empty"
     );
 }
 
@@ -19,7 +19,7 @@ fn test_empty() {
 fn test_doubles() {
     let mut langs;
     for &(script, ranges) in BY_NAME {
-        if script == Script::Inherited {
+        if script == UcdScript::Inherited {
             continue;
         }
         for range in ranges {
@@ -27,7 +27,7 @@ fn test_doubles() {
                 langs = slang_arr_default::<usize>();
 
                 let ch_langs = script_char_to_slangs(script, ch);
-                if ch_langs.is_empty() && script != Script::Common {
+                if ch_langs.is_empty() && script != UcdScript::Common {
                     panic!("Empty langs in {:?} for char: {}", script, ch);
                 }
                 for &lang in ch_langs {
@@ -56,9 +56,10 @@ fn test_doubles() {
 fn test_alphabets() {
     use strum::IntoEnumIterator;
 
-    let mut slangs: [Vec<Script>; ScriptLanguage::COUNT] = ::core::array::from_fn(|_| Vec::new());
-    for script in Script::iter() {
-        if script == Script::Common || script == Script::Inherited {
+    let mut slangs: [Vec<UcdScript>; ScriptLanguage::COUNT] =
+        ::core::array::from_fn(|_| Vec::new());
+    for script in UcdScript::iter() {
+        if script == UcdScript::Common || script == UcdScript::Inherited {
             continue;
         }
         for &slang in script_char_to_slangs(script, char::default()) {
@@ -82,25 +83,10 @@ fn test_alphabets() {
         .enumerate()
         .filter(|(_, scrs)| scrs.len() > 1)
         .map(|(sl, _)| ScriptLanguage::from_usize_unchecked(sl))
-        .filter(|&sl| <Option<Script>>::from(sl).is_some())
+        .filter(|sl| ![ScriptLanguage::Japanese, ScriptLanguage::Korean].contains(sl))
         .collect();
 
     if !slangs_used.is_empty() {
         panic!("{:?} are used in multiple scripts", slangs_used);
-    }
-
-    let slangs_used: ahash::AHashSet<ScriptLanguage> = slangs
-        .iter()
-        .enumerate()
-        .filter(|(_, scrs)| scrs.len() == 1)
-        .map(|(sl, _)| ScriptLanguage::from_usize_unchecked(sl))
-        .filter(|&sl| <Option<Script>>::from(sl).is_none() && sl.into_script_str().is_empty())
-        .collect();
-
-    if !slangs_used.is_empty() {
-        panic!(
-            "{:?} do not have a script stated in `slang` macro",
-            slangs_used
-        );
     }
 }

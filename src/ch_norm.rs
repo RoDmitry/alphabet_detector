@@ -1,4 +1,4 @@
-use crate::lang::{char_compose_custom, Script};
+use crate::lang::{char_compose_custom, UcdScript};
 use icu_normalizer::properties::CanonicalCompositionBorrowed;
 
 #[cfg(all(debug_assertions, feature = "test_chars"))]
@@ -51,7 +51,7 @@ fn char_decompose(ch: char) -> (char, Option<char>, Option<char>) {
 
 #[derive(Clone, Copy, Debug)]
 pub struct CharData {
-    pub script: Script,
+    pub script: UcdScript,
     pub idx: usize,
     pub ch: char,
 }
@@ -69,14 +69,14 @@ pub fn from_ch_ind(
     char_indices: impl Iterator<Item = (usize, char)>,
 ) -> CharNormalizingIterator<impl Iterator<Item = CharData>> {
     let mut iter = char_indices.map(|(ch_idx, ch)| CharData {
-        script: Script::find(ch),
+        script: UcdScript::find(ch),
         idx: ch_idx,
         ch,
     });
 
     let mut next_char = iter.next();
     while let Some(CharData {
-        script: Script::Inherited,
+        script: UcdScript::Inherited,
         ..
     }) = next_char
     {
@@ -126,9 +126,9 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
             }
         }
 
-        // composing `ch` with `next_char` of `Script::Inherited`
+        // composing `ch` with `next_char` of `UcdScript::Inherited`
         while let Some(CharData {
-            script: Script::Inherited,
+            script: UcdScript::Inherited,
             idx: i,
             ch: c,
         }) = self.next_char
