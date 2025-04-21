@@ -2,11 +2,11 @@ use crate::lang::{char_compose_custom, UcdScript};
 use icu_normalizer::properties::CanonicalCompositionBorrowed;
 
 #[cfg(all(debug_assertions, feature = "test_chars"))]
-pub(crate) fn test_chars(script: Script, chars: &[char]) {
+pub(crate) fn test_chars(script: UcdScript, chars: &[char]) {
     let decomp_nfd = icu_normalizer::DecomposingNormalizerBorrowed::new_nfd();
     let composer = CanonicalCompositionBorrowed::new();
     for &ch in chars {
-        let ch_script = Script::find(ch);
+        let ch_script = UcdScript::find(ch);
         assert_eq!(ch_script, script, "char '{ch}'");
 
         let ch_str = ch.to_string();
