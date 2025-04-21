@@ -1,6 +1,6 @@
 #![allow(unexpected_cfgs)]
 
-use alphabet_match_macro::*;
+use alphabet_detector_macros::*;
 
 #[derive(Debug, PartialEq)]
 enum TestEnum {
