@@ -50,6 +50,29 @@ fn test_correct_map_to_script() {
 }
 
 #[test]
+fn test_each_code() {
+    for v in ScriptLanguage::iter() {
+        let code = v.into_code();
+        assert!(
+            code < (1 << 30),
+            "ScriptLanguage {v:?} too big code: {}",
+            code
+        );
+    }
+}
+
+#[test]
+fn test_to_code() {
+    assert_eq!(English.into_code(), 5709015_u32);
+}
+
+#[test]
+fn test_from_code() {
+    let language = ScriptLanguage::from_code(5709015_u32).unwrap();
+    assert_eq!(language, English);
+}
+
+#[test]
 fn test_to_string() {
     assert_eq!(English.into_str(), "engLatn");
 }

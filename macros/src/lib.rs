@@ -3,6 +3,8 @@ use syn::parse_macro_input;
 
 mod alphabet_match;
 mod helper;
+mod language_derive;
+mod script_derive;
 mod script_lang_derive;
 
 #[proc_macro]
@@ -26,6 +28,24 @@ pub fn script_lang_derive(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input);
     let tokens = script_lang_derive::script_lang_derive_inner(input)
         .unwrap_or_else(|err| err.to_compile_error());
+
+    TokenStream::from(tokens)
+}
+
+#[proc_macro_derive(Script, attributes(scr))]
+pub fn script_derive(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input);
+    let tokens =
+        script_derive::script_derive_inner(input).unwrap_or_else(|err| err.to_compile_error());
+
+    TokenStream::from(tokens)
+}
+
+#[proc_macro_derive(Language, attributes(language))]
+pub fn language_derive(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input);
+    let tokens =
+        language_derive::language_derive_inner(input).unwrap_or_else(|err| err.to_compile_error());
 
     TokenStream::from(tokens)
 }

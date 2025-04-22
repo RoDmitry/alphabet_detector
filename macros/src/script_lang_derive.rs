@@ -25,6 +25,8 @@ pub(super) fn script_lang_derive_inner(
     let mut match_to_script = Vec::new();
     let mut match_to_parts = Vec::new();
     let mut match_to_str = Vec::new();
+    let mut match_to_code = Vec::new();
+    let mut match_from_code = Vec::new();
     let mut match_from_parts = Vec::new();
     let mut match_from_bytes = Vec::new();
     let mut str_variants = Vec::new();
@@ -119,6 +121,13 @@ pub(super) fn script_lang_derive_inner(
                 Script::#script.into_str()
             )
         });
+        match_to_code.push(quote! {
+            #name::#ident #params => (Language::#lang.into_code() << 10) | Script::#script.into_code() as u32
+        });
+        match_from_code.push(quote! {
+            v if v == const { (Language::#lang.into_code() << 10) | Script::#script.into_code() as u32 } =>
+                ::core::option::Option::Some(#name::#ident #params)
+        });
         match_from_parts.push(quote! {
             (Language::#lang, Script::#script) => ::core::option::Option::Some(#name::#ident #params)
         });
@@ -139,6 +148,7 @@ pub(super) fn script_lang_derive_inner(
         let l = Ident::new(&lang, Span::call_site());
         quote! { Language::#l => &[#(#v),*] }
     });
+    match_from_code.push(quote! { _ => ::core::option::Option::None });
     match_from_parts.push(quote! { _ => ::core::option::Option::None });
     match_from_bytes.push(quote! { _ => ::core::option::Option::None });
 
@@ -180,6 +190,20 @@ pub(super) fn script_lang_derive_inner(
             pub const fn into_str(self) -> &'static str {
                 match self {
                     #(#match_to_str),*
+                }
+            }
+            /// 30-bit code
+            #[inline]
+            pub const fn into_code(self) -> u32 {
+                match self {
+                    #(#match_to_code),*
+                }
+            }
+            /// 30-bit code
+            #[inline]
+            pub const fn from_code(v: u32) -> Option<Self> {
+                match v {
+                    #(#match_from_code),*
                 }
             }
             #[inline]

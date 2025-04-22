@@ -130,14 +130,14 @@ fn main() {
                 .into_iter()
                 .enumerate()
                 .filter(|(_, cnt)| *cnt > lang_count)
-                .map(|(l, _)| ScriptLanguage::from_usize_unchecked(l))
+                .map(|(l, _)| ScriptLanguage::transmute_from_usize(l))
                 .collect();
 
             let top_lang_chars: AHashMap<_, _> = not_found_chars
                 .iter()
                 .enumerate()
                 .filter(|(_, c)| !c.is_empty())
-                .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(l), c))
+                .map(|(l, c)| (ScriptLanguage::transmute_from_usize(l), c))
                 .filter(|(l, _)| top_langs.contains(l))
                 .map(|(l, c)| {
                     (l, {
@@ -158,7 +158,7 @@ fn main() {
                 .into_iter()
                 .enumerate()
                 .filter(|(_, c)| !c.is_empty())
-                .map(|(l, c)| (ScriptLanguage::from_usize_unchecked(l), c))
+                .map(|(l, c)| (ScriptLanguage::transmute_from_usize(l), c))
                 .filter(|(l, _)| thread_langs.contains(l))
                 .flat_map(|(_, c)| c.into_iter())
                 .collect();

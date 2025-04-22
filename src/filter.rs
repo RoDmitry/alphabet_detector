@@ -17,7 +17,7 @@ pub fn filter_max(
             .into_iter()
             .enumerate()
             .filter(move |(_, cnt)| *cnt == lang_count_max)
-            .map(|(l, _)| ScriptLanguage::from_usize_unchecked(l)),
+            .map(|(l, _)| ScriptLanguage::transmute_from_usize(l)),
         lang_count_max,
     )
 }
@@ -36,7 +36,7 @@ pub fn filter_with_margin<const PERCENT: u32>(
         .into_iter()
         .enumerate()
         .filter(move |(_, cnt)| *cnt > lang_count_filter)
-        .map(|(l, cnt)| (ScriptLanguage::from_usize_unchecked(l), cnt))
+        .map(|(l, cnt)| (ScriptLanguage::transmute_from_usize(l), cnt))
 }
 
 /// Only top (100 - `PERCENT`)% `ScriptLanguage`s are retained, then sorted.

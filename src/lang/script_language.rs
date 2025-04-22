@@ -1,20 +1,19 @@
 use super::{script_char_to_slangs, Language, Script, UcdScript};
-use ::core::fmt;
 use ::std::fmt::Debug;
 use alphabet_detector_macros::ScriptLanguage;
 use strum::{EnumCount, IntoEnumIterator};
 use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 
-const ENUM_NAME: &str = "ScriptLanguage";
-
 /// Language + script.
 /// Value-names not always represent a script used, so a "default" script can be changed.
+/// Int representation is unstable and can be changed anytime.
 /// Parts representation (const
 /// [`into_parts`](enum.ScriptLanguage.html#method.into_parts)/[`from_parts`](enum.ScriptLanguage.html#method.from_parts))
+/// or code representation (const
+/// [`into_code`](enum.ScriptLanguage.html#method.into_code)/[`from_code`](enum.ScriptLanguage.html#method.from_code))
 /// or string representation (const
 /// [`into_str`](enum.ScriptLanguage.html#method.into_str)/[`from_str`](enum.ScriptLanguage.html#method.from_str))
 /// are more stable.
-/// Int representation is unstable and can be changed anytime.
 #[derive(
     Clone,
     Copy,
@@ -847,6 +846,9 @@ pub enum ScriptLanguage {
     Zulu,
 }
 
+impl_try_from!(ScriptLanguage, u32, u32 i32 usize isize u64 i64 u128 i128);
+impl_serde!(ScriptLanguage, "ScriptLanguage");
+
 impl ScriptLanguage {
     /// Returns an iterator of all `ScriptLanguage`s
     #[inline(always)]
@@ -861,38 +863,9 @@ impl ScriptLanguage {
     }
 
     #[inline(always)]
-    pub fn from_usize_unchecked(v: usize) -> Self {
+    pub fn transmute_from_usize(v: usize) -> Self {
         debug_assert!(v < Self::COUNT);
         unsafe { ::core::mem::transmute::<usize, Self>(v) }
-    }
-}
-
-macro_rules! impl_try_from {
-    ($($t:ty)*) => {$(
-        impl TryFrom<$t> for ScriptLanguage {
-            type Error = &'static str;
-
-            #[inline]
-            fn try_from(v: $t) -> Result<Self, Self::Error> {
-                if v < Self::COUNT as $t {
-                    Ok(unsafe { ::core::mem::transmute::<usize, Self>(v as usize) })
-                } else {
-                    Err(concat_const::concat!(
-                        "value > ",
-                        concat_const::int!(ScriptLanguage::COUNT as i128)
-                    ))
-                }
-            }
-        }
-    )*};
-}
-
-impl_try_from!(u16 u32 usize u64 u128);
-
-impl From<ScriptLanguage> for UcdScript {
-    #[inline]
-    fn from(sl: ScriptLanguage) -> Self {
-        UcdScript::from(Script::from(sl))
     }
 }
 
@@ -902,77 +875,10 @@ impl From<ScriptLanguage> for UcdScript {
     }
 } */
 
-impl serde::Serialize for ScriptLanguage {
+impl From<ScriptLanguage> for UcdScript {
     #[inline]
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        serde::Serializer::serialize_unit_variant(
-            serializer,
-            ENUM_NAME,
-            *self as u32,
-            self.into_str(),
-        )
-    }
-}
-
-impl<'de> serde::Deserialize<'de> for ScriptLanguage {
-    #[inline]
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        #[doc(hidden)]
-        struct ScriptLanguageValueVisitor;
-
-        impl<'de> serde::de::Visitor<'de> for ScriptLanguageValueVisitor {
-            type Value = ScriptLanguage;
-
-            fn expecting(&self, __formatter: &mut fmt::Formatter) -> fmt::Result {
-                fmt::Formatter::write_str(__formatter, "variant identifier")
-            }
-
-            #[inline]
-            fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {
-                Self::Value::try_from(v).map_err(|_| {
-                    serde::de::Error::invalid_value(
-                        serde::de::Unexpected::Unsigned(v),
-                        &concat_const::concat!(
-                            "variant index 0 <= i < ",
-                            concat_const::int!(ScriptLanguage::COUNT as i128)
-                        ),
-                    )
-                })
-            }
-
-            #[inline]
-            fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {
-                Self::Value::from_str(v)
-                    .ok_or_else(|| serde::de::Error::unknown_variant(v, Self::Value::VARIANTS))
-            }
-
-            #[inline]
-            fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {
-                Self::Value::from_bytes(v).ok_or_else(|| {
-                    serde::de::Error::unknown_variant(
-                        &serde::__private::from_utf8_lossy(v),
-                        Self::Value::VARIANTS,
-                    )
-                })
-            }
-        }
-
-        serde::Deserializer::deserialize_identifier(deserializer, ScriptLanguageValueVisitor)
+    fn from(sl: ScriptLanguage) -> Self {
+        UcdScript::from(Script::from(sl))
     }
 }
 

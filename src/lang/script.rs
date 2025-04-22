@@ -1,377 +1,370 @@
-use serde::{Deserialize, Serialize};
-use strum_macros::{EnumIter, EnumString, IntoStaticStr};
-
 use super::UcdScript;
+use alphabet_detector_macros::Script;
+use strum_macros::EnumIter;
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    PartialEq,
-    Eq,
-    PartialOrd,
-    Ord,
-    Hash,
-    Serialize,
-    Deserialize,
-    EnumIter,
-    EnumString,
-    IntoStaticStr,
-)]
-#[strum(const_into_str)]
-// #[strum(ascii_case_insensitive)]
+/// Int representation is unstable and can be changed anytime.
+/// Code representation (const
+/// [`into_code`](enum.Script.html#method.into_code)/[`from_code`](enum.Script.html#method.from_code))
+/// or string representation (const
+/// [`into_str`](enum.Script.html#method.into_str)/[`from_str`](enum.Script.html#method.from_str))
+/// are more stable.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumIter, Script)]
 pub enum Script {
-    #[strum(serialize = "Adlm")]
+    #[scr(short = "Adlm", code = 166)]
     Adlam,
-    #[strum(serialize = "Ahom")]
+    #[scr(short = "Ahom", code = 338)]
     Ahom,
-    #[strum(serialize = "Hluw")]
+    #[scr(short = "Hluw", code = 80)]
     AnatolianHieroglyphs,
-    #[strum(serialize = "Arab")]
+    #[scr(short = "Arab", code = 160)]
     Arabic,
-    #[strum(serialize = "Armn")]
+    #[scr(short = "Armn", code = 230)]
     Armenian,
-    #[strum(serialize = "Avst")]
+    #[scr(short = "Avst", code = 134)]
     Avestan,
-    #[strum(serialize = "Bali")]
+    #[scr(short = "Bali", code = 360)]
     Balinese,
-    #[strum(serialize = "Bamu")]
+    #[scr(short = "Bamu", code = 435)]
     Bamum,
-    #[strum(serialize = "Bass")]
+    #[scr(short = "Bass", code = 259)]
     BassaVah,
-    #[strum(serialize = "Batk")]
+    #[scr(short = "Batk", code = 365)]
     Batak,
-    #[strum(serialize = "Beng")]
+    #[scr(short = "Beng", code = 325)]
     Bengali,
-    #[strum(serialize = "Bhks")]
+    #[scr(short = "Bhks", code = 334)]
     Bhaiksuki,
-    #[strum(serialize = "Bopo")]
+    #[scr(short = "Bopo", code = 285)]
     Bopomofo,
-    #[strum(serialize = "Brah")]
+    #[scr(short = "Brah", code = 300)]
     Brahmi,
-    #[strum(serialize = "Brai")]
+    #[scr(short = "Brai", code = 570)]
     Braille,
-    #[strum(serialize = "Bugi")]
+    #[scr(short = "Bugi", code = 367)]
     Buginese,
-    #[strum(serialize = "Buhd")]
+    #[scr(short = "Buhd", code = 372)]
     Buhid,
-    #[strum(serialize = "Cans")]
+    #[scr(short = "Cans", code = 440)]
     CanadianAboriginal,
-    #[strum(serialize = "Cari")]
+    #[scr(short = "Cari", code = 201)]
     Carian,
-    #[strum(serialize = "Aghb")]
+    #[scr(short = "Aghb", code = 239)]
     CaucasianAlbanian,
-    #[strum(serialize = "Cakm")]
+    #[scr(short = "Cakm", code = 349)]
     Chakma,
-    #[strum(serialize = "Cham")]
+    #[scr(short = "Cham", code = 358)]
     Cham,
-    #[strum(serialize = "Cher")]
+    #[scr(short = "Cher", code = 445)]
     Cherokee,
-    #[strum(serialize = "Chrs")]
+    #[scr(short = "Chrs", code = 109)]
     Chorasmian,
-    #[strum(serialize = "Zyyy")]
+    #[scr(short = "Zyyy", code = 998)]
     Common,
-    #[strum(serialize = "Copt")]
+    #[scr(short = "Copt", code = 204)]
     Coptic,
-    #[strum(serialize = "Xsux")]
+    #[scr(short = "Xsux", code = 20)]
     Cuneiform,
-    #[strum(serialize = "Cprt")]
+    #[scr(short = "Cprt", code = 403)]
     Cypriot,
-    #[strum(serialize = "Cpmn")]
+    #[scr(short = "Cpmn", code = 402)]
     CyproMinoan,
-    #[strum(serialize = "Cyrl")]
+    #[scr(short = "Cyrl", code = 220)]
     Cyrillic,
-    #[strum(serialize = "Dsrt")]
+    #[scr(short = "Dsrt", code = 250)]
     Deseret,
-    #[strum(serialize = "Deva")]
+    #[scr(short = "Deva", code = 315)]
     Devanagari,
-    #[strum(serialize = "Diak")]
+    #[scr(short = "Diak", code = 342)]
     DivesAkuru,
-    #[strum(serialize = "Dogr")]
+    #[scr(short = "Dogr", code = 328)]
     Dogra,
-    #[strum(serialize = "Dupl")]
+    #[scr(short = "Dupl", code = 755)]
     Duployan,
-    #[strum(serialize = "Egyp")]
+    #[scr(short = "Egyp", code = 50)]
     EgyptianHieroglyphs,
-    #[strum(serialize = "Elba")]
+    #[scr(short = "Elba", code = 226)]
     Elbasan,
-    #[strum(serialize = "Elym")]
+    #[scr(short = "Elym", code = 128)]
     Elymaic,
-    #[strum(serialize = "Ethi")]
+    #[scr(short = "Ethi", code = 430)]
     Ethiopic,
-    #[strum(serialize = "Gara")]
+    #[scr(short = "Gara", code = 164)]
     Garay,
-    #[strum(serialize = "Geor")]
+    #[scr(short = "Geor", code = 240)]
     Georgian,
-    #[strum(serialize = "Glag")]
+    #[scr(short = "Glag", code = 225)]
     Glagolitic,
-    #[strum(serialize = "Goth")]
+    #[scr(short = "Goth", code = 206)]
     Gothic,
-    #[strum(serialize = "Gran")]
+    #[scr(short = "Gran", code = 343)]
     Grantha,
-    #[strum(serialize = "Grek")]
+    #[scr(short = "Grek", code = 200)]
     Greek,
-    #[strum(serialize = "Gujr")]
+    #[scr(short = "Gujr", code = 320)]
     Gujarati,
-    #[strum(serialize = "Gong")]
+    #[scr(short = "Gong", code = 312)]
     GunjalaGondi,
-    #[strum(serialize = "Guru")]
+    #[scr(short = "Guru", code = 310)]
     Gurmukhi,
-    #[strum(serialize = "Gukh")]
+    #[scr(short = "Gukh", code = 397)]
     GurungKhema,
-    #[strum(serialize = "Hani")]
+    #[scr(short = "Hani", code = 500)]
     Han,
-    #[strum(serialize = "Hang")]
+    #[scr(short = "Hang", code = 286)]
     Hangul,
-    #[strum(serialize = "Rohg")]
+    #[scr(short = "Rohg", code = 167)]
     HanifiRohingya,
-    #[strum(serialize = "Hans")]
+    #[scr(short = "Hans", code = 501)]
     HanSimplified,
-    #[strum(serialize = "Hant")]
+    #[scr(short = "Hant", code = 502)]
     HanTraditional,
-    #[strum(serialize = "Hano")]
+    #[scr(short = "Hano", code = 371)]
     Hanunoo,
-    #[strum(serialize = "Hatr")]
+    #[scr(short = "Hatr", code = 127)]
     Hatran,
-    #[strum(serialize = "Hebr")]
+    #[scr(short = "Hebr", code = 125)]
     Hebrew,
-    #[strum(serialize = "Hira")]
+    #[scr(short = "Hira", code = 410)]
     Hiragana,
-    #[strum(serialize = "Armi")]
+    #[scr(short = "Armi", code = 124)]
     ImperialAramaic,
-    #[strum(serialize = "Zinh")]
+    #[scr(short = "Zinh", code = 994)]
     Inherited,
-    #[strum(serialize = "Phli")]
+    #[scr(short = "Phli", code = 131)]
     InscriptionalPahlavi,
-    #[strum(serialize = "Prti")]
+    #[scr(short = "Prti", code = 130)]
     InscriptionalParthian,
-    #[strum(serialize = "Jpan")]
+    #[scr(short = "Jpan", code = 413)]
     Japanese,
-    #[strum(serialize = "Java")]
+    #[scr(short = "Java", code = 361)]
     Javanese,
-    #[strum(serialize = "Kthi")]
+    #[scr(short = "Kthi", code = 317)]
     Kaithi,
-    #[strum(serialize = "Knda")]
+    #[scr(short = "Knda", code = 345)]
     Kannada,
-    #[strum(serialize = "Kana")]
+    #[scr(short = "Kana", code = 411)]
     Katakana,
-    #[strum(serialize = "Kawi")]
+    #[scr(short = "Kawi", code = 368)]
     Kawi,
-    #[strum(serialize = "Kali")]
+    #[scr(short = "Kali", code = 357)]
     KayahLi,
-    #[strum(serialize = "Khar")]
+    #[scr(short = "Khar", code = 305)]
     Kharoshthi,
-    #[strum(serialize = "Kits")]
+    #[scr(short = "Kits", code = 288)]
     KhitanSmallScript,
-    #[strum(serialize = "Khmr")]
+    #[scr(short = "Khmr", code = 355)]
     Khmer,
-    #[strum(serialize = "Khoj")]
+    #[scr(short = "Khoj", code = 322)]
     Khojki,
-    #[strum(serialize = "Sind")]
+    #[scr(short = "Sind", code = 318)]
     Khudawadi,
-    #[strum(serialize = "Krai")]
+    #[scr(short = "Krai", code = 396)]
     KiratRai,
-    #[strum(serialize = "Kore")]
+    #[scr(short = "Kore", code = 287)]
     Korean,
-    #[strum(serialize = "Laoo")]
+    #[scr(short = "Laoo", code = 356)]
     Lao,
-    #[strum(serialize = "Latn")]
+    #[scr(short = "Latn", code = 215)]
     Latin,
-    #[strum(serialize = "Lepc")]
+    #[scr(short = "Lepc", code = 335)]
     Lepcha,
-    #[strum(serialize = "Limb")]
+    #[scr(short = "Limb", code = 336)]
     Limbu,
-    #[strum(serialize = "Lina")]
+    #[scr(short = "Lina", code = 400)]
     LinearA,
-    #[strum(serialize = "Linb")]
+    #[scr(short = "Linb", code = 401)]
     LinearB,
-    #[strum(serialize = "Lisu")]
+    #[scr(short = "Lisu", code = 399)]
     Lisu,
-    #[strum(serialize = "Lyci")]
+    #[scr(short = "Lyci", code = 202)]
     Lycian,
-    #[strum(serialize = "Lydi")]
+    #[scr(short = "Lydi", code = 116)]
     Lydian,
-    #[strum(serialize = "Mahj")]
+    #[scr(short = "Mahj", code = 314)]
     Mahajani,
-    #[strum(serialize = "Maka")]
+    #[scr(short = "Maka", code = 366)]
     Makasar,
-    #[strum(serialize = "Mlym")]
+    #[scr(short = "Mlym", code = 347)]
     Malayalam,
-    #[strum(serialize = "Mand")]
+    #[scr(short = "Mand", code = 140)]
     Mandaic,
-    #[strum(serialize = "Mani")]
+    #[scr(short = "Mani", code = 139)]
     Manichaean,
-    #[strum(serialize = "Marc")]
+    #[scr(short = "Marc", code = 332)]
     Marchen,
-    #[strum(serialize = "Gonm")]
+    #[scr(short = "Gonm", code = 313)]
     MasaramGondi,
-    #[strum(serialize = "Medf")]
+    #[scr(short = "Medf", code = 265)]
     Medefaidrin,
-    #[strum(serialize = "Mtei")]
+    #[scr(short = "Mtei", code = 337)]
     MeeteiMayek,
-    #[strum(serialize = "Mend")]
+    #[scr(short = "Mend", code = 438)]
     MendeKikakui,
-    #[strum(serialize = "Merc")]
+    #[scr(short = "Merc", code = 101)]
     MeroiticCursive,
-    #[strum(serialize = "Mero")]
+    #[scr(short = "Mero", code = 100)]
     MeroiticHieroglyphs,
-    #[strum(serialize = "Plrd")]
+    #[scr(short = "Plrd", code = 282)]
     Miao,
-    #[strum(serialize = "Modi")]
+    #[scr(short = "Modi", code = 324)]
     Modi,
-    #[strum(serialize = "Mong")]
+    #[scr(short = "Mong", code = 145)]
     Mongolian,
-    #[strum(serialize = "Mroo")]
+    #[scr(short = "Mroo", code = 264)]
     Mro,
-    #[strum(serialize = "Mult")]
+    #[scr(short = "Mult", code = 323)]
     Multani,
-    #[strum(serialize = "Mymr")]
+    #[scr(short = "Mymr", code = 350)]
     Myanmar,
-    #[strum(serialize = "Nbat")]
+    #[scr(short = "Nbat", code = 159)]
     Nabataean,
-    #[strum(serialize = "Nagm")]
+    #[scr(short = "Nagm", code = 295)]
     NagMundari,
-    #[strum(serialize = "Nand")]
+    #[scr(short = "Nand", code = 311)]
     Nandinagari,
-    #[strum(serialize = "Newa")]
+    #[scr(short = "Newa", code = 333)]
     Newa,
-    #[strum(serialize = "Talu")]
+    #[scr(short = "Talu", code = 354)]
     NewTaiLue,
-    #[strum(serialize = "Nkoo")]
+    #[scr(short = "Nkoo", code = 165)]
     Nko,
-    #[strum(serialize = "Nshu")]
+    #[scr(short = "Nshu", code = 499)]
     Nushu,
-    #[strum(serialize = "Hmnp")]
+    #[scr(short = "Hmnp", code = 451)]
     NyiakengPuachueHmong,
-    #[strum(serialize = "Ogam")]
+    #[scr(short = "Ogam", code = 212)]
     Ogham,
-    #[strum(serialize = "Olck")]
+    #[scr(short = "Olck", code = 261)]
     OlChiki,
-    #[strum(serialize = "Hung")]
+    #[scr(short = "Hung", code = 176)]
     OldHungarian,
-    #[strum(serialize = "Ital")]
+    #[scr(short = "Ital", code = 210)]
     OldItalic,
-    #[strum(serialize = "Narb")]
+    #[scr(short = "Narb", code = 106)]
     OldNorthArabian,
-    #[strum(serialize = "Perm")]
+    #[scr(short = "Perm", code = 227)]
     OldPermic,
-    #[strum(serialize = "Xpeo")]
+    #[scr(short = "Xpeo", code = 30)]
     OldPersian,
-    #[strum(serialize = "Sogo")]
+    #[scr(short = "Sogo", code = 142)]
     OldSogdian,
-    #[strum(serialize = "Sarb")]
+    #[scr(short = "Sarb", code = 105)]
     OldSouthArabian,
-    #[strum(serialize = "Orkh")]
+    #[scr(short = "Orkh", code = 175)]
     OldTurkic,
-    #[strum(serialize = "Ougr")]
+    #[scr(short = "Ougr", code = 143)]
     OldUyghur,
-    #[strum(serialize = "Onao")]
+    #[scr(short = "Onao", code = 296)]
     OlOnal,
-    #[strum(serialize = "Orya")]
+    #[scr(short = "Orya", code = 327)]
     Oriya,
-    #[strum(serialize = "Osge")]
+    #[scr(short = "Osge", code = 219)]
     Osage,
-    #[strum(serialize = "Osma")]
+    #[scr(short = "Osma", code = 260)]
     Osmanya,
-    #[strum(serialize = "Hmng")]
+    #[scr(short = "Hmng", code = 450)]
     PahawhHmong,
-    #[strum(serialize = "Palm")]
+    #[scr(short = "Palm", code = 126)]
     Palmyrene,
-    #[strum(serialize = "Pauc")]
+    #[scr(short = "Pauc", code = 263)]
     PauCinHau,
-    #[strum(serialize = "Phag")]
+    #[scr(short = "Phag", code = 331)]
     PhagsPa,
-    #[strum(serialize = "Phnx")]
+    #[scr(short = "Phnx", code = 115)]
     Phoenician,
-    #[strum(serialize = "Phlp")]
+    #[scr(short = "Phlp", code = 132)]
     PsalterPahlavi,
-    #[strum(serialize = "Rjng")]
+    #[scr(short = "Rjng", code = 363)]
     Rejang,
-    #[strum(serialize = "Runr")]
+    #[scr(short = "Runr", code = 211)]
     Runic,
-    #[strum(serialize = "Samr")]
+    #[scr(short = "Samr", code = 123)]
     Samaritan,
-    #[strum(serialize = "Saur")]
+    #[scr(short = "Saur", code = 344)]
     Saurashtra,
-    #[strum(serialize = "Shrd")]
+    #[scr(short = "Shrd", code = 319)]
     Sharada,
-    #[strum(serialize = "Shaw")]
+    #[scr(short = "Shaw", code = 281)]
     Shavian,
-    #[strum(serialize = "Sidd")]
+    #[scr(short = "Sidd", code = 302)]
     Siddham,
-    #[strum(serialize = "Sgnw")]
+    #[scr(short = "Sgnw", code = 95)]
     SignWriting,
-    #[strum(serialize = "Sinh")]
+    #[scr(short = "Sinh", code = 348)]
     Sinhala,
-    #[strum(serialize = "Sogd")]
+    #[scr(short = "Sogd", code = 141)]
     Sogdian,
-    #[strum(serialize = "Sora")]
+    #[scr(short = "Sora", code = 398)]
     SoraSompeng,
-    #[strum(serialize = "Soyo")]
+    #[scr(short = "Soyo", code = 329)]
     Soyombo,
-    #[strum(serialize = "Sund")]
+    #[scr(short = "Sund", code = 362)]
     Sundanese,
-    #[strum(serialize = "Sunu")]
+    #[scr(short = "Sunu", code = 274)]
     Sunuwar,
-    #[strum(serialize = "Sylo")]
+    #[scr(short = "Sylo", code = 316)]
     SylotiNagri,
-    #[strum(serialize = "Syrc")]
+    #[scr(short = "Syrc", code = 135)]
     Syriac,
-    #[strum(serialize = "Tglg")]
+    #[scr(short = "Tglg", code = 370)]
     Tagalog,
-    #[strum(serialize = "Tagb")]
+    #[scr(short = "Tagb", code = 373)]
     Tagbanwa,
-    #[strum(serialize = "Tale")]
+    #[scr(short = "Tale", code = 353)]
     TaiLe,
-    #[strum(serialize = "Lana")]
+    #[scr(short = "Lana", code = 351)]
     TaiTham,
-    #[strum(serialize = "Tavt")]
+    #[scr(short = "Tavt", code = 359)]
     TaiViet,
-    #[strum(serialize = "Takr")]
+    #[scr(short = "Takr", code = 321)]
     Takri,
-    #[strum(serialize = "Taml")]
+    #[scr(short = "Taml", code = 346)]
     Tamil,
-    #[strum(serialize = "Tnsa")]
+    #[scr(short = "Tnsa", code = 275)]
     Tangsa,
-    #[strum(serialize = "Tang")]
+    #[scr(short = "Tang", code = 520)]
     Tangut,
-    #[strum(serialize = "Telu")]
+    #[scr(short = "Telu", code = 340)]
     Telugu,
-    #[strum(serialize = "Thaa")]
+    #[scr(short = "Thaa", code = 170)]
     Thaana,
-    #[strum(serialize = "Thai")]
+    #[scr(short = "Thai", code = 352)]
     Thai,
-    #[strum(serialize = "Tibt")]
+    #[scr(short = "Tibt", code = 330)]
     Tibetan,
-    #[strum(serialize = "Tfng")]
+    #[scr(short = "Tfng", code = 120)]
     Tifinagh,
-    #[strum(serialize = "Tirh")]
+    #[scr(short = "Tirh", code = 326)]
     Tirhuta,
-    #[strum(serialize = "Todr")]
+    #[scr(short = "Todr", code = 229)]
     Todhri,
-    #[strum(serialize = "Toto")]
+    #[scr(short = "Toto", code = 294)]
     Toto,
-    #[strum(serialize = "Tutg")]
+    #[scr(short = "Tutg", code = 341)]
     TuluTigalari,
-    #[strum(serialize = "Ugar")]
+    #[scr(short = "Ugar", code = 40)]
     Ugaritic,
-    #[strum(serialize = "Vaii")]
+    #[scr(short = "Vaii", code = 470)]
     Vai,
-    #[strum(serialize = "Vith")]
+    #[scr(short = "Vith", code = 228)]
     Vithkuqi,
-    #[strum(serialize = "Wcho")]
+    #[scr(short = "Wcho", code = 283)]
     Wancho,
-    #[strum(serialize = "Wara")]
+    #[scr(short = "Wara", code = 262)]
     WarangCiti,
-    #[strum(serialize = "Yezi")]
+    #[scr(short = "Yezi", code = 192)]
     Yezidi,
-    #[strum(serialize = "Yiii")]
+    #[scr(short = "Yiii", code = 460)]
     Yi,
-    #[strum(serialize = "Zanb")]
+    #[scr(short = "Zanb", code = 339)]
     ZanabazarSquare,
 }
 
+impl_try_from!(Script, u16, u16 i16 u32 i32 usize isize u64 i64 u128 i128);
+impl_serde!(Script, "Script");
+
 impl From<Script> for UcdScript {
+    #[inline]
     fn from(s: Script) -> Self {
         use Script::*;
         match s {
