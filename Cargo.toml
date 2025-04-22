@@ -1,14 +1,20 @@
 [package]
 name = "alphabet_detector"
-version = "0.4.1"
-authors = ["Dmitry Rodionov <gh@rdmtr.com>"]
+version = "0.5.0"
+authors = { workspace = true }
 description = "Natural language alphabet detection library"
 documentation = "https://docs.rs/alphabet_detector/"
-repository = "https://github.com/RoDmitry/alphabet_detector"
+repository = { workspace = true }
 categories = ["text-processing"]
 keywords = ["language", "match", "split", "text", "word"]
 include = ["src"]
 readme = "README.md"
+license = { workspace = true }
+edition = { workspace = true }
+
+[workspace.package]
+authors = ["Dmitry Rodionov <gh@rdmtr.com>"]
+repository = "https://github.com/RoDmitry/alphabet_detector"
 license = "MIT OR Apache-2.0"
 edition = "2021"
 
@@ -32,7 +38,7 @@ members = ["macros"]
 
 [dependencies]
 ahash = "0.8"
-alphabet_detector_macros = { path = "macros", version = "0.4" }
+alphabet_detector_macros = { path = "macros", version = "0.5" }
 concat_const = "0.2"
 debug_unsafe = "0.1"
 icu_normalizer = "2.0.0-beta2"
