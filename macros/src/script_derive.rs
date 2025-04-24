@@ -96,7 +96,7 @@ pub(super) fn script_derive_inner(input: DeriveInput) -> syn::Result<proc_macro2
             Fields::Named(..) => quote! { {..} },
         };
 
-        let short = short.ok_or_else(|| Error::new(ident.span(), "No short name name provided"))?;
+        let short = short.ok_or_else(|| Error::new(ident.span(), "No short name provided"))?;
         let code = code.ok_or_else(|| Error::new(ident.span(), "No code provided"))?;
 
         match_to_str.push(quote! {

@@ -82,8 +82,7 @@ pub(super) fn language_derive_inner(input: DeriveInput) -> syn::Result<proc_macr
             Fields::Named(..) => quote! { {..} },
         };
 
-        let short_text =
-            short.ok_or_else(|| Error::new(ident.span(), "No short name name provided"))?;
+        let short_text = short.ok_or_else(|| Error::new(ident.span(), "No short name provided"))?;
         if short_text.len() > 6 {
             return Err(Error::new(ident.span(), "Too long short name"));
         }

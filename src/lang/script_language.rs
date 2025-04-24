@@ -187,10 +187,10 @@ pub enum ScriptLanguage {
     ChineseCantoneseTraditional,
     #[slang(script = Bopomofo, lang = ChineseMandarin)]
     ChineseMandarinBopomofo,
-    #[slang(script = HanSimplified, lang = Chinese)]
-    ChineseSimplified,
-    #[slang(script = HanTraditional, lang = Chinese)]
-    ChineseTraditional,
+    #[slang(script = HanSimplified, lang = ChineseMandarin)]
+    ChineseMandarinSimplified,
+    #[slang(script = HanTraditional, lang = ChineseMandarin)]
+    ChineseMandarinTraditional,
     #[slang(script = Nushu)]
     ChineseTuhua,
     #[slang(script = Latin)]
@@ -261,6 +261,10 @@ pub enum ScriptLanguage {
     Faroese,
     #[slang(script = Latin)]
     Fijian,
+    #[slang(script = Latin)]
+    Filipino,
+    #[slang(script = Tagalog, lang = Filipino)]
+    FilipinoTagalog,
     #[slang(script = Latin)]
     Finnish,
     #[slang(script = Latin)]
@@ -392,7 +396,7 @@ pub enum ScriptLanguage {
     #[slang(script = Khmer)]
     Khmer,
     #[slang(script = Latin)]
-    Kikongo,
+    KikongoKituba,
     #[slang(script = Latin)]
     Kikuyu,
     #[slang(script = Latin)]
@@ -728,10 +732,6 @@ pub enum ScriptLanguage {
     Swedish,
     #[slang(script = SylotiNagri)]
     Sylheti,
-    #[slang(script = Latin)]
-    Tagalog,
-    #[slang(script = Tagalog, lang = Tagalog)]
-    TagalogTagalog,
     #[slang(script = Tagbanwa)]
     Tagbanwa,
     #[slang(script = TaiViet)]

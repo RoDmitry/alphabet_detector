@@ -358,6 +358,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ScriptLanguage::English,
                 ScriptLanguage::Faroese,
                 ScriptLanguage::Fijian,
+                ScriptLanguage::Filipino,
                 ScriptLanguage::Finnish,
                 ScriptLanguage::Fon,
                 ScriptLanguage::French,
@@ -380,7 +381,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ScriptLanguage::Kabuverdianu,
                 ScriptLanguage::Kamba,
                 ScriptLanguage::KanuriCentral,
-                ScriptLanguage::Kikongo,
+                ScriptLanguage::KikongoKituba,
                 ScriptLanguage::Kikuyu,
                 ScriptLanguage::Kimbundu,
                 ScriptLanguage::Kinyarwanda,
@@ -417,7 +418,6 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ScriptLanguage::Sundanese,
                 ScriptLanguage::Swahili,
                 ScriptLanguage::Swati,
-                ScriptLanguage::Tagalog,
                 ScriptLanguage::TamasheqLatin,
                 ScriptLanguage::TokPisin,
                 ScriptLanguage::Tsonga,
@@ -744,7 +744,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         GurungKhema => &[ScriptLanguage::GurungKhema],
         Han => alphabet_match!([
             (
-                ScriptLanguage::ChineseSimplified,
+                ScriptLanguage::ChineseMandarinSimplified,
                 [
                     // https://en.wikisource.org/wiki/Translation:List_of_Frequently_Used_Characters_in_Modern_Chinese
                     // https://www.tutormandarin.net/en/list-of-different-simplified-and-traditional-characters/
@@ -832,7 +832,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::ChineseTraditional,
+                ScriptLanguage::ChineseMandarinTraditional,
                 [
                     '後', '並', '併', '緖', '絶', '偽', '証', '嘆', '稅', '脱', '剝', '悅',
                     // simplified autoconverted
@@ -1532,6 +1532,15 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
+                ScriptLanguage::Filipino,
+                [
+                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
+                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n',
+                    /* 'Ng', 'ng', */ 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T',
+                    't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z'
+                ]
+            ),
+            (
                 ScriptLanguage::Finnish, //++
                 [
                     'A', 'a', 'Ä', 'ä', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g',
@@ -1790,7 +1799,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Kikongo,
+                ScriptLanguage::KikongoKituba,
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
@@ -2343,15 +2352,6 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Tagalog,
-                [
-                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
-                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n',
-                    /* 'Ng', 'ng', */ 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T',
-                    't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z'
-                ]
-            ),
-            (
                 ScriptLanguage::TamasheqLatin, //++
                 [
                     'A', 'a', 'Ă', 'ă', 'Ǎ', 'ǎ', 'Ə', 'ə', 'B', 'b', 'C', 'c', 'D', 'd', 'Ḍ', 'ḍ',
@@ -2657,7 +2657,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Sunuwar => &[ScriptLanguage::Sunuwar],
         SylotiNagri => &[ScriptLanguage::Sylheti],
         Syriac => &[ScriptLanguage::AramaicSyriac],
-        Tagalog => &[ScriptLanguage::TagalogTagalog],
+        Tagalog => &[ScriptLanguage::FilipinoTagalog],
         Tagbanwa => &[ScriptLanguage::Tagbanwa],
         TaiLe => &[ScriptLanguage::TaiNuea],
         TaiTham => &[

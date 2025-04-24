@@ -156,9 +156,9 @@ pub enum Language {
     Cherokee,
     #[language(short = "hne")]
     Chhattisgarhi,
-    /// Macro
-    #[language(short = "zho")]
-    Chinese,
+    // Macro
+    // #[language(short = "zho")]
+    // Chinese,
     #[language(short = "yue")]
     ChineseCantonese,
     #[language(short = "cmn")]
@@ -205,7 +205,7 @@ pub enum Language {
     English,
     #[language(short = "epo")]
     Esperanto,
-    #[language(short = "est")]
+    #[language(short = "ekk")]
     Estonian,
     #[language(short = "ett")]
     Etruscan,
@@ -215,6 +215,8 @@ pub enum Language {
     Faroese,
     #[language(short = "fij")]
     Fijian,
+    #[language(short = "fil")]
+    Filipino,
     #[language(short = "fin")]
     Finnish,
     #[language(short = "fon")]
@@ -249,7 +251,7 @@ pub enum Language {
     Gothic,
     #[language(short = "ell")]
     Greek,
-    #[language(short = "grn")]
+    #[language(short = "gug")]
     Guarani,
     #[language(short = "guj")]
     Gujarati,
@@ -323,8 +325,8 @@ pub enum Language {
     Khitan,
     #[language(short = "khm")]
     Khmer,
-    #[language(short = "kon")]
-    Kikongo,
+    #[language(short = "ktu")]
+    KikongoKituba,
     #[language(short = "kik")]
     Kikuyu,
     #[language(short = "kmb")]
@@ -589,8 +591,6 @@ pub enum Language {
     Swedish,
     #[language(short = "syl")]
     Sylheti,
-    #[language(short = "tgl")]
-    Tagalog,
     #[language(short = "tgw")]
     Tagbanwa,
     #[language(short = "blt")]
