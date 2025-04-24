@@ -565,10 +565,10 @@ pub enum ScriptLanguage {
     Odia,
     #[slang(script = CanadianAboriginal)]
     Ojibwe,
-    #[slang(script = Runic)]
-    OldEnglish,
-    #[slang(script = Ogham)]
-    OldIrish,
+    #[slang(script = Runic, lang = OldEnglish)]
+    OldEnglishRunic,
+    #[slang(script = Ogham, lang = OldIrish)]
+    OldIrishOgham,
     #[slang(script = Kawi)]
     OldJavanese,
     #[slang(script = Runic)]
