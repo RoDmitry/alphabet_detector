@@ -3,6 +3,7 @@ use alphabet_detector_macros::Language;
 use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 
 // For dialect create a new Language.
+// ISO 639-3 code.
 /// Int representation is unstable and can be changed anytime.
 /// Code representation (const
 /// [`into_code`](enum.Language.html#method.into_code)/[`from_code`](enum.Language.html#method.from_code))

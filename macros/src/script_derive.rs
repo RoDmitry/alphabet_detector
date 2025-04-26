@@ -121,32 +121,35 @@ pub(super) fn script_derive_inner(input: DeriveInput) -> syn::Result<proc_macro2
         impl #impl_generics #name #ty_generics #where_clause {
             const VARIANTS: &'static [&'static str] = &[#(#str_variants),*];
 
-            /// 10-bit code
+            /// 10-bit code (ISO 15924 number)
             #[inline]
             pub const fn into_code(self) -> u16 {
                 match self {
                     #(#match_to_code),*
                 }
             }
+            /// ISO 15924 code string
             #[inline]
             pub const fn into_str(self) -> &'static str {
                 match self {
                     #(#match_to_str),*
                 }
             }
-            /// 10-bit code
+            /// 10-bit code (ISO 15924 number)
             #[inline]
             pub const fn from_code(v: u16) -> Option<Self> {
                 match v {
                     #(#match_from_code),*
                 }
             }
+            /// ISO 15924 code string
             #[inline]
             pub const fn from_bytes(v: &[u8]) -> Option<Self> {
                 match v {
                     #(#match_from_bytes),*
                 }
             }
+            /// ISO 15924 code string
             #[inline]
             pub const fn from_str(s: &str) -> Option<Self> {
                 Self::from_bytes(s.as_bytes())

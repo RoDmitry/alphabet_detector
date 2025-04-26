@@ -118,32 +118,35 @@ pub(super) fn language_derive_inner(input: DeriveInput) -> syn::Result<proc_macr
         impl #impl_generics #name #ty_generics #where_clause {
             const VARIANTS: &'static [&'static str] = &[#(#str_variants),*];
 
-            /// 20-bit code
+            /// 20-bit code (compacted ISO 639-3 code)
             #[inline]
             pub const fn into_code(self) -> u32 {
                 match self {
                     #(#match_to_code),*
                 }
             }
+            /// ISO 639-3 code string
             #[inline]
             pub const fn into_str(self) -> &'static str {
                 match self {
                     #(#match_to_str),*
                 }
             }
-            /// 20-bit code
+            /// 20-bit code (compacted ISO 639-3 code)
             #[inline]
             pub const fn from_code(v: u32) -> Option<Self> {
                 match v {
                     #(#match_from_code),*
                 }
             }
+            /// ISO 639-3 code string
             #[inline]
             pub const fn from_bytes(v: &[u8]) -> Option<Self> {
                 match v {
                     #(#match_from_bytes),*
                 }
             }
+            /// ISO 639-3 code string
             #[inline]
             pub const fn from_str(s: &str) -> Option<Self> {
                 Self::from_bytes(s.as_bytes())

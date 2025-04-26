@@ -186,20 +186,21 @@ pub(super) fn script_lang_derive_inner(
                     #(#match_to_parts),*
                 }
             }
+            /// ISO 639-3 + ISO 15924 codes string
             #[inline]
             pub const fn into_str(self) -> &'static str {
                 match self {
                     #(#match_to_str),*
                 }
             }
-            /// 30-bit code
+            /// 30-bit code (compacted ISO 639-3 code, ISO 15924 number)
             #[inline]
             pub const fn into_code(self) -> u32 {
                 match self {
                     #(#match_to_code),*
                 }
             }
-            /// 30-bit code
+            /// 30-bit code (compacted ISO 639-3 code, ISO 15924 number)
             #[inline]
             pub const fn from_code(v: u32) -> Option<Self> {
                 match v {
@@ -212,12 +213,14 @@ pub(super) fn script_lang_derive_inner(
                     #(#match_from_parts),*
                 }
             }
+            /// ISO 639-3 + ISO 15924 codes string
             #[inline]
             pub const fn from_bytes(v: &[u8]) -> Option<Self> {
                 match v {
                     #(#match_from_bytes),*
                 }
             }
+            /// ISO 639-3 + ISO 15924 codes string
             #[inline]
             pub const fn from_str(s: &str) -> Option<Self> {
                 Self::from_bytes(s.as_bytes())
