@@ -3,6 +3,7 @@ use alphabet_detector_macros::Script;
 use strum_macros::EnumIter;
 
 // ISO 15924 code.
+/// Has aliases in comparison to [`UcdScript`](enum.UcdScript.html).
 /// Int representation is unstable and can be changed anytime.
 /// Code representation (const
 /// [`into_code`](enum.Script.html#method.into_code)/[`from_code`](enum.Script.html#method.from_code))

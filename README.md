@@ -7,7 +7,8 @@
 
 > One language can be written in multiple scripts, so it will be detected as a different [`ScriptLanguage`](https://docs.rs/alphabet_detector/latest/alphabet_detector/enum.ScriptLanguage.html) (language + script)
 
-Does not have any models, just matches the alphabet. Not recommended to use as a standalone detector, it's more like a word separator + language prefilter for an actual language detector ([`Langram`](https://github.com/RoDmitry/langram)).
+Does not have any models, just matches the alphabet. Not recommended to use as a standalone detector. 
+It's more like a word separator + language prefilter for an actual language detector ([`Langram`](https://github.com/RoDmitry/langram)).
 
 Splits text (iterator `CharIndices`) to words, and detects [`ScriptLanguage`](https://docs.rs/alphabet_detector/latest/alphabet_detector/enum.ScriptLanguage.html)s (language + script) of words by used letters (chars).
 
