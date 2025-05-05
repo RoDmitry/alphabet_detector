@@ -60,7 +60,7 @@ pub(super) fn script_lang_derive_inner(
                                 Some(tt) => {
                                     return Err(Error::new(
                                         tt.span(),
-                                        format!("Unexpected \"{}\"", tt),
+                                        format!("Unexpected \"{tt}\""),
                                     ))
                                 }
                                 _ => return Err(Error::new(i.span(), "No script provided")),
@@ -73,7 +73,7 @@ pub(super) fn script_lang_derive_inner(
                             }
                         }
                         v => {
-                            return Err(Error::new(i.span(), format!("Unexpected \"{}\"", v)));
+                            return Err(Error::new(i.span(), format!("Unexpected \"{v}\"")));
                         }
                     }
                 }
@@ -82,7 +82,7 @@ pub(super) fn script_lang_derive_inner(
                     if ch != ',' {
                         return Err(syn::Error::new(
                             p.span(),
-                            format!("Unexpected \"{}\", expected comma \",\"", ch),
+                            format!("Unexpected \"{ch}\", expected comma \",\""),
                         ));
                     }
                 }

@@ -52,7 +52,7 @@ pub(super) fn script_derive_inner(input: DeriveInput) -> syn::Result<proc_macro2
                                 Some(tt) => {
                                     return Err(Error::new(
                                         tt.span(),
-                                        format!("Unexpected \"{}\"", tt),
+                                        format!("Unexpected \"{tt}\""),
                                     ))
                                 }
                                 _ => return Err(Error::new(i.span(), "No short name provided")),
@@ -67,14 +67,14 @@ pub(super) fn script_derive_inner(input: DeriveInput) -> syn::Result<proc_macro2
                                 Some(tt) => {
                                     return Err(Error::new(
                                         tt.span(),
-                                        format!("Unexpected \"{}\"", tt),
+                                        format!("Unexpected \"{tt}\""),
                                     ))
                                 }
                                 _ => return Err(Error::new(i.span(), "No code provided")),
                             }
                         }
                         v => {
-                            return Err(Error::new(i.span(), format!("Unexpected \"{}\"", v)));
+                            return Err(Error::new(i.span(), format!("Unexpected \"{v}\"")));
                         }
                     }
                 }
@@ -83,7 +83,7 @@ pub(super) fn script_derive_inner(input: DeriveInput) -> syn::Result<proc_macro2
                     if ch != ',' {
                         return Err(syn::Error::new(
                             p.span(),
-                            format!("Unexpected \"{}\", expected comma \",\"", ch),
+                            format!("Unexpected \"{ch}\", expected comma \",\""),
                         ));
                     }
                 }

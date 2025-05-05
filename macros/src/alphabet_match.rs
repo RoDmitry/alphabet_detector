@@ -48,8 +48,7 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
                                     return Err(Error::new(
                                         val.span(),
                                         format!(
-                                            "Char literal: {} was already added for key: {}",
-                                            value, ki
+                                            "Char literal: {value} was already added for key: {ki}",
                                         ),
                                     ));
                                 }

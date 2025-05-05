@@ -5,7 +5,7 @@ pub(crate) fn skip_eq(i: &Ident, tt_iter: &mut impl Iterator<Item = TokenTree>) 
         Some(TokenTree::Punct(p)) if p.as_char() == '=' => Ok(()),
         Some(tt) => Err(syn::Error::new_spanned(
             &tt,
-            format!("Unexpected \"{}\", expected equal sign \"=\"", tt),
+            format!("Unexpected \"{tt}\", expected equal sign \"=\""),
         )),
         None => Err(syn::Error::new_spanned(i, "expected: equal sign \"=\"")),
     }
