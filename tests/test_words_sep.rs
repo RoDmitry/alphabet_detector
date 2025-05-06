@@ -23,6 +23,8 @@ use rstest::*;
     case("¿-", ahashset!()),
     case(" ¿-", ahashset!()),
     case("a-b", ahashset!("a-b")),
+    case("3-rd", ahashset!("rd")),
+    case("3ʳᵈ", ahashset!("ʳᵈ")),
     case("ПроSto", ahashset!("про", "sto")),
     case::chinese("中文", ahashset!("中文")),
     case("worda 🙈", ahashset!("worda")),
