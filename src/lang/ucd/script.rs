@@ -1,4 +1,10 @@
-use ::core::cmp::Ordering;
+use ::core::{
+    cmp::{
+        Ordering,
+        Ordering::{Equal, Greater, Less},
+    },
+    hint,
+};
 use alphabet_detector_macros::Script;
 use debug_unsafe::slice::SliceGetter;
 use strum_macros::EnumIter;
@@ -444,10 +450,91 @@ const fn char_ranges_array_sorted() -> [RangeScript; LEN] {
 }
 const CHAR_RANGES_SORTED: [RangeScript; LEN] = char_ranges_array_sorted();
 
-/* #[test]
-fn print_char_ranges_sorted() {
-    panic!("{:?}", CHAR_RANGES_SORTED);
-} */
+pub trait BSearch<T> {
+    fn binary_search_by_fast<'a>(&'a self, ch: char) -> Result<usize, usize>;
+
+    fn binary_search_by_broken<'a, F>(&'a self, f: F) -> Result<usize, usize>
+    where
+        F: Fn(&'a T) -> Ordering,
+        T: 'a;
+}
+
+impl BSearch<RangeScript> for [RangeScript] {
+    #[inline(always)]
+    fn binary_search_by_fast<'a>(&'a self, ch: char) -> Result<usize, usize> {
+        let mut size = self.len();
+        let mut base = 0usize;
+
+        while size > 1 {
+            let half = size / 2;
+            let mid = base + half;
+
+            let cmp = compare(unsafe { self.get_unchecked(mid) }, ch);
+
+            base = match cmp {
+                Less => mid,
+                Equal => {
+                    unsafe { hint::assert_unchecked(mid < self.len()) };
+                    return Ok(mid);
+                }
+                Greater => base,
+            };
+            // base = hint::select_unpredictable(cmp == Greater, base, mid);
+
+            size -= half;
+        }
+
+        let cmp = compare(unsafe { self.get_unchecked(base) }, ch);
+        if cmp == Equal {
+            unsafe { hint::assert_unchecked(base < self.len()) };
+            Ok(base)
+        } else {
+            // `(cmp == Less)` is not a problem anymore,
+            // probably because it uses `-C debuginfo=0`
+            let result = base + (cmp == Less) as usize;
+            unsafe { hint::assert_unchecked(result <= self.len()) };
+            Err(result)
+        }
+    }
+
+    #[inline(always)]
+    fn binary_search_by_broken<'a, F>(&'a self, f: F) -> Result<usize, usize>
+    where
+        F: Fn(&'a RangeScript) -> Ordering,
+    {
+        let mut size = self.len();
+        let mut base = 0usize;
+
+        while size > 1 {
+            let half = size / 2;
+            let mid = base + half;
+
+            let cmp = f(unsafe { self.get_unchecked(mid) });
+
+            base = match cmp {
+                Less => mid,
+                Equal => {
+                    unsafe { hint::assert_unchecked(mid < self.len()) };
+                    return Ok(mid);
+                }
+                Greater => base,
+            };
+            // base = hint::select_unpredictable(cmp == Greater, base, mid);
+
+            size -= half;
+        }
+
+        let cmp = f(unsafe { self.get_unchecked(base) });
+        if cmp == Equal {
+            unsafe { hint::assert_unchecked(base < self.len()) };
+            Ok(base)
+        } else {
+            let result = base + (cmp == Less) as usize;
+            unsafe { hint::assert_unchecked(result <= self.len()) };
+            Err(result)
+        }
+    }
+}
 
 #[inline(always)]
 fn compare(ra: &RangeScript, ch: char) -> Ordering {
@@ -463,10 +550,26 @@ fn compare(ra: &RangeScript, ch: char) -> Ordering {
 impl UcdScript {
     pub fn find(ch: char) -> Self {
         CHAR_RANGES_SORTED
-            .binary_search_by(|ra| compare(ra, ch))
+            .binary_search_by_fast(ch)
             .ok()
-            .map(|i| CHAR_RANGES_SORTED.get_safe_unchecked(i).script)
-            // Some unused `Common` ranges in `ucd` are commented out, so it defaults to `Common`
+            .map(
+                #[inline(always)]
+                |i| CHAR_RANGES_SORTED.get_safe_unchecked(i).script,
+            )
+            .unwrap_or(Self::Common)
+    }
+
+    pub fn find_broken(ch: char) -> Self {
+        CHAR_RANGES_SORTED
+            .binary_search_by_broken(
+                #[inline(always)]
+                |ra| compare(ra, ch),
+            )
+            .ok()
+            .map(
+                #[inline(always)]
+                |i| CHAR_RANGES_SORTED.get_safe_unchecked(i).script,
+            )
             .unwrap_or(Self::Common)
     }
 }

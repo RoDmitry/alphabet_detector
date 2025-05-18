@@ -35,7 +35,7 @@ pub const BY_NAME: &'static [(UcdScript, &'static [(char, char)])] = &[
     (UcdScript::Cham, CHAM),
     (UcdScript::Cherokee, CHEROKEE),
     (UcdScript::Chorasmian, CHORASMIAN),
-    (UcdScript::Common, COMMON),
+    // (UcdScript::Common, COMMON),
     (UcdScript::Coptic, COPTIC),
     (UcdScript::Cuneiform, CUNEIFORM),
     (UcdScript::Cypriot, CYPRIOT),
