@@ -323,7 +323,6 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Cham => &[ScriptLanguage::ChamEastern, ScriptLanguage::ChamWestern],
         Cherokee => &[ScriptLanguage::Cherokee],
         Chorasmian => &[ScriptLanguage::Chorasmian],
-        // If you want to add something here, validate that char's range is active in `ucd.rs`.
         // During parsing these considered as connectors
         // example1: `can't` for english is one word,
         //  but `one/two` will be parsed as separate words,

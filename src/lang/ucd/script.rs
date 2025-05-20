@@ -449,6 +449,44 @@ fn print_char_ranges_sorted() {
     panic!("{:?}", CHAR_RANGES_SORTED);
 } */
 
+trait BSearch<T> {
+    fn binary_search_by_char(&self, ch: char) -> UcdScript;
+}
+// better than native `binary_search_by` because of `match` with an early exit,
+// which gives better optimization with branches instead of `cmovae`.
+impl BSearch<RangeScript> for [RangeScript] {
+    #[inline(always)]
+    fn binary_search_by_char(&self, ch: char) -> UcdScript {
+        let mut size = self.len();
+        let mut base = 0_usize;
+
+        while size > 1 {
+            let half = size >> 1;
+            let mid = base + half;
+
+            let res = self.get_safe_unchecked(mid);
+            let cmp = compare(res, ch);
+
+            base = match cmp {
+                Ordering::Less => mid,
+                Ordering::Equal => return res.script,
+                Ordering::Greater => base,
+            };
+            // base = ::core::hint::select_unpredictable(cmp == Ordering::Greater, base, mid);
+            size -= half;
+        }
+
+        let res = self.get_safe_unchecked(base);
+        let cmp = compare(res, ch);
+        if cmp == Ordering::Equal {
+            res.script
+        } else {
+            // Some unused `Common` ranges in `ucd` are commented out, so it defaults to `Common`.
+            UcdScript::Common
+        }
+    }
+}
+
 #[inline(always)]
 fn compare(ra: &RangeScript, ch: char) -> Ordering {
     if ch < ra.range_start {
@@ -462,12 +500,13 @@ fn compare(ra: &RangeScript, ch: char) -> Ordering {
 
 impl UcdScript {
     pub fn find(ch: char) -> Self {
-        CHAR_RANGES_SORTED
-            .binary_search_by(|ra| compare(ra, ch))
-            .ok()
-            .map(|i| CHAR_RANGES_SORTED.get_safe_unchecked(i).script)
-            // Some unused `Common` ranges in `ucd` are commented out, so it defaults to `Common`
-            .unwrap_or(Self::Common)
+        CHAR_RANGES_SORTED.binary_search_by_char(ch)
+        /* CHAR_RANGES_SORTED
+        .binary_search_by(|ra| compare(ra, ch))
+        .ok()
+        .map(|i| CHAR_RANGES_SORTED.get_safe_unchecked(i).script)
+        // Some unused `Common` ranges in `ucd` are commented out, so it defaults to `Common`.
+        .unwrap_or(Self::Common) */
     }
 }
 
@@ -501,7 +540,7 @@ pub(crate) fn script_same(script: Script, ch: char) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::CHAR_RANGES_SORTED;
+    use super::{BSearch, RangeScript, UcdScript, CHAR_RANGES_SORTED};
 
     #[test]
     fn test_char_ranges_sorted() {
@@ -519,5 +558,136 @@ mod tests {
             );
             prev = range;
         }
+    }
+
+    #[test]
+    fn test_bsearch() {
+        let input = [RangeScript {
+            range_start: 'a',
+            range_end: 'z',
+            script: UcdScript::Latin,
+        }];
+        assert_eq!(input.binary_search_by_char('b'), UcdScript::Latin);
+
+        let input = [
+            RangeScript {
+                range_start: 'a',
+                range_end: 'b',
+                script: UcdScript::Adlam,
+            },
+            RangeScript {
+                range_start: 'c',
+                range_end: 'd',
+                script: UcdScript::Ahom,
+            },
+            RangeScript {
+                range_start: 'e',
+                range_end: 'f',
+                script: UcdScript::AnatolianHieroglyphs,
+            },
+        ];
+        assert_eq!(input.binary_search_by_char('a'), UcdScript::Adlam);
+        assert_eq!(input.binary_search_by_char('d'), UcdScript::Ahom);
+        assert_eq!(
+            input.binary_search_by_char('e'),
+            UcdScript::AnatolianHieroglyphs
+        );
+        assert_eq!(input.binary_search_by_char('x'), UcdScript::Common);
+
+        let input = [
+            RangeScript {
+                range_start: 'a',
+                range_end: 'b',
+                script: UcdScript::Adlam,
+            },
+            RangeScript {
+                range_start: 'c',
+                range_end: 'd',
+                script: UcdScript::Ahom,
+            },
+            RangeScript {
+                range_start: 'e',
+                range_end: 'f',
+                script: UcdScript::AnatolianHieroglyphs,
+            },
+            RangeScript {
+                range_start: 'g',
+                range_end: 'h',
+                script: UcdScript::Arabic,
+            },
+        ];
+        assert_eq!(input.binary_search_by_char('a'), UcdScript::Adlam);
+        assert_eq!(input.binary_search_by_char('b'), UcdScript::Adlam);
+        assert_eq!(input.binary_search_by_char('c'), UcdScript::Ahom);
+        assert_eq!(input.binary_search_by_char('d'), UcdScript::Ahom);
+        assert_eq!(
+            input.binary_search_by_char('e'),
+            UcdScript::AnatolianHieroglyphs
+        );
+        assert_eq!(
+            input.binary_search_by_char('f'),
+            UcdScript::AnatolianHieroglyphs
+        );
+        assert_eq!(input.binary_search_by_char('g'), UcdScript::Arabic);
+        assert_eq!(input.binary_search_by_char('h'), UcdScript::Arabic);
+        assert_eq!(input.binary_search_by_char('x'), UcdScript::Common);
+
+        let input = [
+            RangeScript {
+                range_start: 'a',
+                range_end: 'b',
+                script: UcdScript::Adlam,
+            },
+            RangeScript {
+                range_start: 'c',
+                range_end: 'd',
+                script: UcdScript::Ahom,
+            },
+            RangeScript {
+                range_start: 'e',
+                range_end: 'f',
+                script: UcdScript::AnatolianHieroglyphs,
+            },
+            RangeScript {
+                range_start: 'g',
+                range_end: 'h',
+                script: UcdScript::Arabic,
+            },
+            RangeScript {
+                range_start: 'i',
+                range_end: 'j',
+                script: UcdScript::Armenian,
+            },
+        ];
+        assert_eq!(input.binary_search_by_char('a'), UcdScript::Adlam);
+        assert_eq!(input.binary_search_by_char('b'), UcdScript::Adlam);
+        assert_eq!(input.binary_search_by_char('c'), UcdScript::Ahom);
+        assert_eq!(input.binary_search_by_char('d'), UcdScript::Ahom);
+        assert_eq!(
+            input.binary_search_by_char('e'),
+            UcdScript::AnatolianHieroglyphs
+        );
+        assert_eq!(
+            input.binary_search_by_char('f'),
+            UcdScript::AnatolianHieroglyphs
+        );
+        assert_eq!(input.binary_search_by_char('g'), UcdScript::Arabic);
+        assert_eq!(input.binary_search_by_char('h'), UcdScript::Arabic);
+        assert_eq!(input.binary_search_by_char('i'), UcdScript::Armenian);
+        assert_eq!(input.binary_search_by_char('j'), UcdScript::Armenian);
+        assert_eq!(input.binary_search_by_char('x'), UcdScript::Common);
+
+        assert_eq!(
+            CHAR_RANGES_SORTED.binary_search_by_char('Ύ'),
+            UcdScript::Greek
+        );
+        assert_eq!(
+            CHAR_RANGES_SORTED.binary_search_by_char('Σ'),
+            UcdScript::Greek
+        );
+        assert_eq!(
+            CHAR_RANGES_SORTED.binary_search_by_char(char::MAX),
+            UcdScript::Common
+        );
     }
 }
