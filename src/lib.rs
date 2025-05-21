@@ -26,4 +26,4 @@ pub use ch_norm::{CharData, CharNormalizingIterator};
 pub use filter::*;
 pub use fulltext::*;
 pub use lang::*;
-pub use words::{WordIterator, WordLang};
+pub use words::{Word, WordIterator};

@@ -67,7 +67,7 @@ pub struct WordIterator<I: Iterator<Item = CharData>, B: WordBuf> {
     prev_char_script: UcdScript,
     word_langs_cnt: ScriptLanguageArr<u32>,
     word_common_langs_cnt: ScriptLanguageArr<u32>,
-    res: Option<WordLang<B>>,
+    res: Option<Word<B>>,
 }
 
 impl<I: Iterator<Item = CharData>, B: WordBuf> From<CharNormalizingIterator<I>>
@@ -101,7 +101,7 @@ pub fn from_ch_ind<B: WordBuf>(
 }
 
 #[derive(Clone, Debug)]
-pub struct WordLang<B: WordBuf> {
+pub struct Word<B: WordBuf> {
     pub buf: B,
     pub range: Range<usize>,
     pub langs_cnt: ScriptLanguageArr<u32>,
@@ -115,7 +115,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
                 .enumerate()
                 .for_each(|(lang, cnt)| *self.word_langs_cnt.get_safe_unchecked_mut(lang) += cnt);
 
-            self.res = Some(WordLang {
+            self.res = Some(Word {
                 buf: ::core::mem::take(&mut self.word_buf),
                 range: self.word_start_index..self.not_saved_word_end_index,
                 langs_cnt: ::core::mem::replace(&mut self.word_langs_cnt, slang_arr_default()),
@@ -126,7 +126,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> WordIterator<I, B> {
 }
 
 impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
-    type Item = WordLang<B>;
+    type Item = Word<B>;
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {

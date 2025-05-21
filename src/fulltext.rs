@@ -1,26 +1,9 @@
 use crate::{
     filter_max, filter_with_margin, filter_with_margin_sorted, slang_arr_default,
     words::{self, WordBuf},
-    ScriptLanguage, ScriptLanguageArr, WordLang,
+    ScriptLanguage, ScriptLanguageArr, Word,
 };
-use ::core::ops::Range;
 use debug_unsafe::slice::SliceGetter;
-
-#[derive(Clone, Debug)]
-pub struct Word<B: WordBuf> {
-    pub buf: B,
-    pub range: Range<usize>,
-}
-
-impl<B: WordBuf> From<WordLang<B>> for Word<B> {
-    #[inline(always)]
-    fn from(v: WordLang<B>) -> Self {
-        Self {
-            buf: v.buf,
-            range: v.range,
-        }
-    }
-}
 
 /// All words detection summed up
 pub fn fulltext<B: WordBuf>(
@@ -32,10 +15,10 @@ pub fn fulltext<B: WordBuf>(
     let found_words = words::from_ch_ind(char_indices);
     for wld in found_words {
         // let (langs, count_max) = filter_max(wld.langs_cnt); // worse at detecting
-        for (lang, cnt) in wld.langs_cnt.into_iter().enumerate() {
+        for (lang, cnt) in wld.langs_cnt.iter().enumerate() {
             *langs_count.get_safe_unchecked_mut(lang) += cnt;
         }
-        words.push(Word::from(wld));
+        words.push(wld);
     }
 
     (words, langs_count)

@@ -14,7 +14,7 @@ Splits text (iterator `CharIndices`) to words, and detects [`ScriptLanguage`](ht
 
 ### Examples
 
-To split `text` to the iterator of [`WordLang`](https://docs.rs/alphabet_detector/latest/alphabet_detector/words/struct.WordLang.html):
+To split `text` to the iterator of [`Word`](https://docs.rs/alphabet_detector/latest/alphabet_detector/words/struct.Word.html):
 ```rust
 let word_iter = words::from_ch_ind::<Vec<char>>(text.char_indices());
 ```
