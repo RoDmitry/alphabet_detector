@@ -5,7 +5,7 @@ use crate::{
 };
 use debug_unsafe::slice::SliceGetter;
 
-/// All words detection summed up
+/// All words detection summed up.
 pub fn fulltext<B: WordBuf>(
     char_indices: impl Iterator<Item = (usize, char)>,
 ) -> (Vec<Word<B>>, ScriptLanguageArr<u32>) {
@@ -24,7 +24,7 @@ pub fn fulltext<B: WordBuf>(
     (words, langs_count)
 }
 
-/// All words detection summed up, then filtered by max ([`filter_max`](fn.filter_max.html)
+/// All words detection summed up, then filtered by max ([`filter_max`](fn.filter_max.html)).
 pub fn fulltext_filter_max<B: WordBuf>(
     char_indices: impl Iterator<Item = (usize, char)>,
 ) -> (Vec<Word<B>>, impl Iterator<Item = ScriptLanguage>, u32) {
@@ -36,9 +36,11 @@ pub fn fulltext_filter_max<B: WordBuf>(
 
 /// All words detection summed up, then filtered with margin percent
 /// ([`filter_with_margin`](fn.filter_with_margin.html)).
+///
 /// Less then (100 - `PERCENT`)% margin for an error.
 /// `PERCENT` = 95 is recommended.
-/// Recommended
+///
+/// Recommended.
 pub fn fulltext_filter_with_margin<B: WordBuf, const PERCENT: u32>(
     char_indices: impl Iterator<Item = (usize, char)>,
 ) -> (Vec<Word<B>>, impl Iterator<Item = (ScriptLanguage, u32)>) {
@@ -50,6 +52,7 @@ pub fn fulltext_filter_with_margin<B: WordBuf, const PERCENT: u32>(
 
 /// All words detection summed up, then filtered with margin percent
 /// ([`filter_with_margin_sorted`](fn.filter_with_margin_sorted.html)), then sorted.
+///
 /// Less then (100 - `PERCENT`)% margin for an error.
 /// `PERCENT` = 95 is recommended.
 pub fn fulltext_filter_with_margin_sorted<B: WordBuf, const PERCENT: u32>(
