@@ -1,6 +1,6 @@
 [package]
 name = "alphabet_detector"
-version = "0.6.0"
+version = "0.7.0"
 authors = { workspace = true }
 description = "Natural language alphabet detection library"
 documentation = "https://docs.rs/alphabet_detector/"
@@ -49,7 +49,7 @@ strum_macros = "0.27"
 # optional
 clap = { version = "4", features = ["derive"], optional = true }
 compact_str = { version = "0.9", optional = true }
-pyo3 = { version = "0.24", optional = true }
+pyo3 = { version = "0.25", optional = true }
 threadpool = { version = "1", optional = true }
 
 [dev-dependencies]

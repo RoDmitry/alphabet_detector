@@ -1,5 +1,6 @@
+use ::std::hint::black_box;
 use alphabet_detector::{ch_norm, fulltext, fulltext_filter_max, fulltext_filter_with_margin};
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, Criterion};
 
 const SENTENCES: &[&str] = &[
     "و في نفس الوقت أقول بأن الشيخ صالح لم يشر إلى مسؤولية الدولة التي تسمح لمواطنيها بملكية قنوات تبث ما تبث بل إنه حصر المسؤولية على ملاك هذه القنوات.",
