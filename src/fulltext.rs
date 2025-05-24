@@ -43,11 +43,15 @@ pub fn fulltext_filter_max<B: WordBuf>(
 /// Recommended.
 pub fn fulltext_filter_with_margin<B: WordBuf, const PERCENT: u32>(
     char_indices: impl Iterator<Item = (usize, char)>,
-) -> (Vec<Word<B>>, impl Iterator<Item = (ScriptLanguage, u32)>) {
+) -> (
+    Vec<Word<B>>,
+    impl Iterator<Item = (ScriptLanguage, u32)>,
+    u32,
+) {
     let (words, langs_count) = fulltext(char_indices);
-    let langs = filter_with_margin::<PERCENT>(langs_count);
+    let (langs, langs_count_margin) = filter_with_margin::<PERCENT>(langs_count);
 
-    (words, langs)
+    (words, langs, langs_count_margin)
 }
 
 /// All words detection summed up, then filtered with margin percent
@@ -57,9 +61,9 @@ pub fn fulltext_filter_with_margin<B: WordBuf, const PERCENT: u32>(
 /// `PERCENT` = 95 is recommended.
 pub fn fulltext_filter_with_margin_sorted<B: WordBuf, const PERCENT: u32>(
     char_indices: impl Iterator<Item = (usize, char)>,
-) -> (Vec<Word<B>>, Vec<(ScriptLanguage, u32)>) {
+) -> (Vec<Word<B>>, Vec<(ScriptLanguage, u32)>, u32) {
     let (words, langs_count) = fulltext(char_indices);
-    let langs = filter_with_margin_sorted::<PERCENT>(langs_count);
+    let (langs, langs_count_margin) = filter_with_margin_sorted::<PERCENT>(langs_count);
 
-    (words, langs)
+    (words, langs, langs_count_margin)
 }
