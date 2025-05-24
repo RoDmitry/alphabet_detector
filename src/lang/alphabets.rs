@@ -2678,11 +2678,11 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Tibetan => &[ScriptLanguage::Dzongkha, ScriptLanguage::Tibetan],
         Tifinagh => alphabet_match!([
             (
-                ScriptLanguage::TamasheqTifinagh,
+                ScriptLanguage::TamasheqTifinagh, //+
                 [
-                    'ⴰ', 'ⴱ', 'ⴳ', 'ⴶ', 'ⴷ', 'ⴸ', 'ⴹ', 'ⴼ', 'ⵀ', 'ⴾ', 'ⵂ', 'ⵃ', 'ⵄ', 'ⵆ', 'ⵈ', 'ⵉ',
-                    'ⵊ', 'ⵌ', 'ⵋ', 'ⵍ', 'ⵎ', 'ⵏ', 'ⵑ', 'ⵓ', 'ⵔ', 'ⵗ', 'ⵙ', 'ⵚ', 'ⵛ', 'ⵜ', 'ⵟ', 'ⵡ',
-                    'ⵢ', 'ⵣ', 'ⵥ', 'ⵦ', /*unverified*/ 'ⴽ', 'ⴻ', 'ⵖ',
+                    'ⴰ', 'ⴱ', 'ⴴ', 'ⴶ', 'ⴷ', 'ⴸ', 'ⴹ', 'ⴼ', 'ⴾ', 'ⵂ', 'ⵃ', 'ⵄ', 'ⵆ', 'ⵈ', 'ⵉ', 'ⵌ',
+                    'ⵋ', 'ⵍ', 'ⵎ', 'ⵏ', 'ⵑ', 'ⵓ', 'ⵔ', 'ⵗ', 'ⵙ', 'ⵚ', 'ⵛ', 'ⵜ', 'ⵟ', 'ⵡ', 'ⵢ', 'ⵣ',
+                    'ⵥ', 'ⵦ',
                 ]
             ),
             (
