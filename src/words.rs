@@ -164,6 +164,8 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 }) = self.norm_iter.get_next_char()
                 {
                     next_char_script == UcdScript::Common
+                        || next_char_script != self.prev_char_script
+                            && self.prev_char_script != UcdScript::Common
                 } else {
                     true
                 }
