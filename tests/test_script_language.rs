@@ -1,25 +1,28 @@
+use ahash::AHashSet;
 use alphabet_detector::{script_char_to_slangs, Language, Script, ScriptLanguage, UcdScript};
 use strum::{EnumCount, IntoEnumIterator};
 use ScriptLanguage::*;
 
 #[test]
 fn test_order() {
-    let mut lang_prev = format!("{:?}", ScriptLanguage::iter().next().unwrap()).to_lowercase();
-    for lang in ScriptLanguage::iter() {
-        let lang = format!("{lang:?}").to_lowercase();
-        assert!(
-            lang_prev <= lang,
-            "ScriptLanguage wrong order: {lang_prev} > {lang}"
-        );
-        lang_prev = lang;
+    let mut script_prev = Script::Common;
+    let mut scripts_closed = AHashSet::default();
+    for slang in ScriptLanguage::iter() {
+        let script = Script::from(slang);
+        if script != script_prev {
+            if !scripts_closed.insert(script) {
+                panic!("ScriptLanguage wrong order: {script:?}");
+            }
+            script_prev = script;
+        }
     }
 }
 
 #[test]
 fn test_max_value() {
-    for lang in ScriptLanguage::iter() {
+    for slang in ScriptLanguage::iter() {
         assert!(
-            (lang as usize) < ScriptLanguage::COUNT,
+            (slang as usize) < ScriptLanguage::COUNT,
             "Language value >= it's count"
         );
     }

@@ -62,6 +62,8 @@ pub enum Language {
     ArabicSouthernYemeni,
     #[language(short = "ajp")]
     ArabicSouthLevantine,
+    #[language(short = "apd")]
+    ArabicSudanese,
     #[language(short = "aeb")]
     ArabicTunisian,
     #[language(short = "elym")]
@@ -449,6 +451,8 @@ pub enum Language {
     Nepali,
     #[language(short = "new")]
     Newar,
+    #[language(short = "pcm")]
+    NigerianPidgin,
     #[language(short = "nod")]
     NorthernThai,
     #[language(short = "nob")]

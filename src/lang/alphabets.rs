@@ -151,6 +151,13 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
+                ScriptLanguage::ArabicSudanese,
+                [
+                    'أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط',
+                    'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي', 'ء', 'ى', 'ئ',
+                ]
+            ),
+            (
                 ScriptLanguage::ArabicTunisian,
                 [
                     'ا', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط',
@@ -301,11 +308,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         ],
         Bhaiksuki => &[ScriptLanguage::SanskritBhaiksuki],
         Bopomofo => &[ScriptLanguage::ChineseMandarinBopomofo],
-        Brahmi => &[
-            ScriptLanguage::SanskritBrahmi,
-            ScriptLanguage::Prakrit,
-            ScriptLanguage::MarathiBrahmi,
-        ],
+        Brahmi => &[ScriptLanguage::SanskritBrahmi, ScriptLanguage::Prakrit],
         Braille => &[ScriptLanguage::Braille],
         Buginese => &[
             ScriptLanguage::BugineseBuginese,
@@ -2044,6 +2047,22 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
+                ScriptLanguage::NigerianPidgin, //+
+                #[rustfmt::skip]
+                [
+                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'Ẹ', 'ẹ', 'F', 'f', 'G', 'g',
+                    'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o',
+                    'Ọ', 'ọ', 'P', 'p', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w',
+                    'Y', 'y', 'Z', 'z', 'Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú', 'À', 'à',
+                    'È', 'è', 'Ì', 'ì', 'Ò', 'ò', 'Ù', 'ù',
+                    // from `char_compose_custom`
+                    '\u{f00b9}', // Ẹ̀ẹ̀
+                    '\u{f00cd}', // Ọ̀ọ̀
+                    '\u{f01b9}', // Ẹ́ẹ́
+                    '\u{f01cd}', // Ọ́ọ́
+                ]
+            ),
+            (
                 ScriptLanguage::NorwegianBokmal, //++
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
@@ -2572,7 +2591,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Lydian => &[ScriptLanguage::Lydian],
         Mahajani => &[
             ScriptLanguage::HindiMahajani,
-            ScriptLanguage::Marwari,
+            ScriptLanguage::MarwariMahajani,
             ScriptLanguage::PunjabiEasternMahajani,
         ],
         Makasar => &[ScriptLanguage::MakassareseMakasar],
