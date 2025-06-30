@@ -30,7 +30,7 @@
 //! ```
 //!
 //! It will give you all [`Word`](struct.Word.html)s (`Vec<Word<Vec<char>>>`) of `text` and `Vec<(ScriptLanguage, u32)>` filtered with a less then 5% margin for an error.
-//! 
+//!
 //! Instead of `Vec<char>` you can use [other types](words/trait.WordBuf.html#foreign-impls) of words.
 
 #![cfg_attr(docsrs, feature(doc_cfg))]

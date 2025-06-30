@@ -57,16 +57,16 @@ pub(crate) fn char_compose_custom(ch: char, mark: char) -> char {
 pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
 
 // How to add a new alphabet:
-// Add all the letters of all the alphabets in the script group.
-//  Even though it's possible to add not all of the letters,
-//   (for example when all alphabets include them, like in `UcdScript::Han`),
-//   it's recommended to add common letters (if alphabet is not very big),
-//   anyway they will be filtered out by `alphabet_match!` macro.
+// Add every letter (except used only for loanwords) for each alphabet within the script group.
+// Do not add letters used only for loanwords, but save them in a comment.
+// Even though it's possible to add not all of the letters,
+//  (for example when all alphabets include them, like in `UcdScript::Han`),
+//  it's recommended to add common letters (if alphabet is not very big),
+//  anyway they will be filtered out by `alphabet_match!` macro.
 // Do not add same `ScriptLanguage` to different scripts, except `UcdScript::Common` or
 //  languages written with different scripts in a one word (like Japanese),
-//  instead create a new alphabet.
-// There is no reason to add letters if the script contains only one `ScriptLanguage`.
-// Do not add letters used only for loanwords, but save them in a comment.
+//  instead create a new `ScriptLanguage`.
+// There is no reason to add any letters if a script contains only one `ScriptLanguage`.
 /// Returns all `ScriptLanguage`s by `UcdScript` and `char`
 pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLanguage] {
     use UcdScript::*;
