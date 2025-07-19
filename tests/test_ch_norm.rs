@@ -8,7 +8,7 @@ use rstest::*;
 #[rstest(text, expected_chars,
     case("word", vec!('w','o','r','d')),
     case("'word'", vec!('\'','w','o','r','d','\'')),
-    case::combine("ÑầM̄", vec!('Ñ','ầ','\u{f046d}')),
+    case::combine("ÑầƐ̌", vec!('Ñ','ầ','\u{f0c5b}')),
     case("ﬁ", vec!('f','i')),
     case("ﬃ", vec!('f','f','i')),
     case("ﬁre", vec!('f','i','r','e')),

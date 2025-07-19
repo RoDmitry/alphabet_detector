@@ -7,7 +7,7 @@ use ::std::{
 use ahash::{AHashMap, AHashSet};
 use alphabet_detector::{
     ch_norm, reader::ReadCharsChunks, script_char_to_slangs, slang_arr_default,
-    slang_arr_default_nc, CharData, ScriptLanguage, ScriptLanguageArr, UcdScript,
+    slang_arr_default_nc, ucd::BY_NAME, CharData, ScriptLanguage, ScriptLanguageArr, UcdScript,
 };
 use clap::Parser;
 use debug_unsafe::slice::SliceGetter;
@@ -58,6 +58,22 @@ fn main() {
 
             println!("*{}* {:?} started", file_name, thread_lang);
 
+            let mut lang_chars = AHashSet::new();
+            for &(script, ranges) in BY_NAME {
+                if script != thread_script {
+                    continue;
+                }
+                for range in ranges {
+                    for ch in range.0..=range.1 {
+                        let ch_langs = script_char_to_slangs(thread_script, ch);
+                        if ch_langs != thread_langs && ch_langs.contains(&thread_lang) {
+                            lang_chars.insert(ch);
+                        }
+                    }
+                }
+                break;
+            }
+
             let file = BufReader::new(File::open(path.path()).expect("open failed"));
             let ch_iter = file.chars_chunks(b'\n').map(|v| (0, v.unwrap()));
 
@@ -66,6 +82,9 @@ fn main() {
             let mut not_found_chars: ScriptLanguageArr<AHashMap<char, usize>> =
                 slang_arr_default_nc();
             for CharData { script, ch, .. } in ch_norm::from_ch_ind(ch_iter) {
+                lang_chars.remove(&ch.to_lowercase().next().unwrap());
+                lang_chars.remove(&ch.to_uppercase().next().unwrap());
+
                 let langs = script_char_to_slangs(script, ch);
                 let mut has_lang = false;
                 for &l in langs {
@@ -85,6 +104,13 @@ fn main() {
                             .or_default() += 1;
                     }
                 }
+            }
+
+            if !lang_chars.is_empty() {
+                println!(
+                    "*{}* {:?} unused chars found: {:?}",
+                    file_name, thread_lang, lang_chars
+                );
             }
 
             let lang_count = langs_count[thread_lang as usize];
