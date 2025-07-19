@@ -7,6 +7,9 @@ use alphabet_detector::{ScriptLanguage::*, *};
 use rstest::*;
 
 #[rstest(expected_language, word,
+    case(ChineseMandarinSimplified, "东京"),
+    case(ChineseMandarinSimplified, "会员"),
+    case(ChineseMandarinSimplified, "经济"),
     case(Czech, "tvořen"),
     case(Esperanto, "intermiksiĝis"),
     case(Esperanto, "kreitaĵoj"),
@@ -17,6 +20,9 @@ use rstest::*;
     case(Hungarian, "fekvő"),
     case(Hungarian, "meggyűrűzni"),
     case(Icelandic, "þagnarskyldu"),
+    case(Japanese, "会員"),
+    case(Japanese, "自動販売機"),
+    case(Japanese, "関西国際空港"),
     case(Kazakh, "ақын"),
     case(Kazakh, "шұрайлы"),
     case(Macedonian, "ќерка"),
@@ -121,6 +127,7 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Catalan, "només"),
     case(Catalan, "pràctiques"),
     case(Catalan, "substituïts"),
+    case(ChineseMandarinTraditional, "經濟"),
     case(Croatian, "nađete"),
     case(Croatian, "prihvaćanju"),
     case(Czech, "jeďte"),
@@ -149,6 +156,8 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Hebrew, "בתחרויות"),
     case(Icelandic, "minjaverðir"),
     case(Italian, "venerdì"),
+    case(Japanese, "東京"),
+    case(Japanese, "経済"),
     case(Kazakh, "әлем"),
     case(Kazakh, "оның"),
     case(Kazakh, "шаруашылығы"),
@@ -206,7 +215,7 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Vietnamese, "ravị"),
     case(Vietnamese, "sỏi"),
     case(Vietnamese, "trĩ"),
-    case(Yoruba, "ṣaaju")
+    case(Yoruba, "ṣaaju"),
 )]
 fn test_word_multiple_langs(expected_language: ScriptLanguage, word: &str) {
     let found_words: Vec<_> = words::from_ch_ind::<String>(word.char_indices()).collect();
