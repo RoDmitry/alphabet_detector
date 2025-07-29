@@ -215,7 +215,7 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Vietnamese, "ravị"),
     case(Vietnamese, "sỏi"),
     case(Vietnamese, "trĩ"),
-    case(Yoruba, "ṣaaju"),
+    case(Yoruba, "ṣaaju")
 )]
 fn test_word_multiple_langs(expected_language: ScriptLanguage, word: &str) {
     let found_words: Vec<_> = words::from_ch_ind::<String>(word.char_indices()).collect();

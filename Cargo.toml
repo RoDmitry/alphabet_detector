@@ -1,6 +1,6 @@
 [package]
 name = "alphabet_detector"
-version = "0.9.0"
+version = "0.9.1"
 authors = { workspace = true }
 description = "Natural language alphabet detection library"
 documentation = "https://docs.rs/alphabet_detector/"
