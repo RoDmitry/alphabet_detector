@@ -77,7 +77,7 @@ macro_rules! impl_serde {
                     {
                         Self::Value::from_bytes(v).ok_or_else(|| {
                             ::serde::de::Error::unknown_variant(
-                                &::serde::__private::from_utf8_lossy(v),
+                                &String::from_utf8_lossy(v),
                                 Self::Value::VARIANTS,
                             )
                         })
