@@ -2,8 +2,8 @@ use ::std::fmt::Debug;
 use alphabet_detector_macros::Language;
 use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 
-// For dialect create a new Language.
-// ISO 639-3 code.
+// For dialect create a new Language. Avoid macrolanguages.
+// short = ISO 639-3 code. shortest = ISO 639-1 code.
 /// Int representation is unstable and can be changed anytime.
 /// Code representation (const
 /// [`into_code`](enum.Language.html#method.into_code)/[`from_code`](enum.Language.html#method.from_code))
@@ -19,22 +19,25 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 )]
 #[non_exhaustive]
 pub enum Language {
-    #[language(short = "ace")]
+    #[language(short = "ace", shortest = "ac")]
     Acehnese,
-    #[language(short = "afr")]
+    #[language(short = "afr", shortest = "af")]
     Afrikaans,
     #[language(short = "aho")]
     Ahom,
-    #[language(short = "aka")]
-    Akan,
+    #[language(short = "fat", shortest = "ak")]
+    AkanFante,
+    /// default Akan
+    #[language(short = "twi", old_short = "aka", shortest = "tw")]
+    AkanTwi,
     #[language(short = "akk")]
     Akkadian,
-    /// Macro
-    #[language(short = "sqi")]
+    /// Macro, unique scripts
+    #[language(short = "sqi", old_short = "alb", shortest = "sq")]
     Albanian,
-    #[language(short = "als")]
+    #[language(short = "als", shortest = "sq")]
     AlbanianTosk,
-    #[language(short = "amh")]
+    #[language(short = "amh", shortest = "am")]
     Amharic,
     #[language(short = "grc")]
     AncientGreek,
@@ -46,7 +49,7 @@ pub enum Language {
     AncientSouthArabian,
     #[language(short = "akb")]
     Angkola,
-    #[language(short = "arb")]
+    #[language(short = "arb", shortest = "ar")]
     Arabic,
     #[language(short = "arz")]
     ArabicEgyptian,
@@ -82,27 +85,27 @@ pub enum Language {
     AramaicSamaritan,
     #[language(short = "syc")]
     AramaicSyriac,
-    #[language(short = "hye")]
+    #[language(short = "hye", old_short = "arm", shortest = "hy")]
     Armenian,
-    #[language(short = "asm")]
+    #[language(short = "asm", shortest = "as")]
     Assamese,
     #[language(short = "ast")]
     Asturian,
-    #[language(short = "ave")]
+    #[language(short = "ave", shortest = "ae")]
     Avestan,
     #[language(short = "awa")]
     Awadhi,
-    #[language(short = "ayr")]
+    #[language(short = "ayr", shortest = "ay")]
     AymaraCentral,
     /// Latin
-    #[language(short = "azj")]
+    #[language(short = "azj", shortest = "az")]
     AzerbaijaniNorth,
     /// Arabic
-    #[language(short = "azb")]
+    #[language(short = "azb", shortest = "az")]
     AzerbaijaniSouth,
     #[language(short = "ban")]
     Balinese,
-    #[language(short = "bam")]
+    #[language(short = "bam", shortest = "bm")]
     Bambara,
     #[language(short = "bax")]
     Bamum,
@@ -110,17 +113,17 @@ pub enum Language {
     Banjar,
     #[language(short = "bap")]
     Bantawa,
-    #[language(short = "bak")]
+    #[language(short = "bak", shortest = "ba")]
     Bashkir,
-    #[language(short = "eus")]
+    #[language(short = "eus", old_short = "baq", shortest = "eu")]
     Basque,
     #[language(short = "bsq")]
     Bassa,
-    #[language(short = "bel")]
+    #[language(short = "bel", shortest = "be")]
     Belarusian,
     #[language(short = "bem")]
     Bemba,
-    #[language(short = "ben")]
+    #[language(short = "ben", shortest = "bn")]
     Bengali,
     #[language(short = "bho")]
     Bhojpuri,
@@ -128,7 +131,7 @@ pub enum Language {
     Bhumij,
     #[language(short = "bpy")]
     BishnupriyaManipuri,
-    #[language(short = "bos")]
+    #[language(short = "bos", shortest = "bs")]
     Bosnian,
     /// Group, any language adapted to Braille
     #[language(short = "brai")]
@@ -137,13 +140,13 @@ pub enum Language {
     Buginese,
     #[language(short = "bku")]
     Buhid,
-    #[language(short = "bul")]
+    #[language(short = "bul", shortest = "bg")]
     Bulgarian,
-    #[language(short = "mya")]
+    #[language(short = "mya", old_short = "bur", shortest = "my")]
     Burmese,
     #[language(short = "xcr")]
     Carian,
-    #[language(short = "cat")]
+    #[language(short = "cat", shortest = "ca")]
     Catalan,
     #[language(short = "xag")]
     CaucasianAlbanian,
@@ -159,12 +162,10 @@ pub enum Language {
     Cherokee,
     #[language(short = "hne")]
     Chhattisgarhi,
-    // Macro
-    // #[language(short = "zho")]
-    // Chinese,
-    #[language(short = "yue")]
+    #[language(short = "yue", shortest = "zh")]
     ChineseCantonese,
-    #[language(short = "cmn")]
+    /// default Chinese
+    #[language(short = "cmn", old_short = ["zho", "chi"], shortest = "zh")]
     ChineseMandarin,
     #[language(short = "tuhu")]
     ChineseTuhua,
@@ -172,133 +173,137 @@ pub enum Language {
     Chokwe,
     #[language(short = "xco")]
     Chorasmian,
-    #[language(short = "chu")]
+    #[language(short = "chu", shortest = "cu")]
     ChurchSlavonic,
-    #[language(short = "chv")]
+    #[language(short = "chv", shortest = "cv")]
     Chuvash,
     #[language(short = "cop")]
     Coptic,
-    #[language(short = "cre")]
+    /// Macro, unique script
+    #[language(short = "cre", shortest = "cr")]
     Cree,
-    #[language(short = "hat")]
+    #[language(short = "hat", shortest = "ht")]
     CreoleHaitian,
-    #[language(short = "hrv")]
+    #[language(short = "hrv", shortest = "hr")]
     Croatian,
-    #[language(short = "ces")]
+    #[language(short = "ces", old_short = "cze", shortest = "cs")]
     Czech,
-    #[language(short = "dan")]
+    #[language(short = "dan", shortest = "da")]
     Danish,
-    #[language(short = "div")]
+    #[language(short = "div", shortest = "dv")]
     Dhivehi,
     #[language(short = "luo")]
     Dholuo,
     #[language(short = "dik")]
     DinkaSouthwestern,
-    #[language(short = "doi")]
+    #[language(short = "dgo", old_short = "doi")]
     Dogri,
-    #[language(short = "nld")]
+    #[language(short = "xnr")]
+    DogriKangri,
+    #[language(short = "nld", old_short = "dut", shortest = "nl")]
     Dutch,
     #[language(short = "dyu")]
     Dyula,
-    #[language(short = "dzo")]
+    #[language(short = "dzo", shortest = "dz")]
     Dzongkha,
     #[language(short = "egyp")]
     EgyptianHieroglyphs,
-    #[language(short = "eng")]
+    #[language(short = "eng", shortest = "en")]
     English,
-    #[language(short = "epo")]
+    #[language(short = "epo", shortest = "eo")]
     Esperanto,
-    #[language(short = "ekk")]
+    #[language(short = "ekk", old_short = "est", shortest = "et")]
     Estonian,
     #[language(short = "ett")]
     Etruscan,
-    #[language(short = "ewe")]
+    #[language(short = "ewe", shortest = "ee")]
     Ewe,
-    #[language(short = "fao")]
+    #[language(short = "fao", shortest = "fo")]
     Faroese,
-    #[language(short = "fij")]
+    #[language(short = "fij", shortest = "fj")]
     Fijian,
-    #[language(short = "fil")]
+    #[language(short = "fil", old_short = "tgl", shortest = "tl")]
     Filipino,
-    #[language(short = "fin")]
+    #[language(short = "fin", shortest = "fi")]
     Finnish,
     #[language(short = "fon")]
     Fon,
-    #[language(short = "fra")]
+    #[language(short = "fra", old_short = "fre", shortest = "fr")]
     French,
     #[language(short = "fur")]
     Friulian,
-    /// Macro
-    #[language(short = "ful")]
-    Fulani,
-    #[language(short = "fuv")]
+    #[language(short = "fuc", shortest = "ff")]
+    FulaPulaar,
+    #[language(short = "fuf", shortest = "ff")]
+    FulaPular,
+    #[language(short = "fuv", shortest = "ff")]
     FulfuldeNigerian,
-    #[language(short = "gla")]
+    #[language(short = "gla", shortest = "gd")]
     GaelicScottish,
-    #[language(short = "glg")]
+    #[language(short = "glg", shortest = "gl")]
     Galician,
-    #[language(short = "lug")]
+    #[language(short = "lug", shortest = "lg")]
     Ganda,
     #[language(short = "pgd")]
     Gandhari,
     #[language(short = "gez")]
     Geez,
-    #[language(short = "kat")]
+    #[language(short = "kat", old_short = "geo", shortest = "ka")]
     Georgian,
-    #[language(short = "deu")]
+    #[language(short = "deu", old_short = "ger", shortest = "de")]
     German,
-    /// Macro
+    /// Macro, unique scripts
     #[language(short = "gon")]
     Gondi,
     #[language(short = "got")]
     Gothic,
-    #[language(short = "ell")]
+    #[language(short = "ell", old_short = "gre", shortest = "el")]
     Greek,
-    #[language(short = "gug")]
-    Guarani,
-    #[language(short = "guj")]
+    #[language(short = "gug", old_short = "grn", shortest = "gn")]
+    GuaraniParaguayan,
+    #[language(short = "guj", shortest = "gu")]
     Gujarati,
     #[language(short = "gvr")]
     Gurung,
     #[language(short = "hnn")]
     Hanunoo,
-    #[language(short = "hau")]
+    #[language(short = "hau", shortest = "ha")]
     Hausa,
     #[language(short = "haw")]
     Hawaiian,
-    #[language(short = "heb")]
+    #[language(short = "heb", shortest = "he")]
     Hebrew,
-    #[language(short = "smp")]
+    #[language(short = "smp", shortest = "he")]
     HebrewSamaritan,
-    #[language(short = "hin")]
+    #[language(short = "hin", shortest = "hi")]
     Hindi,
     #[language(short = "hit")]
     Hittite,
-    /// Macro
+    /// Macro, unique scripts
     #[language(short = "hmn")]
     Hmong,
     #[language(short = "hoc")]
     Ho,
-    #[language(short = "hun")]
+    #[language(short = "hun", shortest = "hu")]
     Hungarian,
-    #[language(short = "isl")]
+    #[language(short = "isl", old_short = "ice", shortest = "is")]
     Icelandic,
-    #[language(short = "ibo")]
+    #[language(short = "ibo", shortest = "ig")]
     Igbo,
     #[language(short = "ilo")]
     Ilocano,
-    #[language(short = "ind")]
+    #[language(short = "ind", shortest = "id")]
     Indonesian,
-    /// Macro
-    #[language(short = "iku")]
+    /// Macro, unique script
+    #[language(short = "iku", shortest = "iu")]
     Inuktitut,
-    #[language(short = "gle")]
+    #[language(short = "gle", shortest = "ga")]
     Irish,
-    #[language(short = "ita")]
+    #[language(short = "ita", shortest = "it")]
     Italian,
-    #[language(short = "jpn")]
+    #[language(short = "jpn", shortest = "ja")]
     Japanese,
-    #[language(short = "jav")]
+    #[language(short = "jav", shortest = "jv")]
     Javanese,
     #[language(short = "kac")]
     Jingpho,
@@ -310,53 +315,55 @@ pub enum Language {
     Kabyle,
     #[language(short = "kam")]
     Kamba,
-    #[language(short = "kan")]
+    #[language(short = "kan", shortest = "kn")]
     Kannada,
-    #[language(short = "knc")]
+    #[language(short = "knc", shortest = "kr")]
     KanuriCentral,
     #[language(short = "btx")]
     Karo,
-    #[language(short = "kas")]
+    #[language(short = "kas", shortest = "ks")]
     Kashmiri,
     #[language(short = "eky")]
     KayahEastern,
     #[language(short = "kyu")]
     KayahWestern,
-    #[language(short = "kaz")]
+    #[language(short = "kaz", shortest = "kk")]
     Kazakh,
     #[language(short = "zkt")]
     Khitan,
-    #[language(short = "khm")]
+    #[language(short = "khm", shortest = "km")]
     Khmer,
     #[language(short = "ktu")]
     KikongoKituba,
-    #[language(short = "kik")]
+    #[language(short = "kik", shortest = "ki")]
     Kikuyu,
     #[language(short = "kmb")]
     Kimbundu,
-    #[language(short = "kin")]
+    #[language(short = "kin", shortest = "rw")]
     Kinyarwanda,
-    #[language(short = "kpv")]
-    Komi,
-    #[language(short = "kor")]
+    #[language(short = "koi", shortest = "kv")]
+    KomiPermyak,
+    #[language(short = "kpv", shortest = "kv")]
+    KomiZyrian,
+    #[language(short = "kor", shortest = "ko")]
     Korean,
-    #[language(short = "ckb")]
+    #[language(short = "ckb", shortest = "ku")]
     KurdishCentral,
-    #[language(short = "kmr")]
+    #[language(short = "kmr", shortest = "ku")]
     KurdishNorthern,
-    #[language(short = "sdh")]
+    #[language(short = "sdh", shortest = "ku")]
     KurdishSouthern,
     #[language(short = "kfr")]
     Kutchi,
-    #[language(short = "kir")]
+    #[language(short = "kir", shortest = "ky")]
     Kyrgyz,
-    #[language(short = "lao")]
+    #[language(short = "lao", shortest = "lo")]
     Lao,
-    #[language(short = "ltg")]
+    #[language(short = "ltg", shortest = "lv")]
     Latgalian,
-    #[language(short = "lat")]
+    #[language(short = "lat", shortest = "la")]
     Latin,
-    #[language(short = "lvs")]
+    #[language(short = "lvs", shortest = "lv")]
     Latvian,
     #[language(short = "lep")]
     Lepcha,
@@ -364,13 +371,13 @@ pub enum Language {
     Ligurian,
     #[language(short = "lif")]
     Limbu,
-    #[language(short = "lim")]
+    #[language(short = "lim", shortest = "li")]
     Limburgish,
-    #[language(short = "lin")]
+    #[language(short = "lin", shortest = "ln")]
     Lingala,
     #[language(short = "lis")]
     Lisu,
-    #[language(short = "lit")]
+    #[language(short = "lit", shortest = "lt")]
     Lithuanian,
     /// Group
     #[language(short = "lolo")]
@@ -383,13 +390,13 @@ pub enum Language {
     LuwianCuneiform,
     #[language(short = "hlu")]
     LuwianHieroglyphic,
-    #[language(short = "ltz")]
+    #[language(short = "ltz", shortest = "lb")]
     Luxembourgish,
     #[language(short = "xlc")]
     Lycian,
     #[language(short = "xld")]
     Lydian,
-    #[language(short = "mkd")]
+    #[language(short = "mkd", old_short = "mac", shortest = "mk")]
     Macedonian,
     #[language(short = "mag")]
     Magahi,
@@ -397,24 +404,24 @@ pub enum Language {
     Maithili,
     #[language(short = "mak")]
     Makassarese,
-    #[language(short = "zsm")]
+    #[language(short = "plt", shortest = "mg")]
+    MalagasyPlateau,
+    #[language(short = "zsm", old_short = ["msa", "may"], shortest = "ms")]
     Malay,
-    #[language(short = "mal")]
+    #[language(short = "mal", shortest = "ml")]
     Malayalam,
-    #[language(short = "plt")]
-    MalgasyPlateau,
-    #[language(short = "mlt")]
+    #[language(short = "mlt", shortest = "mt")]
     Maltese,
     #[language(short = "btm")]
     Mandailing,
-    /// Macro
+    /// Macro, unique script
     #[language(short = "man")]
     Manding,
-    #[language(short = "mri")]
+    #[language(short = "mri", old_short = "mao", shortest = "mi")]
     Maori,
-    #[language(short = "mar")]
+    #[language(short = "mar", shortest = "mr")]
     Marathi,
-    /// Macro
+    /// Macro, unique script
     #[language(short = "mwr")]
     Marwari,
     #[language(short = "dmf")]
@@ -437,7 +444,7 @@ pub enum Language {
     MinoanLinearA,
     #[language(short = "lus")]
     Mizo,
-    #[language(short = "khk")]
+    #[language(short = "khk", shortest = "mn")]
     MongolianHalh,
     #[language(short = "mos")]
     Mossi,
@@ -447,7 +454,7 @@ pub enum Language {
     Mundari,
     #[language(short = "gmy")]
     MycenaeanGreek,
-    #[language(short = "npi")]
+    #[language(short = "npi", shortest = "ne")]
     Nepali,
     #[language(short = "new")]
     Newar,
@@ -455,19 +462,17 @@ pub enum Language {
     NigerianPidgin,
     #[language(short = "nod")]
     NorthernThai,
-    #[language(short = "nob")]
+    #[language(short = "nob", shortest = "nb")]
     NorwegianBokmal,
-    #[language(short = "nno")]
+    #[language(short = "nno", shortest = "nn")]
     NorwegianNynorsk,
     #[language(short = "nus")]
     Nuer,
-    #[language(short = "nya")]
+    #[language(short = "nya", shortest = "ny")]
     Nyanja,
-    #[language(short = "oci")]
+    #[language(short = "oci", shortest = "oc")]
     Occitan,
-    #[language(short = "ory")]
-    Odia,
-    /// Macro
+    /// Macro, unique script
     #[language(short = "oji")]
     Ojibwe,
     #[language(short = "ang")]
@@ -484,9 +489,11 @@ pub enum Language {
     OldTurkic,
     #[language(short = "oui")]
     OldUyghur,
-    #[language(short = "gax")]
+    #[language(short = "ory", shortest = "or")]
+    OriyaOdia,
+    #[language(short = "gax", shortest = "om")]
     OromoSouthern,
-    #[language(short = "gaz")]
+    #[language(short = "gaz", shortest = "om")]
     OromoWestCentral,
     #[language(short = "osa")]
     Osage,
@@ -500,99 +507,100 @@ pub enum Language {
     Papiamento,
     #[language(short = "xpr")]
     Parthian,
-    #[language(short = "pbt")]
+    #[language(short = "pbt", shortest = "ps")]
     PashtoSouthern,
     /// Afghani
-    #[language(short = "prs")]
+    #[language(short = "prs", shortest = "fa")]
     PersianDari,
     /// Iranian
-    #[language(short = "pes")]
+    #[language(short = "pes", old_short = ["fas", "per"], shortest = "fa")]
     PersianWestern,
     #[language(short = "phn")]
     Phoenician,
-    #[language(short = "pol")]
+    #[language(short = "pol", shortest = "pl")]
     Polish,
-    #[language(short = "por")]
+    #[language(short = "por", shortest = "pt")]
     Portuguese,
     /// Group
     #[language(short = "pra")]
     Prakrit,
-    #[language(short = "fuf")]
-    Pular,
-    #[language(short = "pan")]
+    #[language(short = "pan", shortest = "pa")]
     PunjabiEastern,
-    #[language(short = "quy")]
+    #[language(short = "quy", shortest = "qu")]
     QuechuaAyacucho,
     #[language(short = "rej")]
     Rejang,
     #[language(short = "rhg")]
     Rohingya,
-    #[language(short = "ron")]
+    #[language(short = "ron", old_short = "rum", shortest = "ro")]
     Romanian,
-    #[language(short = "run")]
+    #[language(short = "run", shortest = "rn")]
     Rundi,
-    #[language(short = "rus")]
+    #[language(short = "rus", shortest = "ru")]
     Russian,
-    #[language(short = "smo")]
+    #[language(short = "smo", shortest = "sm")]
     Samoan,
-    #[language(short = "sag")]
+    #[language(short = "sag", shortest = "sg")]
     Sango,
-    #[language(short = "san")]
+    #[language(short = "cls", old_short = "san", shortest = "sa")]
     Sanskrit,
+    #[language(short = "vsn", shortest = "sa")]
+    SanskritVedic,
     #[language(short = "sat")]
     Santali,
     #[language(short = "skr")]
     Saraiki,
-    #[language(short = "srd")]
+    /// Macro, hard to separate
+    #[language(short = "srd", shortest = "sc")]
     Sardinian,
     #[language(short = "saz")]
     Saurashtra,
     #[language(short = "nso")]
     Sepedi,
-    #[language(short = "srp")]
+    #[language(short = "srp", shortest = "sr")]
     Serbian,
     #[language(short = "sot")]
     Sesotho,
     #[language(short = "shn")]
     Shan,
-    #[language(short = "sna")]
+    #[language(short = "sna", shortest = "sn")]
     Shona,
     #[language(short = "scn")]
     Sicilian,
     /// Group
-    #[language(short = "sgnw")]
+    #[language(short = "sgn")]
     SignLanguages,
     #[language(short = "szl")]
     Silesian,
     #[language(short = "bts")]
     Simalungun,
-    #[language(short = "snd")]
+    #[language(short = "snd", shortest = "sd")]
     Sindhi,
-    #[language(short = "sin")]
+    #[language(short = "sin", shortest = "si")]
     Sinhala,
-    #[language(short = "slk")]
+    #[language(short = "slk", old_short = "slo", shortest = "sk")]
     Slovak,
-    #[language(short = "slv")]
-    Slovene,
+    #[language(short = "slv", shortest = "sl")]
+    Slovenian,
     #[language(short = "sog")]
     Sogdian,
-    #[language(short = "som")]
+    #[language(short = "som", shortest = "so")]
     Somali,
     #[language(short = "srb")]
     Sora,
-    #[language(short = "spa")]
+    #[language(short = "spa", shortest = "es")]
     Spanish,
     #[language(short = "sux")]
     Sumerian,
-    #[language(short = "sun")]
+    #[language(short = "sun", shortest = "su")]
     Sundanese,
     #[language(short = "suz")]
     Sunuwar,
-    #[language(short = "swh")]
+    #[language(short = "swh", shortest = "sw")]
     Swahili,
-    #[language(short = "ssw")]
+    #[language(short = "ssw", shortest = "ss")]
     Swati,
-    #[language(short = "swe")]
+    #[language(short = "swe", shortest = "sv")]
     Swedish,
     #[language(short = "syl")]
     Sylheti,
@@ -606,32 +614,32 @@ pub enum Language {
     TaiLue,
     #[language(short = "tdd")]
     TaiNuea,
-    #[language(short = "tgk")]
+    #[language(short = "tgk", shortest = "tg")]
     Tajik,
     #[language(short = "taq")]
     Tamasheq,
     #[language(short = "tzm")]
     TamazightCentralAtlas,
-    #[language(short = "tam")]
+    #[language(short = "tam", shortest = "ta")]
     Tamil,
-    /// Macro
+    /// Macro, unique script
     #[language(short = "nst")]
     Tangsa,
     #[language(short = "txg")]
     Tangut,
-    #[language(short = "tat")]
+    #[language(short = "tat", shortest = "tt")]
     Tatar,
     #[language(short = "crh")]
     TatarCrimean,
     #[language(short = "ctd")]
     Tedim,
-    #[language(short = "tel")]
+    #[language(short = "tel", shortest = "te")]
     Telugu,
-    #[language(short = "tha")]
+    #[language(short = "tha", shortest = "th")]
     Thai,
-    #[language(short = "bod")]
+    #[language(short = "bod", old_short = "tib", shortest = "bo")]
     Tibetan,
-    #[language(short = "tir")]
+    #[language(short = "tir", shortest = "ti")]
     Tigrinya,
     #[language(short = "bbc")]
     TobaBatak,
@@ -639,57 +647,55 @@ pub enum Language {
     TokPisin,
     #[language(short = "txo")]
     Toto,
-    #[language(short = "tso")]
+    #[language(short = "tso", shortest = "ts")]
     Tsonga,
-    #[language(short = "tsn")]
+    #[language(short = "tsn", shortest = "tn")]
     Tswana,
     #[language(short = "tcy")]
     Tulu,
     #[language(short = "tum")]
     Tumbuka,
-    #[language(short = "tur")]
+    #[language(short = "tur", shortest = "tr")]
     Turkish,
-    #[language(short = "tuk")]
+    #[language(short = "tuk", shortest = "tk")]
     Turkmen,
-    #[language(short = "twi")]
-    Twi,
     #[language(short = "uga")]
     Ugaritic,
-    #[language(short = "ukr")]
+    #[language(short = "ukr", shortest = "uk")]
     Ukrainian,
     #[language(short = "xum")]
     Umbrian,
     #[language(short = "umb")]
     Umbundu,
-    #[language(short = "urd")]
+    #[language(short = "urd", shortest = "ur")]
     Urdu,
-    #[language(short = "uig")]
+    #[language(short = "uig", shortest = "ug")]
     Uyghur,
-    #[language(short = "uzn")]
+    #[language(short = "uzn", shortest = "uz")]
     UzbekNorthern,
     #[language(short = "vai")]
     Vai,
     #[language(short = "vec")]
     Venetian,
-    #[language(short = "vie")]
+    #[language(short = "vie", shortest = "vi")]
     Vietnamese,
     #[language(short = "nnp")]
     Wancho,
     #[language(short = "war")]
     Waray,
-    #[language(short = "cym")]
+    #[language(short = "cym", old_short = "wel", shortest = "cy")]
     Welsh,
-    #[language(short = "wol")]
+    #[language(short = "wol", shortest = "wo")]
     Wolof,
-    #[language(short = "xho")]
+    #[language(short = "xho", shortest = "xh")]
     Xhosa,
-    #[language(short = "ydd")]
+    #[language(short = "ydd", shortest = "yi")]
     YiddishEastern,
-    #[language(short = "yor")]
+    #[language(short = "yor", shortest = "yo")]
     Yoruba,
     #[language(short = "xzh")]
     Zhangzhung,
-    #[language(short = "zul")]
+    #[language(short = "zul", shortest = "zu")]
     Zulu,
 }
 

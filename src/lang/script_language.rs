@@ -130,13 +130,11 @@ pub enum ScriptLanguage {
     #[slang(script = Latin)]
     Banjar, // 10.6 old
     #[slang(script = Latin)]
-    Akan, // 10 old
-    #[slang(script = Latin)]
     Ilocano, // 11
     #[slang(script = Latin)]
     AzerbaijaniNorth, // 10?
     #[slang(script = Latin)]
-    MalgasyPlateau, // ??
+    MalagasyPlateau, // ??
     #[slang(script = Latin)]
     OromoSouthern, // ??
     #[slang(script = Latin)]
@@ -158,13 +156,17 @@ pub enum ScriptLanguage {
     #[slang(script = Latin)]
     Nyanja, // 7 2007
     #[slang(script = Latin)]
+    AkanTwi, // ~7.1 2013
+    #[slang(script = Latin)]
     Umbundu, // 7
     #[slang(script = Latin)]
     Kikuyu, // 6.6 old
     #[slang(script = Latin)]
     Croatian, // 6.5
     #[slang(script = Latin)]
-    Guarani, // 6.5
+    GuaraniParaguayan, // 6.5
+    #[slang(script = Latin)]
+    FulaPulaar, // 6.3 2022
     #[slang(script = Latin)]
     Minangkabau, // 5.5 old
     #[slang(script = Latin)]
@@ -178,7 +180,7 @@ pub enum ScriptLanguage {
     #[slang(script = Latin)]
     Ewe, // 5
     #[slang(script = Latin)]
-    Pular, // 4.8
+    FulaPular, // 4.8
     #[slang(script = Latin)]
     Swati, // 4.7 2013
     #[slang(script = Latin)]
@@ -208,11 +210,11 @@ pub enum ScriptLanguage {
     #[slang(script = Latin)]
     Acehnese, // 2.8 2010
     #[slang(script = Latin)]
-    Twi, // ?? sub of Akan
+    AkanFante, // 2.8 2013
     #[slang(script = Latin)]
     Bosnian, // 2.7
     #[slang(script = Latin)]
-    Slovene, // 2.5 old
+    Slovenian, // 2.5 old
     #[slang(script = Latin)]
     Chokwe, // 2.5 2018
     #[slang(script = Latin)]
@@ -394,7 +396,9 @@ pub enum ScriptLanguage {
     #[slang(script = Devanagari)]
     Wancho, // 0.06
     #[slang(script = Devanagari)]
-    Sanskrit, // 0
+    Sanskrit,
+    #[slang(script = Devanagari)]
+    SanskritVedic,
 
     // Cyrillic
     #[slang(script = Cyrillic)]
@@ -456,12 +460,6 @@ pub enum ScriptLanguage {
     #[slang(script = Myanmar)]
     Shan, // 4.7 2017
 
-    // Adlam
-    #[slang(script = Adlam)]
-    Fulani, // 40
-    #[slang(script = Adlam, lang = Pular)]
-    PularAdlam,
-
     // Hebrew
     #[slang(script = Hebrew)]
     Hebrew, // 8.3 2018
@@ -496,6 +494,10 @@ pub enum ScriptLanguage {
     /// Historical
     #[slang(script = Batak, lang = Mandailing)]
     MandailingBatak,
+
+    // Adlam
+    #[slang(script = Adlam, lang = FulaPular)]
+    FulaPularAdlam, // 4.8
 
     // Tifinagh
     #[slang(script = Tifinagh)]
@@ -557,6 +559,8 @@ pub enum ScriptLanguage {
     // Takri
     #[slang(script = Takri, lang = Dogri)]
     DogriTakri,
+    #[slang(script = Takri, lang = DogriKangri)]
+    DogriKangriTakri,
     #[slang(script = Takri, lang = Kashmiri)]
     KashmiriTakri,
 
@@ -637,6 +641,12 @@ pub enum ScriptLanguage {
     Oscan,
     #[slang(script = OldItalic)]
     Umbrian,
+
+    // OldPermic
+    #[slang(script = OldPermic, lang = KomiZyrian)]
+    KomiZyrianOldPermic, // 0.1 but not that script
+    #[slang(script = OldPermic, lang = KomiPermyak)]
+    KomiPermyakOldPermic, // 0.063
 
     // PhagsPa
     /// Historical
@@ -796,8 +806,6 @@ pub enum ScriptLanguage {
     Khitan,
     #[slang(script = Khmer)]
     Khmer,
-    #[slang(script = OldPermic, lang = Komi)]
-    KomiOldPermic,
     #[slang(script = Yezidi, lang = KurdishNorthern)]
     KurdishNorthernYezidi,
     #[slang(script = Lao)]
@@ -855,8 +863,6 @@ pub enum ScriptLanguage {
     MycenaeanGreek,
     #[slang(script = Newa)]
     Newar,
-    #[slang(script = Oriya)]
-    Odia,
     #[slang(script = Ogham, lang = OldIrish)]
     OldIrishOgham,
     #[slang(script = OldPersian)]
@@ -865,6 +871,8 @@ pub enum ScriptLanguage {
     OldTurkic,
     #[slang(script = OldUyghur)]
     OldUyghur,
+    #[slang(script = Oriya)]
+    OriyaOdia,
     #[slang(script = Osage)]
     Osage,
     #[slang(script = InscriptionalParthian)]

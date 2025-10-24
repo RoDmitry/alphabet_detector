@@ -71,7 +71,7 @@ pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
 pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLanguage] {
     use UcdScript::*;
     match script {
-        Adlam => &[ScriptLanguage::Fulani, ScriptLanguage::PularAdlam],
+        Adlam => &[ScriptLanguage::FulaPularAdlam],
         Ahom => &[ScriptLanguage::Ahom],
         AnatolianHieroglyphs => &[ScriptLanguage::LuwianHieroglyphic],
         Arabic => alphabet_match!([
@@ -339,6 +339,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 // Latin
                 ScriptLanguage::Acehnese,
                 ScriptLanguage::Afrikaans,
+                ScriptLanguage::AkanTwi,
                 ScriptLanguage::AlbanianTosk,
                 ScriptLanguage::Asturian,
                 ScriptLanguage::AymaraCentral,
@@ -364,11 +365,12 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ScriptLanguage::Fon,
                 ScriptLanguage::French,
                 ScriptLanguage::Friulian,
+                ScriptLanguage::FulaPulaar,
                 ScriptLanguage::FulfuldeNigerian,
                 ScriptLanguage::GaelicScottish,
                 ScriptLanguage::Galician,
                 ScriptLanguage::Ganda,
-                ScriptLanguage::Guarani,
+                ScriptLanguage::GuaraniParaguayan,
                 ScriptLanguage::Hausa,
                 ScriptLanguage::Hawaiian,
                 ScriptLanguage::Icelandic,
@@ -392,8 +394,8 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ScriptLanguage::Lombard,
                 ScriptLanguage::LubaKasai,
                 ScriptLanguage::Luxembourgish,
+                ScriptLanguage::MalagasyPlateau,
                 ScriptLanguage::Malay,
-                ScriptLanguage::MalgasyPlateau,
                 ScriptLanguage::Maltese,
                 ScriptLanguage::Maori,
                 ScriptLanguage::Minangkabau,
@@ -426,7 +428,6 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ScriptLanguage::Tswana,
                 ScriptLanguage::Tumbuka,
                 ScriptLanguage::Turkish,
-                ScriptLanguage::Twi,
                 ScriptLanguage::Umbundu,
                 ScriptLanguage::UzbekNorthern,
                 ScriptLanguage::Venetian,
@@ -696,8 +697,16 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ॠ', 'ऌ', /* 'ॡ', */ 'ए', 'ऐ', 'ओ',
                     'औ', 'क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण',
                     'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष',
-                    'स', 'ह', // Vedic Sanskrit
-                    'ळ',
+                    'स', 'ह',
+                ],
+            ),
+            (
+                ScriptLanguage::SanskritVedic,
+                [
+                    'अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ॠ', 'ऌ', /* 'ॡ', */ 'ए', 'ऐ', 'ओ',
+                    'औ', 'क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण',
+                    'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष',
+                    'स', 'ह', 'ळ',
                 ],
             ),
             (
@@ -1263,12 +1272,23 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Akan, //+
+                ScriptLanguage::AkanFante, //+
+                [
+                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'Ɛ', 'ɛ', 'F', 'f', 'G', 'g', 'H', 'h',
+                    'I', 'i', 'K', 'k', 'M', 'm', 'N', 'n', 'O', 'o', 'Ɔ', 'ɔ', 'P', 'p', 'R', 'r',
+                    'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Z', 'z',
+                ]
+            ),
+            (
+                ScriptLanguage::AkanTwi, //++
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'Ɛ', 'ɛ', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'Ɔ', 'ɔ', 'P', 'p',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y',
-                    'y', // loanwords C, J, Q, V, X, Z
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Ã', 'ã', 'Á', 'á',
+                    'Ẽ', 'ẽ', 'Ĩ', 'ĩ', 'Õ', 'õ', 'Ũ',
+                    'ũ',
+                    // any more diacritics?
+                    // loanwords C, J, Q, V, X, Z
                 ]
             ),
             (
@@ -1594,6 +1614,24 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
+                ScriptLanguage::FulaPulaar, //+
+                [
+                    'A', 'a', 'B', 'b', 'Ɓ', 'ɓ', 'C', 'c', 'D', 'd', 'Ɗ', 'ɗ', 'E', 'e', 'F', 'f',
+                    'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n',
+                    'Ñ', 'ñ', 'Ŋ', 'ŋ', 'O', 'o', 'P', 'p', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u',
+                    'W', 'w', 'X', 'x', 'Y', 'y', 'Ƴ', 'ƴ',
+                ]
+            ),
+            (
+                ScriptLanguage::FulaPular, //+
+                [
+                    'A', 'a', 'B', 'b', 'Ɓ', 'ɓ', 'C', 'c', 'D', 'd', 'Ɗ', 'ɗ', 'E', 'e', 'F', 'f',
+                    'G', 'g', 'Ɠ', 'ɠ', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm',
+                    'N', 'n', 'Ñ', 'ñ', 'Ŋ', 'ŋ', 'O', 'o', 'P', 'p', 'R', 'r', 'S', 's', 'T', 't',
+                    'U', 'u', 'W', 'w', 'Y', 'y', 'Ƴ', 'ƴ',
+                ]
+            ),
+            (
                 ScriptLanguage::FulfuldeNigerian, //+
                 [
                     'A', 'a', 'B', 'b', 'Ɓ', 'ɓ', 'C', 'c', 'D', 'd', 'Ɗ', 'ɗ', 'E', 'e', 'F', 'f',
@@ -1638,7 +1676,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Guarani, //+
+                ScriptLanguage::GuaraniParaguayan, //+
                 [
                     'Ã', 'ã', 'Á', 'á', 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'Ẽ', 'ẽ', 'Ê', 'ê',
                     'E', 'e', 'É', 'é', 'G', 'g', 'H', 'h', 'Í', 'í', 'Ĩ', 'ĩ', 'Î', 'î', 'I', 'i',
@@ -1965,21 +2003,21 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
+                ScriptLanguage::MalagasyPlateau,
+                [
+                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
+                    'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
+                    'S', 's', 'T', 't', 'V', 'v', 'Y', 'y', 'Z', 'z', /*unverified*/ 'À', 'à',
+                    'Ô', 'ô'
+                ]
+            ),
+            (
                 ScriptLanguage::Malay, //+
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
                     'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
                     'Y', 'y', 'Z', 'z'
-                ]
-            ),
-            (
-                ScriptLanguage::MalgasyPlateau,
-                [
-                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
-                    'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
-                    'S', 's', 'T', 't', 'V', 'v', 'Y', 'y', 'Z', 'z', /*unverified*/ 'À', 'à',
-                    'Ô', 'ô'
                 ]
             ),
             (
@@ -2177,15 +2215,6 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Pular, //+
-                [
-                    'A', 'a', 'B', 'b', 'Ɓ', 'ɓ', 'C', 'c', 'D', 'd', 'Ɗ', 'ɗ', 'E', 'e', 'F', 'f',
-                    'G', 'g', 'Ɠ', 'ɠ', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm',
-                    'N', 'n', 'Ñ', 'ñ', 'Ŋ', 'ŋ', 'O', 'o', 'P', 'p', 'R', 'r', 'S', 's', 'T', 't',
-                    'U', 'u', 'W', 'w', 'Y', 'y', 'Ƴ', 'ƴ',
-                ]
-            ),
-            (
                 ScriptLanguage::QuechuaAyacucho, //++
                 [
                     'A', 'a', 'C', 'c', 'H', 'h', 'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n',
@@ -2308,7 +2337,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Slovene,
+                ScriptLanguage::Slovenian,
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'Č', 'č', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g',
                     'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o',
@@ -2450,15 +2479,6 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'Ň', 'ň', 'O', 'o',
                     'Ö', 'ö', 'P', 'p', 'R', 'r', 'S', 's', 'Ş', 'ş', 'T', 't', 'U', 'u', 'Ü', 'ü',
                     'W', 'w', 'Y', 'y', 'Ý', 'ý', 'Z', 'z', 'Ä', 'ä', 'Ž', 'ž',
-                ]
-            ),
-            (
-                ScriptLanguage::Twi, //++
-                [
-                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'Ɛ', 'ɛ', 'F', 'f', 'G', 'g', 'H', 'h',
-                    'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'Ɔ', 'ɔ', 'P', 'p',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Ã', 'ã', 'Á', 'á',
-                    'Ẽ', 'ẽ', 'Ĩ', 'ĩ', 'Õ', 'õ', 'Ũ', 'ũ', // any more diacritics?
                 ]
             ),
             (
@@ -2632,7 +2652,10 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
             ScriptLanguage::Oscan,
             ScriptLanguage::Umbrian,
         ],
-        OldPermic => &[ScriptLanguage::KomiOldPermic],
+        OldPermic => &[
+            ScriptLanguage::KomiPermyakOldPermic,
+            ScriptLanguage::KomiZyrianOldPermic,
+        ],
         OldNorthArabian => &[ScriptLanguage::AncientNorthArabian],
         OldPersian => &[ScriptLanguage::OldPersian],
         OldSogdian => &[ScriptLanguage::SogdianOld],
@@ -2640,7 +2663,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         OldTurkic => &[ScriptLanguage::OldTurkic],
         OldUyghur => &[ScriptLanguage::OldUyghur],
         OlOnal => &[ScriptLanguage::Bhumij],
-        Oriya => &[ScriptLanguage::Odia],
+        Oriya => &[ScriptLanguage::OriyaOdia],
         Osage => &[ScriptLanguage::Osage],
         Osmanya => &[ScriptLanguage::SomaliOsmanya],
         PahawhHmong => &[ScriptLanguage::HmongPahawh],
@@ -2688,7 +2711,11 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
             ScriptLanguage::TaiLue,
         ],
         TaiViet => &[ScriptLanguage::TaiDam, ScriptLanguage::TaiDon],
-        Takri => &[ScriptLanguage::DogriTakri, ScriptLanguage::KashmiriTakri],
+        Takri => &[
+            ScriptLanguage::DogriTakri,
+            ScriptLanguage::DogriKangriTakri,
+            ScriptLanguage::KashmiriTakri,
+        ],
         Tamil => &[ScriptLanguage::Tamil],
         Tangsa => &[ScriptLanguage::Tangsa],
         Tangut => &[ScriptLanguage::Tangut],

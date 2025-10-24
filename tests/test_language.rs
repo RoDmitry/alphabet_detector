@@ -29,9 +29,9 @@ fn test_str() {
 
 #[test]
 fn test_code() {
-    for v in Language::iter() {
-        let code = v.into_code();
-        assert!(code < (1 << 20), "Language {v:?} too big code: {}", code);
+    for lang in Language::iter() {
+        let code = lang.into_code();
+        assert!(code < (1 << 20), "Language {lang:?} too big code: {}", code);
     }
 }
 
@@ -49,6 +49,28 @@ fn test_from_code() {
 #[test]
 fn test_to_string() {
     assert_eq!(English.into_str(), "eng");
+}
+
+#[test]
+fn test_macrolangs() {
+    let macrolangs = [
+        "aka", "ara", "aym", "aze", "bal", "bik", "bnc", "bua", "chm", /* "cre", */ "del",
+        "den", "din", "doi", "est", "fas", "ful", "gba", /* "gon", */ "grb", "grn", "hai",
+        "hbs", /* "hmn", */ /* "iku", */ "ipk", "jrb", "kau", "kln", "kok", "kom", "kon",
+        "kpe", "kur", "lah", "lav", "luy", /* "man", */ "mlg", "mon", "msa",
+        /* "mwr", */ "nep", "nor", /* "oji", */ "ori", "orm", "pus", "que", "raj", "rom",
+        "san", /* "sqi", */ /* "srd", */ "swa", "syr", "tmh", "uzb", "yid", "zap", "zha",
+        "zho", "zza",
+    ];
+
+    for lang in Language::iter() {
+        let name = lang.into_str();
+        assert!(
+            !macrolangs.contains(&name),
+            "Language {lang:?} is macrolang: {}",
+            name
+        );
+    }
 }
 
 #[test]

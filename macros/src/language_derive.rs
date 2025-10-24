@@ -20,15 +20,18 @@ pub(super) fn language_derive_inner(input: DeriveInput) -> syn::Result<proc_macr
         }
     };
 
-    let mut match_to_str = Vec::new();
-    let mut match_to_code = Vec::new();
-    let mut match_from_code = Vec::new();
-    let mut match_from_bytes = Vec::new();
-    let mut str_variants = Vec::new();
+    let mut match_to_str = Vec::with_capacity(variants.len());
+    let mut match_to_2letter = Vec::with_capacity(variants.len());
+    let mut match_to_code = Vec::with_capacity(variants.len());
+    let mut match_from_code = Vec::with_capacity(variants.len() + variants.len() / 2);
+    let mut match_from_bytes = Vec::with_capacity(variants.len() + variants.len() / 2);
+    let mut str_variants = Vec::with_capacity(variants.len());
 
     for variant in variants {
         let ident = variant.ident;
         let mut short = None;
+        let mut old_shorts = Vec::new();
+        let mut shortest = None;
 
         let tokens = variant
             .attrs
@@ -59,6 +62,62 @@ pub(super) fn language_derive_inner(input: DeriveInput) -> syn::Result<proc_macr
                                 _ => return Err(Error::new(i.span(), "No short name provided")),
                             }
                         }
+                        "old_short" => {
+                            skip_eq(&i, &mut tokens)?;
+                            match tokens.next() {
+                                Some(TokenTree::Literal(v)) => {
+                                    old_shorts.push(v.to_string());
+                                }
+                                Some(TokenTree::Group(g)) => {
+                                    for gt in g.stream() {
+                                        match gt {
+                                            TokenTree::Literal(v) => {
+                                                old_shorts.push(v.to_string());
+                                            }
+                                            TokenTree::Punct(p) => {
+                                                let ch = p.as_char();
+                                                if ch != ',' {
+                                                    return Err(syn::Error::new(
+                                                        p.span(),
+                                                        format!("Unexpected \"{ch}\", expected comma \",\""),
+                                                    ));
+                                                }
+                                            }
+                                            _ => {
+                                                return Err(Error::new(
+                                                    i.span(),
+                                                    "No old short name provided",
+                                                ))
+                                            }
+                                        }
+                                    }
+                                }
+                                Some(tt) => {
+                                    return Err(Error::new(
+                                        tt.span(),
+                                        format!("Unexpected \"{tt}\""),
+                                    ))
+                                }
+                                _ => {
+                                    return Err(Error::new(i.span(), "No old short name provided"))
+                                }
+                            }
+                        }
+                        "shortest" => {
+                            skip_eq(&i, &mut tokens)?;
+                            match tokens.next() {
+                                Some(TokenTree::Literal(v)) => {
+                                    shortest = Some(v.to_string());
+                                }
+                                Some(tt) => {
+                                    return Err(Error::new(
+                                        tt.span(),
+                                        format!("Unexpected \"{tt}\""),
+                                    ))
+                                }
+                                _ => return Err(Error::new(i.span(), "No shortest name provided")),
+                            }
+                        }
                         v => {
                             return Err(Error::new(i.span(), format!("Unexpected \"{v}\"")));
                         }
@@ -87,6 +146,16 @@ pub(super) fn language_derive_inner(input: DeriveInput) -> syn::Result<proc_macr
             return Err(Error::new(ident.span(), "Too long short name"));
         }
 
+        let short = Literal::from_str(&short_text)?;
+        let short = quote! { #short };
+
+        match_to_str.push(quote! {
+            #name::#ident #params => #short
+        });
+        match_from_bytes.push(quote! {
+            v if ::concat_const::eq_bytes(v, #short.as_bytes()) => ::core::option::Option::Some(#name::#ident #params)
+        });
+
         let mut short_name_chars = short_text[1..short_text.len() - 1].chars();
         let mut code: u32 = short_name_chars.next().unwrap() as u32 & 0b1_1111;
         for char in short_name_chars {
@@ -94,20 +163,44 @@ pub(super) fn language_derive_inner(input: DeriveInput) -> syn::Result<proc_macr
             code |= char as u32 & 0b1_1111;
         }
 
-        let short = Literal::from_str(&short_text)?;
-        let short = quote! { #short };
-        match_to_str.push(quote! {
-            #name::#ident #params => #short
-        });
         match_to_code.push(quote! {
             #name::#ident #params => #code
         });
         match_from_code.push(quote! {
             #code => ::core::option::Option::Some(#name::#ident #params)
         });
-        match_from_bytes.push(quote! {
-            v if ::concat_const::eq_bytes(v, #short.as_bytes()) => ::core::option::Option::Some(#name::#ident #params)
-        });
+
+        // same as short
+        for old_short_text in old_shorts {
+            let old_short = Literal::from_str(&old_short_text)?;
+            let old_short = quote! { #old_short };
+
+            match_from_bytes.push(quote! {
+                v if ::concat_const::eq_bytes(v, #old_short.as_bytes()) => ::core::option::Option::Some(#name::#ident #params)
+            });
+
+            let mut old_short_chars = old_short_text[1..old_short_text.len() - 1].chars();
+            let mut code: u32 = old_short_chars.next().unwrap() as u32 & 0b1_1111;
+            for char in old_short_chars {
+                code <<= 5;
+                code |= char as u32 & 0b1_1111;
+            }
+
+            match_from_code.push(quote! {
+                #code => ::core::option::Option::Some(#name::#ident #params)
+            });
+        }
+
+        if let Some(s) = shortest {
+            if s.len() > 4 {
+                return Err(Error::new(ident.span(), "Too long shortest name"));
+            }
+
+            let s = Literal::from_str(&s)?;
+            match_to_2letter.push(quote! {
+                #name::#ident #params => ::core::option::Option::Some(#s)
+            });
+        }
         str_variants.push(quote! { #short });
     }
 
@@ -130,6 +223,14 @@ pub(super) fn language_derive_inner(input: DeriveInput) -> syn::Result<proc_macr
             pub const fn into_str(self) -> &'static str {
                 match self {
                     #(#match_to_str),*
+                }
+            }
+            /// ISO 639-1 code string
+            #[inline]
+            pub const fn into_2letter(self) -> Option<&'static str> {
+                match self {
+                    #(#match_to_2letter),*,
+                    _ => None
                 }
             }
             /// 20-bit code (compacted ISO 639-3 code)

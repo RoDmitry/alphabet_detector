@@ -21,16 +21,17 @@ pub(super) fn script_lang_derive_inner(
         }
     };
 
-    let mut match_to_language = Vec::new();
-    let mut match_to_script = Vec::new();
-    let mut match_to_parts = Vec::new();
-    let mut match_to_str = Vec::new();
-    let mut match_to_code = Vec::new();
-    let mut match_from_code = Vec::new();
-    let mut match_from_parts = Vec::new();
-    let mut match_from_bytes = Vec::new();
-    let mut str_variants = Vec::new();
-    let mut lang_to_script_langs: AHashMap<String, Vec<_>> = AHashMap::new();
+    let mut match_to_language = Vec::with_capacity(variants.len());
+    let mut match_to_script = Vec::with_capacity(variants.len());
+    let mut match_to_parts = Vec::with_capacity(variants.len());
+    let mut match_to_str = Vec::with_capacity(variants.len());
+    let mut match_to_code = Vec::with_capacity(variants.len());
+    let mut match_from_code = Vec::with_capacity(variants.len() + 1);
+    let mut match_from_parts = Vec::with_capacity(variants.len() + 1);
+    let mut match_from_bytes = Vec::with_capacity(variants.len() + 1);
+    let mut str_variants = Vec::with_capacity(variants.len());
+    let mut lang_to_script_langs: AHashMap<String, Vec<_>> =
+        AHashMap::with_capacity(variants.len());
 
     for variant in variants {
         let ident = variant.ident;
