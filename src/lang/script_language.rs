@@ -967,10 +967,24 @@ impl ScriptLanguage {
     }
 
     #[inline(always)]
-    pub fn transmute_from_usize(v: usize) -> Self {
+    pub const fn transmute_from_usize(v: usize) -> Self {
         debug_assert!(v < Self::COUNT);
         unsafe { ::core::mem::transmute::<usize, Self>(v) }
     }
+
+    const fn hash() -> u64 {
+        let mut hash = 0;
+        let mut i = 0;
+        while i < Self::COUNT {
+            let mut lang_code = Self::transmute_from_usize(i).into_code() as u64;
+            lang_code = lang_code.rotate_left(i as u32);
+            hash ^= lang_code;
+            i += 1;
+        }
+        hash
+    }
+
+    pub const HASH: u64 = Self::hash();
 }
 
 /* impl Display for ScriptLanguage {
