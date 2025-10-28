@@ -3,7 +3,7 @@
 [![Crate](https://img.shields.io/crates/v/alphabet_detector.svg)](https://crates.io/crates/alphabet_detector)
 [![API](https://docs.rs/alphabet_detector/badge.svg)](https://docs.rs/alphabet_detector)
 
-## Detects 402 alphabets of 325 languages in 170 scripts
+## Detects 405 alphabets of 328 languages in 170 scripts
 
 > One language can be written in multiple scripts, so it will be detected as a different [`ScriptLanguage`](https://docs.rs/alphabet_detector/latest/alphabet_detector/enum.ScriptLanguage.html) (language + script)
 
