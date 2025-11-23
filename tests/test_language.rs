@@ -67,7 +67,7 @@ fn test_macrolangs() {
         let name = lang.into_str();
         assert!(
             !macrolangs.contains(&name),
-            "Language {lang:?} is macrolang: {}",
+            "Language {lang:?} is a macrolang: {}",
             name
         );
     }
