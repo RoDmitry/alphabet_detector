@@ -31,7 +31,6 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
     feature = "python",
     pyo3::prelude::pyclass(eq, eq_int, frozen, hash, ord)
 )]
-#[non_exhaustive]
 #[repr(usize)]
 pub enum ScriptLanguage {
     // Latin
@@ -808,6 +807,8 @@ pub enum ScriptLanguage {
     Khmer,
     #[slang(script = Yezidi, lang = KurdishNorthern)]
     KurdishNorthernYezidi,
+    #[slang(script = TolongSiki, lang = Kurukh)]
+    KurukhTolongSiki,
     #[slang(script = Lao)]
     Lao,
     #[slang(script = Lepcha)]
@@ -898,6 +899,8 @@ pub enum ScriptLanguage {
     SaraikiMultani,
     #[slang(script = Saurashtra, lang = Saurashtra)]
     SaurashtraSaurashtra,
+    #[slang(script = Sidetic)]
+    Sidetic,
     #[slang(script = SignWriting)]
     SignLanguages,
     #[slang(script = Khudawadi, lang = Sindhi)]
@@ -924,6 +927,8 @@ pub enum ScriptLanguage {
     TaiLueNew,
     #[slang(script = TaiLe)]
     TaiNuea,
+    #[slang(script = TaiYo, lang = TaiYo)]
+    TaiYoLaiTay,
     #[slang(script = Tamil)]
     Tamil,
     #[slang(script = Tangsa)]
@@ -946,6 +951,8 @@ pub enum ScriptLanguage {
     WanchoWancho,
     #[slang(script = Garay, lang = Wolof)]
     WolofGaray,
+    #[slang(script = BeriaErfe, lang = Zaghawa)]
+    ZaghawaBeriaErfe,
     #[slang(script = Marchen)]
     Zhangzhung,
 }

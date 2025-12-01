@@ -33,6 +33,8 @@ pub enum UcdScript {
     Batak,
     #[scr(short = "Beng", code = 325)]
     Bengali,
+    #[scr(short = "Berf", code = 258)]
+    BeriaErfe,
     #[scr(short = "Bhks", code = 334)]
     Bhaiksuki,
     #[scr(short = "Bopo", code = 285)]
@@ -281,6 +283,8 @@ pub enum UcdScript {
     Shavian,
     #[scr(short = "Sidd", code = 302)]
     Siddham,
+    #[scr(short = "Sidt", code = 180)]
+    Sidetic,
     #[scr(short = "Sgnw", code = 95)]
     SignWriting,
     #[scr(short = "Sinh", code = 348)]
@@ -309,6 +313,8 @@ pub enum UcdScript {
     TaiTham,
     #[scr(short = "Tavt", code = 359)]
     TaiViet,
+    #[scr(short = "Tayo", code = 380)]
+    TaiYo,
     #[scr(short = "Takr", code = 321)]
     Takri,
     #[scr(short = "Taml", code = 346)]
@@ -331,6 +337,8 @@ pub enum UcdScript {
     Tirhuta,
     #[scr(short = "Todr", code = 229)]
     Todhri,
+    #[scr(short = "Tols", code = 299)]
+    TolongSiki,
     #[scr(short = "Toto", code = 294)]
     Toto,
     #[scr(short = "Tutg", code = 341)]

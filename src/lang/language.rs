@@ -17,7 +17,6 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
     feature = "python",
     pyo3::prelude::pyclass(eq, eq_int, frozen, hash, ord)
 )]
-#[non_exhaustive]
 pub enum Language {
     #[language(short = "ace", shortest = "ac")]
     Acehnese,
@@ -353,6 +352,8 @@ pub enum Language {
     KurdishNorthern,
     #[language(short = "sdh", shortest = "ku")]
     KurdishSouthern,
+    #[language(short = "kru")]
+    Kurukh,
     #[language(short = "kfr")]
     Kutchi,
     #[language(short = "kir", shortest = "ky")]
@@ -567,6 +568,8 @@ pub enum Language {
     Shona,
     #[language(short = "scn")]
     Sicilian,
+    #[language(short = "xsd")]
+    Sidetic,
     /// Group
     #[language(short = "sgn")]
     SignLanguages,
@@ -614,6 +617,8 @@ pub enum Language {
     TaiLue,
     #[language(short = "tdd")]
     TaiNuea,
+    #[language(short = "tyj")]
+    TaiYo,
     #[language(short = "tgk", shortest = "tg")]
     Tajik,
     #[language(short = "taq")]
@@ -693,6 +698,8 @@ pub enum Language {
     YiddishEastern,
     #[language(short = "yor", shortest = "yo")]
     Yoruba,
+    #[language(short = "zag")]
+    Zaghawa,
     #[language(short = "xzh")]
     Zhangzhung,
     #[language(short = "zul", shortest = "zu")]

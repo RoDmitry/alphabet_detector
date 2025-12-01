@@ -34,6 +34,8 @@ pub enum Script {
     Batak,
     #[scr(short = "Beng", code = 325)]
     Bengali,
+    #[scr(short = "Berf", code = 258)]
+    BeriaErfe,
     #[scr(short = "Bhks", code = 334)]
     Bhaiksuki,
     #[scr(short = "Bopo", code = 285)]
@@ -290,6 +292,8 @@ pub enum Script {
     Shavian,
     #[scr(short = "Sidd", code = 302)]
     Siddham,
+    #[scr(short = "Sidt", code = 180)]
+    Sidetic,
     #[scr(short = "Sgnw", code = 95)]
     SignWriting,
     #[scr(short = "Sinh", code = 348)]
@@ -318,6 +322,8 @@ pub enum Script {
     TaiTham,
     #[scr(short = "Tavt", code = 359)]
     TaiViet,
+    #[scr(short = "Tayo", code = 380)]
+    TaiYo,
     #[scr(short = "Takr", code = 321)]
     Takri,
     #[scr(short = "Taml", code = 346)]
@@ -340,6 +346,8 @@ pub enum Script {
     Tirhuta,
     #[scr(short = "Todr", code = 229)]
     Todhri,
+    #[scr(short = "Tols", code = 299)]
+    TolongSiki,
     #[scr(short = "Toto", code = 294)]
     Toto,
     #[scr(short = "Tutg", code = 341)]
@@ -381,6 +389,7 @@ impl From<Script> for UcdScript {
             BassaVah => UcdScript::BassaVah,
             Batak => UcdScript::Batak,
             Bengali => UcdScript::Bengali,
+            BeriaErfe => UcdScript::BeriaErfe,
             Bhaiksuki => UcdScript::Bhaiksuki,
             Bopomofo => UcdScript::Bopomofo,
             Brahmi => UcdScript::Brahmi,
@@ -509,6 +518,7 @@ impl From<Script> for UcdScript {
             Sharada => UcdScript::Sharada,
             Shavian => UcdScript::Shavian,
             Siddham => UcdScript::Siddham,
+            Sidetic => UcdScript::Sidetic,
             SignWriting => UcdScript::SignWriting,
             Sinhala => UcdScript::Sinhala,
             Sogdian => UcdScript::Sogdian,
@@ -523,6 +533,7 @@ impl From<Script> for UcdScript {
             TaiLe => UcdScript::TaiLe,
             TaiTham => UcdScript::TaiTham,
             TaiViet => UcdScript::TaiViet,
+            TaiYo => UcdScript::TaiYo,
             Takri => UcdScript::Takri,
             Tamil => UcdScript::Tamil,
             Tangsa => UcdScript::Tangsa,
@@ -534,6 +545,7 @@ impl From<Script> for UcdScript {
             Tifinagh => UcdScript::Tifinagh,
             Tirhuta => UcdScript::Tirhuta,
             Todhri => UcdScript::Todhri,
+            TolongSiki => UcdScript::TolongSiki,
             Toto => UcdScript::Toto,
             TuluTigalari => UcdScript::TuluTigalari,
             Ugaritic => UcdScript::Ugaritic,

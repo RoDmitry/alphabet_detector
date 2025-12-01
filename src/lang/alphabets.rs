@@ -310,6 +310,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
             ScriptLanguage::BishnupriyaManipuri,
             ScriptLanguage::MeiteiBengali,
         ],
+        BeriaErfe => &[ScriptLanguage::ZaghawaBeriaErfe],
         Bhaiksuki => &[ScriptLanguage::SanskritBhaiksuki],
         Bopomofo => &[ScriptLanguage::ChineseMandarinBopomofo],
         Brahmi => &[ScriptLanguage::SanskritBrahmi, ScriptLanguage::Prakrit],
@@ -2693,6 +2694,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
             ScriptLanguage::KashmiriSharada,
         ],
         Shavian => &[ScriptLanguage::EnglishShavian],
+        Sidetic => &[ScriptLanguage::Sidetic],
         Siddham => &[ScriptLanguage::SanskritSiddham],
         SignWriting => &[ScriptLanguage::SignLanguages],
         Sinhala => &[ScriptLanguage::Sinhala],
@@ -2724,7 +2726,9 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Tamil => &[ScriptLanguage::Tamil],
         Tangsa => &[ScriptLanguage::Tangsa],
         Tangut => &[ScriptLanguage::Tangut],
+        TaiYo => &[ScriptLanguage::TaiYoLaiTay],
         Telugu => &[ScriptLanguage::Telugu],
+        TolongSiki => &[ScriptLanguage::KurukhTolongSiki],
         Thaana => &[ScriptLanguage::Dhivehi],
         Thai => &[ScriptLanguage::Thai],
         Tibetan => &[ScriptLanguage::Dzongkha, ScriptLanguage::Tibetan],
@@ -2751,7 +2755,6 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             )
         ]),
-
         Tirhuta => &[ScriptLanguage::MaithiliTirhuta],
         Todhri => &[ScriptLanguage::AlbanianTodhri],
         Toto => &[ScriptLanguage::Toto],
