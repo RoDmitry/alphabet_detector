@@ -1,6 +1,6 @@
 use ::std::fmt::Debug;
 use alphabet_detector_macros::Language;
-use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
+use strum_macros::{EnumCount as EnumCountDerive, EnumIter};
 
 // For dialect create a new Language. Avoid macrolanguages.
 // short = ISO 639-3 code. shortest = ISO 639-1 code.
@@ -11,7 +11,7 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
 /// [`into_str`](enum.Language.html#method.into_str)/[`from_str`](enum.Language.html#method.from_str))
 /// are more stable.
 #[derive(
-    Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumCountMacro, EnumIter, Language,
+    Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumCountDerive, EnumIter, Language,
 )]
 #[cfg_attr(
     feature = "python",

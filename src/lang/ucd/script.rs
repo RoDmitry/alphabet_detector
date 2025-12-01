@@ -1,7 +1,7 @@
 use ::core::cmp::Ordering;
 use alphabet_detector_macros::Script;
 use debug_unsafe::slice::SliceGetter;
-use strum_macros::EnumIter;
+use strum_macros::{EnumCount as EnumCountDerive, EnumIter};
 
 /// Int representation is unstable and can be changed anytime.
 /// Code representation (const
@@ -9,7 +9,9 @@ use strum_macros::EnumIter;
 /// or string representation (const
 /// [`into_str`](enum.UcdScript.html#method.into_str)/[`from_str`](enum.UcdScript.html#method.from_str))
 /// are more stable.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumIter, Script)]
+#[derive(
+    Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumCountDerive, EnumIter, Script,
+)]
 pub enum UcdScript {
     #[scr(short = "Adlm", code = 166)]
     Adlam,

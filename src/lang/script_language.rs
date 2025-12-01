@@ -2,7 +2,7 @@ use super::{script_char_to_slangs, Language, Script, UcdScript};
 use ::std::fmt::Debug;
 use alphabet_detector_macros::ScriptLanguage;
 use strum::{EnumCount, IntoEnumIterator};
-use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
+use strum_macros::{EnumCount as EnumCountDerive, EnumIter};
 
 /// Language + script. Ordered by total speakers.
 /// Value-names not always represent a script used, so a "default" script can be changed.
@@ -23,7 +23,7 @@ use strum_macros::{EnumCount as EnumCountMacro, EnumIter};
     PartialOrd,
     Ord,
     Hash,
-    EnumCountMacro,
+    EnumCountDerive,
     EnumIter,
     ScriptLanguage,
 )]

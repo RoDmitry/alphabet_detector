@@ -1,6 +1,6 @@
 use super::UcdScript;
 use alphabet_detector_macros::Script;
-use strum_macros::EnumIter;
+use strum_macros::{EnumCount as EnumCountDerive, EnumIter};
 
 // ISO 15924 code.
 /// Has aliases in comparison to [`UcdScript`](enum.UcdScript.html).
@@ -10,7 +10,9 @@ use strum_macros::EnumIter;
 /// or string representation (const
 /// [`into_str`](enum.Script.html#method.into_str)/[`from_str`](enum.Script.html#method.from_str))
 /// are more stable.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumIter, Script)]
+#[derive(
+    Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, EnumCountDerive, EnumIter, Script,
+)]
 pub enum Script {
     #[scr(short = "Adlm", code = 166)]
     Adlam,
