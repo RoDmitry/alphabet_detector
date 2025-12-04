@@ -1,3 +1,5 @@
+#![feature(string_into_chars)]
+
 use ::std::{
     fs,
     fs::File,
@@ -6,8 +8,8 @@ use ::std::{
 };
 use ahash::{AHashMap, AHashSet};
 use alphabet_detector::{
-    ch_norm, reader::ReadCharsChunks, script_char_to_slangs, slang_arr_default,
-    slang_arr_default_nc, ucd::BY_NAME, CharData, ScriptLanguage, ScriptLanguageArr, UcdScript,
+    ch_norm, reader::ReadChunks, script_char_to_slangs, slang_arr_default, slang_arr_default_nc,
+    ucd::BY_NAME, CharData, ScriptLanguage, ScriptLanguageArr, UcdScript,
 };
 use clap::Parser;
 use debug_unsafe::slice::SliceGetter;
@@ -75,7 +77,9 @@ fn main() {
             }
 
             let file = BufReader::new(File::open(path.path()).expect("open failed"));
-            let ch_iter = file.chars_chunks(b'\n').map(|v| (0, v.unwrap()));
+            let ch_iter = file
+                .chunks(b'\n')
+                .flat_map(|s| s.unwrap().into_chars().map(|c| (0, c)));
 
             let mut langs_count = slang_arr_default::<usize>();
             let mut found_chars: AHashMap<char, usize> = Default::default();

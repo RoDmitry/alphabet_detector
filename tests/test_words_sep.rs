@@ -25,6 +25,7 @@ use rstest::*;
     case(" ¿-", ahashset!()),
     case("a-b", ahashset!("a-b")),
     case("a_b", ahashset!("a", "b")),
+    case::new_line("abc\ndef", ahashset!("abc", "def")),
     case("a- asd", ahashset!("a", "asd")),
     case("asd-фыв", ahashset!("asd", "фыв")),
     case("3-rd", ahashset!("rd")),

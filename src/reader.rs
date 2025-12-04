@@ -1,6 +1,6 @@
 use ::std::{
     io::{self, BufRead, ErrorKind, Read},
-    string::{FromUtf8Error, IntoChars},
+    string::FromUtf8Error,
     sync::LazyLock,
 };
 use regex::Regex;
@@ -16,54 +16,41 @@ pub enum Error {
 
 /// Not the best optimization.
 /// Better use one buffer, instead of creating a new one each time.
-pub struct ReadCharsChunksIter<R: BufRead> {
+pub struct ReadChunksIter<R: BufRead> {
     reader: R,
     read_until: u8,
-    chars: IntoChars,
 }
 
-impl<R: Read + BufRead> Iterator for ReadCharsChunksIter<R> {
-    type Item = Result<char, Error>;
+impl<R: Read + BufRead> Iterator for ReadChunksIter<R> {
+    type Item = Result<String, Error>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        loop {
-            if let Some(ch) = self.chars.next() {
-                return Some(Ok(ch));
-            }
-
-            let mut buffer = Vec::<u8>::new();
-            return match self.reader.read_until(self.read_until, &mut buffer) {
-                Ok(0) => None,
-                Ok(_) => {
-                    let text = match String::from_utf8(buffer) {
-                        Ok(t) => t,
-                        Err(e) => return Some(Err(Error::Utf8(e))),
-                    };
-                    self.chars = SKIP_PARAMS.replace_all(&text, "").into_owned().into_chars();
-
-                    continue;
-                }
-                Err(e) if e.kind() == ErrorKind::UnexpectedEof => None,
-                Err(e) => Some(Err(Error::Io(e))),
-            };
+        let mut buffer = Vec::<u8>::new();
+        match self.reader.read_until(self.read_until, &mut buffer) {
+            Ok(0) => None,
+            Ok(_) => Some(match String::from_utf8(buffer) {
+                Ok(t) => Ok(SKIP_PARAMS.replace_all(&t, "").into_owned()),
+                Err(e) => Err(Error::Utf8(e)),
+            }),
+            Err(e) if e.kind() == ErrorKind::UnexpectedEof => None,
+            Err(e) => Some(Err(Error::Io(e))),
         }
     }
 }
 
-pub trait ReadCharsChunks: Sized {
+pub trait ReadChunks: Sized {
     type Output;
 
-    fn chars_chunks(self, read_until: u8) -> Self::Output;
+    fn chunks(self, read_until: u8) -> Self::Output;
 }
 
-impl<R: Read + BufRead> ReadCharsChunks for R {
-    type Output = ReadCharsChunksIter<R>;
+impl<R: Read + BufRead> ReadChunks for R {
+    type Output = ReadChunksIter<R>;
 
-    fn chars_chunks(self, read_until: u8) -> Self::Output {
-        ReadCharsChunksIter {
+    fn chunks(self, read_until: u8) -> Self::Output {
+        ReadChunksIter {
             reader: self,
             read_until,
-            chars: String::new().into_chars(),
         }
     }
 }
