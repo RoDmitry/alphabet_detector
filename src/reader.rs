@@ -1,7 +1,12 @@
 use ::std::{
     io::{self, BufRead, ErrorKind, Read},
     string::{FromUtf8Error, IntoChars},
+    sync::LazyLock,
 };
+use regex::Regex;
+
+static SKIP_PARAMS: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r#"strong\s?=\s?["″][^"″]*["″]"#).unwrap()); // skips `strong="val"`
 
 #[derive(Debug)]
 pub enum Error {
@@ -34,7 +39,7 @@ impl<R: Read + BufRead> Iterator for ReadCharsChunksIter<R> {
                         Ok(t) => t,
                         Err(e) => return Some(Err(Error::Utf8(e))),
                     };
-                    self.chars = text.into_chars();
+                    self.chars = SKIP_PARAMS.replace_all(&text, "").into_owned().into_chars();
 
                     continue;
                 }

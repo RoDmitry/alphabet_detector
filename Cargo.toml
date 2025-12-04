@@ -36,7 +36,7 @@ required-features = ["cli_alphabet_intersection"]
 [features]
 cli_alphabet_intersection = ["files_read", "clap", "threadpool"]
 compact_str = ["dep:compact_str"]
-files_read = []
+files_read = ["dep:regex"]
 python = ["pyo3"]
 test_chars = []
 
@@ -54,6 +54,7 @@ strum_macros = "0.27"
 clap = { version = "4", features = ["derive"], optional = true }
 compact_str = { version = "0.9", optional = true }
 pyo3 = { version = "0.27", optional = true }
+regex = { version = "1", optional = true }
 threadpool = { version = "1", optional = true }
 
 [dev-dependencies]
