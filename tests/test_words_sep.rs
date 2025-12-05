@@ -16,6 +16,8 @@ use rstest::*;
     case("'word'", ahashset!("word")),
     case("''word''", ahashset!("word")),
     case("can't", ahashset!("can't")),
+    case("can’t", ahashset!("can't")),
+    case("canʼt", ahashset!("can't")),
     case("can'фыв", ahashset!("can", "фыв")),
     case("worda' wordb", ahashset!("worda", "wordb")),
     case("worda 'wordb", ahashset!("worda", "wordb")),

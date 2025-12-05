@@ -2142,13 +2142,12 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Nyanja,
+                ScriptLanguage::Nyanja, //++?
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'Y', 'y', 'Z',
-                    'z', /*unverified*/
-                    'V', 'v', 'Ŵ', 'ŵ'
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Ŵ', 'ŵ', 'Y', 'y',
+                    'Z', 'z'
                 ]
             ),
             (
@@ -2170,13 +2169,12 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::OromoWestCentral,
+                ScriptLanguage::OromoWestCentral, //+
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'X', 'x', 'Y',
-                    'y', /*unverified*/
-                    'Z', 'z', 'V', 'v'
+                    'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
+                    'Y', 'y', 'Z', 'z'
                 ]
             ),
             (
@@ -2184,19 +2182,18 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x',
-                    'Y', 'y', 'Z', 'z',
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y',
+                    'Z', 'z',
                 ]
             ),
             (
-                ScriptLanguage::Papiamento,
+                ScriptLanguage::Papiamento, //++
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
-                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y',
-                    'Z', 'z', 'Á', 'á', 'É', 'é', 'È', 'è', 'Ó', 'ó', 'Ú', 'ú', 'Ü', 'ü', 'Ñ',
-                    'ñ', /*unverified*/
-                    'Í', 'í', 'Ò', 'ò'
+                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'Ñ', 'ñ', 'O', 'o',
+                    'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w',
+                    'X', 'x', 'Y', 'y', 'Z', 'z', 'Á', 'á', 'É', 'é', 'È', 'è', 'Í', 'í', 'Ó', 'ó',
+                    'Ò', 'ò', 'Ü', 'ü', 'Ú', 'ú', 'Ù', 'ù'
                 ]
             ),
             (
@@ -2239,22 +2236,20 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Rundi,
+                ScriptLanguage::Rundi, //+
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y',
-                    'y', /*unverified*/
-                    'Z', 'z'
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z'
                 ]
             ),
             (
-                ScriptLanguage::Samoan,
+                ScriptLanguage::Samoan, //++
                 [
-                    'A', 'a', 'E', 'e', 'F', 'f', 'G', 'g', 'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm',
-                    'N', 'n', 'O', 'o', 'P', 'p', 'S', 's', 'T', 't', 'U', 'u', 'V',
-                    'v', /*unverified*/
-                    'Ā', 'ā', 'Ē', 'ē', 'R', 'r'
+                    'A', 'a', 'E', 'e', 'F', 'f', 'G', 'g', 'I', 'i', 'L', 'l', 'M', 'm', 'N', 'n',
+                    'O', 'o', 'P', 'p', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'Ā', 'ā', 'Ē', 'ē',
+                    'Ī', 'ī', 'Ō', 'ō', 'Ū', 'ū', // loanwords H
+                    'K', 'k', 'R', 'r', // rare, but used
                 ]
             ),
             (
@@ -2278,22 +2273,22 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Sepedi,
+                ScriptLanguage::Sepedi, //++?
                 [
-                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'Ê', 'ê', 'F', 'f', 'G', 'g',
-                    'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o',
-                    'Ô', 'ô', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w',
-                    'X', 'x', 'Y', 'y', 'Z', 'z', 'Š', 'š'
+                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'Ê', 'ê', 'F', 'f', 'G', 'g', 'H', 'h',
+                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'Ô', 'ô',
+                    'P', 'p', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'X', 'x', 'Y', 'y',
+                    'Z', 'z', 'Š', 'š' // loanwords C
                 ]
             ),
             (
-                ScriptLanguage::Sesotho, //+ including Lesotho
+                ScriptLanguage::Sesotho, //++
                 [
-                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
-                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y',
-                    'Z', 'z', 'Š', 'š', /* 'Ò', 'ò', */ 'Ō', 'ō', 'È',
-                    'è', /* 'Ē', 'ē' */
+                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
+                    'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q',
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z',
+                    'Š', 'š', //
+                    'C', 'c', // in 'ch' (Lesotho)
                 ]
             ),
             (
@@ -2352,13 +2347,12 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Somali,
+                ScriptLanguage::Somali, //++
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'Q', 'q',
-                    'R', 'r', 'S', 's', /* 'Sh', 'sh', */ 'T', 't', 'U', 'u', 'W', 'w', 'X',
-                    'x', 'Y', 'y', /*unverified*/
-                    'P', 'p', 'V', 'v'
+                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'W', 'w', 'X', 'x', 'Y',
+                    'y' // loanwords P, V, Z
                 ]
             ),
             (
@@ -2389,12 +2383,12 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::Swati,
+                ScriptLanguage::Swati, //++
                 [
                     'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
                     'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
-                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', /*unverified*/
-                    'Z', 'z', 'R', 'r'
+                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z', 'R',
+                    'r' // R - unofficially used
                 ]
             ),
             (
@@ -2421,24 +2415,20 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::TatarCrimean,
+                ScriptLanguage::TatarCrimean, //++?
                 [
-                    'A', 'a', 'B', 'b', 'C', 'c', 'Ç', 'ç', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g',
-                    'H', 'h', 'I', 'ı', 'İ', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n',
-                    'O', 'o', 'Ö', 'ö', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'Ş', 'ş', 'T', 't',
-                    'U', 'u', 'Ü', 'ü', 'V', 'v', 'Y', 'y', 'Z', 'z', 'Ğ', 'ğ', 'Ə',
-                    'ə', /*unverified*/
-                    'Ñ', 'ñ', 'Â', 'â'
+                    'A', 'a', 'Â', 'â', 'B', 'b', 'C', 'c', 'Ç', 'ç', 'D', 'd', 'E', 'e', 'F', 'f',
+                    'G', 'g', 'Ğ', 'ğ', 'H', 'h', 'İ', 'i', 'I', 'ı', 'J', 'j', 'K', 'k', 'L', 'l',
+                    'M', 'm', 'N', 'n', 'Ñ', 'ñ', 'O', 'o', 'Ö', 'ö', 'P', 'p', 'Q', 'q', 'R', 'r',
+                    'S', 's', 'Ş', 'ş', 'T', 't', 'U', 'u', 'Ü', 'ü', 'V', 'v', 'Y', 'y', 'Z', 'z',
                 ]
             ),
             (
-                ScriptLanguage::TokPisin,
+                ScriptLanguage::TokPisin, //++
                 [
                     'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
                     'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'R', 'r',
-                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z',
-                    'z', /*unverified*/
-                    'C', 'c',
+                    'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'Y', 'y'
                 ]
             ),
             (
@@ -2497,13 +2487,12 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::UzbekNorthern,
+                ScriptLanguage::UzbekNorthern, //++
                 [
-                    'A', 'a', 'B', 'b', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i',
-                    'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q',
-                    'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'X', 'x', 'Y', 'y', 'Z',
-                    'z', /*unverified*/
-                    'C', 'c'
+                    'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h',
+                    'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p',
+                    'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'X', 'x', 'Y', 'y',
+                    'Z', 'z'
                 ]
             ),
             (

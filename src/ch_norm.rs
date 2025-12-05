@@ -138,7 +138,7 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
             self.next_char = self.iter.next();
         }
 
-        if ch == '’' {
+        if ['’', 'ʼ'].contains(&ch) {
             ch = '\'';
         }
 
