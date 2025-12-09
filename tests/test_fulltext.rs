@@ -7,12 +7,12 @@ use alphabet_detector::{ScriptLanguage::*, *};
 use rstest::*;
 
 #[rstest(expected_language, text, expected_languages,
-    case(ChineseMandarinTraditional, "也有越來越多的人開始飼養寵物", ahashset!(ChineseCantoneseTraditional, ChineseMandarinTraditional, Japanese)),
+    case(ChineseMandarinTraditional, "也有越來越多的人開始飼養寵物", ahashset!(ChineseCantoneseTraditional, ChineseMandarinTraditional, Japanese, Korean)),
     case(Japanese, "昨日、東京で大切な友達に会いました。", ahashset!(Japanese)), // Kanji (Han) + Hiragana
-    case(ChineseMandarinSimplified, "经济", ahashset![ChineseMandarinSimplified]),
-    case(ChineseMandarinTraditional, "經濟", ahashset![ChineseMandarinTraditional, ChineseCantoneseTraditional, Japanese]),
-    case::kanji(Japanese, "経済", ahashset![Korean, Japanese]),
-    case::kanji2(Japanese, "自動販売機", ahashset![Japanese]),
+    case(ChineseMandarinSimplified, "经济", ahashset!(ChineseMandarinSimplified)),
+    case(ChineseMandarinTraditional, "經濟", ahashset!(ChineseCantoneseTraditional, ChineseMandarinTraditional, Japanese, Korean)),
+    case::kanji(Japanese, "経済", ahashset!(Japanese)),
+    case::kanji2(Japanese, "自動販売機", ahashset!(Japanese)),
 )]
 fn test_fulltext_filter_max(
     expected_language: ScriptLanguage,
