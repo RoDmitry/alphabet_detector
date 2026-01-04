@@ -18,6 +18,8 @@ use strum_macros::{EnumCount as EnumCountDerive, EnumIter};
     pyo3::prelude::pyclass(eq, eq_int, frozen, hash, ord)
 )]
 pub enum Language {
+    #[language(short = "abk", shortest = "ab")]
+    Abkhaz,
     #[language(short = "ace", shortest = "ac")]
     Acehnese,
     #[language(short = "afr", shortest = "af")]
@@ -94,7 +96,7 @@ pub enum Language {
     Avestan,
     #[language(short = "awa")]
     Awadhi,
-    #[language(short = "ayr", shortest = "ay")]
+    #[language(short = "ayr", old_short = "aym", shortest = "ay")]
     AymaraCentral,
     /// Latin
     #[language(short = "azj", shortest = "az")]
@@ -157,6 +159,8 @@ pub enum Language {
     ChamEastern,
     #[language(short = "cja")]
     ChamWestern,
+    #[language(short = "che", shortest = "ce")]
+    Chechen,
     #[language(short = "chr")]
     Cherokee,
     #[language(short = "hne")]
@@ -422,6 +426,8 @@ pub enum Language {
     Maori,
     #[language(short = "mar", shortest = "mr")]
     Marathi,
+    #[language(short = "mhr", old_short = "chm")]
+    MariEastern,
     /// Macro, unique script
     #[language(short = "mwr")]
     Marwari,
@@ -455,6 +461,8 @@ pub enum Language {
     Mundari,
     #[language(short = "gmy")]
     MycenaeanGreek,
+    #[language(short = "yrk")]
+    Nenets,
     #[language(short = "npi", shortest = "ne")]
     Nepali,
     #[language(short = "new")]
@@ -500,6 +508,8 @@ pub enum Language {
     Osage,
     #[language(short = "osc")]
     Oscan,
+    #[language(short = "oss", shortest = "os")]
+    Ossetian,
     #[language(short = "btd")]
     Pakpak,
     #[language(short = "pag")]
@@ -539,6 +549,8 @@ pub enum Language {
     Rundi,
     #[language(short = "rus", shortest = "ru")]
     Russian,
+    #[language(short = "sme", shortest = "se")]
+    SamiNorthern,
     #[language(short = "smo", shortest = "sm")]
     Samoan,
     #[language(short = "sag", shortest = "sg")]
@@ -560,6 +572,8 @@ pub enum Language {
     Sepedi,
     #[language(short = "srp", shortest = "sr")]
     Serbian,
+    #[language(short = "srr")]
+    Serer,
     #[language(short = "sot")]
     Sesotho,
     #[language(short = "shn")]

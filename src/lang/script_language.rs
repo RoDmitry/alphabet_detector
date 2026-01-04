@@ -223,6 +223,8 @@ pub enum ScriptLanguage {
     #[slang(script = Latin)]
     Esperanto, // 2
     #[slang(script = Latin)]
+    Serer, // 1.9
+    #[slang(script = Latin)]
     AlbanianTosk, // 1.8 2011
     #[slang(script = Latin)]
     DinkaSouthwestern, // < 2
@@ -296,6 +298,8 @@ pub enum ScriptLanguage {
     TatarCrimean, // 0.06 2020
     #[slang(script = Latin)]
     Maori, // 0.05 2015
+    #[slang(script = Latin)]
+    SamiNorthern, // 0.025 2013
     #[slang(script = Latin)]
     Hawaiian, // 0.025
     #[slang(script = Latin)]
@@ -423,9 +427,19 @@ pub enum ScriptLanguage {
     #[slang(script = Cyrillic)]
     Macedonian, // 2
     #[slang(script = Cyrillic)]
+    Chechen, // 1.8 2020
+    #[slang(script = Cyrillic)]
     Bashkir, // 0.75
     #[slang(script = Cyrillic)]
     Chuvash, // 0.75
+    #[slang(script = Cyrillic)]
+    Ossetian, // 0.5
+    #[slang(script = Cyrillic)]
+    MariEastern, // 0.25
+    #[slang(script = Cyrillic)]
+    Abkhaz, // 0.2
+    #[slang(script = Cyrillic)]
+    Nenets, // 0.025
     #[slang(script = Cyrillic, lang = ChurchSlavonic)]
     ChurchSlavonicOld,
 
