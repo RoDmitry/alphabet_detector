@@ -27,7 +27,11 @@ pub fn fulltext<B: WordBuf>(
 /// All words detection summed up, then filtered by max ([`filter_max`](fn.filter_max.html)).
 pub fn fulltext_filter_max<B: WordBuf>(
     char_indices: impl Iterator<Item = (usize, char)>,
-) -> (Vec<Word<B>>, impl Iterator<Item = ScriptLanguage>, u32) {
+) -> (
+    Vec<Word<B>>,
+    impl Iterator<Item = ScriptLanguage> + Clone,
+    u32,
+) {
     let (words, langs_count) = fulltext(char_indices);
     let (langs, cnt) = filter_max(langs_count);
 
@@ -45,7 +49,7 @@ pub fn fulltext_filter_with_margin<B: WordBuf, const PERCENT: u32>(
     char_indices: impl Iterator<Item = (usize, char)>,
 ) -> (
     Vec<Word<B>>,
-    impl Iterator<Item = (ScriptLanguage, u32)>,
+    impl Iterator<Item = (ScriptLanguage, u32)> + Clone,
     u32,
 ) {
     let (words, langs_count) = fulltext(char_indices);

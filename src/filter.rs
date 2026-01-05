@@ -9,7 +9,7 @@ pub fn slangs_count_max(langs_cnt: &ScriptLanguageArr<u32>) -> u32 {
 #[inline]
 pub fn filter_max(
     langs_cnt: ScriptLanguageArr<u32>,
-) -> (impl Iterator<Item = ScriptLanguage>, u32) {
+) -> (impl Iterator<Item = ScriptLanguage> + Clone, u32) {
     let lang_count_max = slangs_count_max(&langs_cnt);
 
     (
@@ -29,7 +29,7 @@ pub fn filter_max(
 #[inline]
 pub fn filter_with_margin<const PERCENT: u32>(
     langs_cnt: ScriptLanguageArr<u32>,
-) -> (impl Iterator<Item = (ScriptLanguage, u32)>, u32) {
+) -> (impl Iterator<Item = (ScriptLanguage, u32)> + Clone, u32) {
     assert!(PERCENT < 100);
     let langs_count_margin = slangs_count_max(&langs_cnt) * PERCENT / 100;
 
