@@ -97,7 +97,7 @@ fn main() {
                 }
 
                 if has_lang {
-                    if langs != script_char_to_slangs(script, char::default()) {
+                    if langs != ScriptLanguage::all_with_script(script) {
                         *found_chars.entry(ch).or_default() += 1;
                     }
                 } else {

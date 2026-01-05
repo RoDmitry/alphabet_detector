@@ -62,7 +62,7 @@ fn test_alphabets() {
         if script == UcdScript::Common || script == UcdScript::Inherited {
             continue;
         }
-        for &slang in script_char_to_slangs(script, char::default()) {
+        for &slang in ScriptLanguage::all_with_script(script) {
             slangs[slang as usize].push(script);
         }
     }
