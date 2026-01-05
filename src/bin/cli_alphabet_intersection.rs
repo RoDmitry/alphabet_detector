@@ -9,7 +9,7 @@ use ::std::{
 use ahash::{AHashMap, AHashSet};
 use alphabet_detector::{
     ch_norm, reader::ReadChunks, script_char_to_slangs, slang_arr_default, slang_arr_default_nc,
-    ucd::BY_NAME, CharData, ScriptLanguage, ScriptLanguageArr, UcdScript,
+    ucd::BY_NAME, CharData, Language, Script, ScriptLanguage, ScriptLanguageArr, UcdScript,
 };
 use clap::Parser;
 use debug_unsafe::slice::SliceGetter;
@@ -47,6 +47,8 @@ fn main() {
                 *lang_seen = true;
             }
 
+            let unknown_lang =
+                ScriptLanguage::from_parts((Language::Unknown, Script::from(thread_lang)));
             let thread_script = UcdScript::from(thread_lang);
             let thread_langs = ScriptLanguage::all_with_script(thread_script);
             // TODO: rm this filter
@@ -68,7 +70,9 @@ fn main() {
                 for range in ranges {
                     for ch in range.0..=range.1 {
                         let ch_langs = script_char_to_slangs(thread_script, ch);
-                        if ch_langs != thread_langs && ch_langs.contains(&thread_lang) {
+                        if (unknown_lang.is_some() || ch_langs != thread_langs)
+                            && ch_langs.contains(&thread_lang)
+                        {
                             lang_chars.insert(ch);
                         }
                     }
@@ -189,7 +193,7 @@ fn main() {
                 .enumerate()
                 .filter(|(_, c)| !c.is_empty())
                 .map(|(l, c)| (ScriptLanguage::transmute_from_usize(l), c))
-                .filter(|(l, _)| thread_langs.contains(l))
+                .filter(|(l, _)| Some(l) == unknown_lang.as_ref() || thread_langs.contains(l))
                 .flat_map(|(_, c)| c.into_iter())
                 .collect();
             let mut not_found_chars: Vec<_> = not_found_chars

@@ -290,6 +290,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     // loanwords 'ص'
                 ]
             ),
+            // ScriptLanguage::UnknownArabic
         ]),
         Armenian => &[ScriptLanguage::Armenian],
         Avestan => &[ScriptLanguage::Avestan],
@@ -668,6 +669,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'Я', 'я',
                 ]
             ),
+            ScriptLanguage::UnknownCyrillic
         ]),
         Deseret => &[ScriptLanguage::EnglishDeseret],
         Devanagari => alphabet_match!([
@@ -793,6 +795,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह',
                 ],
             ),
+            // ScriptLanguage::UnknownDevanagari
         ]),
         DivesAkuru => &[ScriptLanguage::DhivehiDivesAkuru],
         Dogra => &[ScriptLanguage::DogriDogra],
@@ -2739,6 +2742,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'Y', 'y', 'Z', 'z'
                 ]
             ),
+            ScriptLanguage::UnknownLatin
         ]),
         Lepcha => &[ScriptLanguage::Lepcha],
         Limbu => &[ScriptLanguage::Limbu],
@@ -2863,7 +2867,8 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Thaana => &[ScriptLanguage::Dhivehi],
         Thai => &[ScriptLanguage::Thai],
         Tibetan => &[ScriptLanguage::Dzongkha, ScriptLanguage::Tibetan],
-        Tifinagh => alphabet_match!([
+        Tifinagh => &[ScriptLanguage::TamazightCentralAtlas],
+        /* alphabet_match!([
             (
                 ScriptLanguage::TamasheqTifinagh, //+
                 [
@@ -2880,12 +2885,11 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'ⵍ', 'ⵎ', 'ⵏ', 'ⵓ', 'ⵔ', 'ⵕ', 'ⵖ', 'ⵙ', 'ⵚ', 'ⵛ', 'ⵜ', 'ⵟ', 'ⵡ', 'ⵢ', 'ⵣ', 'ⵥ',
                     // additional
                     /* 'ⴲ', */ 'ⴴ', /* 'ⴵ', */ 'ⴶ',
-                    'ⴸ', 'ⴺ', 'ⴾ', /* 'ⴿ', */ 'ⵁ', 'ⵂ', 'ⵆ', 'ⵈ', 'ⵋ', 'ⵌ',
-                    /* 'ⵐ', */ 'ⵑ', 'ⵒ', 'ⵗ', /* 'ⵘ', */ 'ⵝ',
-                    /* 'ⵞ', 'ⵤ', */ 'ⵦ', 'ⵧ',
+                    'ⴸ', 'ⴺ', 'ⴾ', /* 'ⴿ', */ 'ⵁ', 'ⵈ', /* 'ⵐ', */ 'ⵑ', 'ⵒ',
+                    /* 'ⵘ', */ 'ⵝ', /* 'ⵞ', 'ⵤ', */ 'ⵦ', 'ⵧ', 'ⵠ', '⵰', '\u{2d7f}',
                 ]
-            )
-        ]),
+            ),
+        ]), */
         Tirhuta => &[ScriptLanguage::MaithiliTirhuta],
         Todhri => &[ScriptLanguage::AlbanianTodhri],
         Toto => &[ScriptLanguage::Toto],

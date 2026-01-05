@@ -47,7 +47,8 @@ fn test_correct_map_to_script() {
         let script = Script::from(slang);
         let ucd = UcdScript::from(script);
         assert!(
-            ScriptLanguage::all_with_script(ucd).contains(&slang),
+            ScriptLanguage::all_with_script(ucd).contains(&slang)
+                || script_char_to_slangs(ucd, char::default()).contains(&slang),
             "ScriptLanguage {slang:?} wrong script: {script:?}",
         );
     }

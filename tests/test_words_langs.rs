@@ -36,6 +36,7 @@ use rstest::*;
     case(Slovak, "pohľade"),
     case(Ukrainian, "ґрунтовому"),
     case(Ukrainian, "пропонує"),
+    case(UnknownLatin, "ʃɒɹɾɫɜɑʊʊ̈ʌt̬ʔ"), // IPA
     case(Vietnamese, "biểu"),
     case(Vietnamese, "bỡi"),
     case(Vietnamese, "cằm"),
@@ -203,6 +204,7 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Spanish, "¿que?"),
     case(Spanish, "años"),
     case(Ukrainian, "пристрої"),
+    case(UnknownLatin, "ºC"),
     case(Vietnamese, "chỉnh"),
     case(Vietnamese, "chọn"),
     case(Vietnamese, "của"),

@@ -1,5 +1,5 @@
 use alphabet_detector::{
-    script_char_to_slangs, slang_arr_default, ucd::BY_NAME, ScriptLanguage, UcdScript,
+    script_char_to_slangs, slang_arr_default, ucd::BY_NAME, Language, ScriptLanguage, UcdScript,
 };
 use strum::EnumCount;
 
@@ -72,6 +72,7 @@ fn test_alphabets() {
         .enumerate()
         .filter(|(_, scrs)| scrs.is_empty())
         .map(|(l, _)| ScriptLanguage::transmute_from_usize(l))
+        .filter(|&sl| Language::from(sl) != Language::Unknown)
         .collect();
 
     if !slangs_used.is_empty() {

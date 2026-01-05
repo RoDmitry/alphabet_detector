@@ -635,7 +635,7 @@ pub enum Language {
     TaiYo,
     #[language(short = "tgk", shortest = "tg")]
     Tajik,
-    #[language(short = "taq")]
+    #[language(short = "taq", old_short = "tmh")]
     Tamasheq,
     #[language(short = "tzm")]
     TamazightCentralAtlas,
@@ -686,6 +686,9 @@ pub enum Language {
     Umbrian,
     #[language(short = "umb")]
     Umbundu,
+    /// Unknown languages based on alphabets
+    #[language(short = "unkn")]
+    Unknown,
     #[language(short = "urd", shortest = "ur")]
     Urdu,
     #[language(short = "uig", shortest = "ug")]

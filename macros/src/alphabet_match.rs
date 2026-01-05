@@ -8,6 +8,7 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
     let mut value_to_keys = AHashMap::new();
 
     let mut keys_all = Vec::new();
+    let mut unknown_lang = None;
     // Parse the input array of tuples
     for tuple in input.elems {
         match tuple {
@@ -65,6 +66,9 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
                     }
                 }
             }
+            Expr::Path(p) => {
+                unknown_lang = Some(p);
+            }
             v => {
                 return Err(Error::new(v.span(), "Expected a tuple"));
             }
@@ -81,6 +85,20 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
             }
         });
 
+    let other = if let Some(l) = unknown_lang {
+        let chars_other = value_to_keys
+            .iter()
+            .filter(|(_, k)| k.len() >= keys_all.len())
+            .map(|(c, _)| quote! { #c });
+
+        quote! {
+            #(#chars_other)|* => &[#(#keys_all),*],
+            _ => &[#l]
+        }
+    } else {
+        quote! { _ => &[#(#keys_all),*] }
+    };
+
     let chars = value_to_keys.keys().map(|c| quote! { #c });
     // Generate the entire match block
     let expanded = quote! {{
@@ -91,7 +109,7 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
         }
         match ch {
             #(#arms)*
-            _ => &[#(#keys_all),*],
+            #other
         }
     }};
 

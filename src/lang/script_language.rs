@@ -304,6 +304,8 @@ pub enum ScriptLanguage {
     Hawaiian, // 0.025
     #[slang(script = Latin)]
     Latin, // 0
+    #[slang(script = Latin, lang = Unknown)]
+    UnknownLatin,
 
     // Han
     #[slang(script = HanSimplified, lang = ChineseMandarin)]
@@ -370,6 +372,8 @@ pub enum ScriptLanguage {
     AcehneseJawi, // 2.8 2010
     #[slang(script = Arabic, lang = Dogri)]
     DogriPersoArabic, // 2.6
+    // #[slang(script = Arabic, lang = Unknown)]
+    // UnknownArabic,
 
     // Devanagari
     #[slang(script = Devanagari)]
@@ -402,6 +406,8 @@ pub enum ScriptLanguage {
     Sanskrit,
     #[slang(script = Devanagari)]
     SanskritVedic,
+    // #[slang(script = Devanagari, lang = Unknown)]
+    // UnknownDevanagari,
 
     // Cyrillic
     #[slang(script = Cyrillic)]
@@ -442,6 +448,8 @@ pub enum ScriptLanguage {
     Nenets, // 0.025
     #[slang(script = Cyrillic, lang = ChurchSlavonic)]
     ChurchSlavonicOld,
+    #[slang(script = Cyrillic, lang = Unknown)]
+    UnknownCyrillic,
 
     // Bengali
     #[slang(script = Bengali)]
@@ -515,8 +523,6 @@ pub enum ScriptLanguage {
     // Tifinagh
     #[slang(script = Tifinagh)]
     TamazightCentralAtlas, // 2.7
-    #[slang(script = Tifinagh, lang = Tamasheq)]
-    TamasheqTifinagh, // 0.9
 
     // Tibetan
     #[slang(script = Tibetan)]
@@ -984,7 +990,14 @@ impl ScriptLanguage {
     /// Returns all `ScriptLanguage`s supporting selected `UcdScript`
     #[inline]
     pub fn all_with_script(script: UcdScript) -> &'static [Self] {
-        script_char_to_slangs(script, char::default())
+        let ch = match script {
+            // UcdScript::Arabic => 'ل',
+            UcdScript::Cyrillic => 'А',
+            // UcdScript::Devanagari => 'ठ',
+            UcdScript::Latin => 'A',
+            _ => char::default(),
+        };
+        script_char_to_slangs(script, ch)
     }
 
     #[inline(always)]
