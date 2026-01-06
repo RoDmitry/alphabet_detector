@@ -30,7 +30,19 @@ fn char_compose(composer: &CanonicalCompositionBorrowed<'static>, ch: char, mark
     if let Some(v) = composer.compose(ch, mark) {
         v
     } else {
-        char_compose_custom(ch, mark)
+        let ch_new = char_compose_custom(ch, mark);
+        #[cfg(feature = "cli_alphabet_intersection")]
+        if ch_new == ch && ch != ' ' && !['\u{361}'].contains(&mark) {
+            println!(
+                "skipped char_compose mark {:?} char {:?} as {}{} script {:?}",
+                mark,
+                ch,
+                ch,
+                mark,
+                UcdScript::find(ch)
+            );
+        }
+        ch_new
     }
 }
 
@@ -128,6 +140,8 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
 
         if ['’', 'ʼ'].contains(&ch) {
             ch = '\'';
+        } else if ['‐', '‑'].contains(&ch) {
+            ch = '-';
         } else {
             // composing `ch` with `next_char` of `UcdScript::Inherited`
             while let Some(CharData {
