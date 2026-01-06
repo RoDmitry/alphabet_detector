@@ -466,6 +466,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ScriptLanguage::Latin,
                 ScriptLanguage::Occitan,
             ],
+            // 'ˈ' | 'ː' => &[ScriptLanguage::IPA],
             // '-' => bypassed for all langs in `word_iter`
             _ => &[], // must be always empty
         },

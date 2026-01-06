@@ -94,7 +94,7 @@ pub fn from_ch_ind(
 impl<I: Iterator<Item = CharData>> CharNormalizingIterator<I> {
     /// not normalized
     #[inline(always)]
-    pub fn get_next_char(&self) -> Option<CharData> {
+    pub fn peek_next_char(&self) -> Option<CharData> {
         self.next_char
     }
 }
@@ -126,20 +126,20 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
             }
         }
 
-        // composing `ch` with `next_char` of `UcdScript::Inherited`
-        while let Some(CharData {
-            script: UcdScript::Inherited,
-            idx: i,
-            ch: c,
-        }) = self.next_char
-        {
-            ch = char_compose(&self.composer, ch, c);
-            idx = i;
-            self.next_char = self.iter.next();
-        }
-
         if ['’', 'ʼ'].contains(&ch) {
             ch = '\'';
+        } else {
+            // composing `ch` with `next_char` of `UcdScript::Inherited`
+            while let Some(CharData {
+                script: UcdScript::Inherited,
+                idx: i,
+                ch: c,
+            }) = self.next_char
+            {
+                ch = char_compose(&self.composer, ch, c);
+                idx = i;
+                self.next_char = self.iter.next();
+            }
         }
 
         Some(CharData { script, idx, ch })

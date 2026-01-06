@@ -161,7 +161,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 } else if let Some(CharData {
                     script: next_char_script,
                     ..
-                }) = self.norm_iter.get_next_char()
+                }) = self.norm_iter.peek_next_char()
                 {
                     next_char_script == UcdScript::Common
                         || next_char_script != self.prev_char_script
