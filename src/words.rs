@@ -130,10 +130,24 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
 
     fn next(&mut self) -> Option<Self::Item> {
         while self.res.is_none() {
-            let Some(CharData { script, idx, ch }) = self.norm_iter.next() else {
+            let Some(CharData {
+                mut script,
+                ccc: _,
+                idx,
+                ch,
+            }) = self.norm_iter.next()
+            else {
                 self.save_word();
                 break;
             };
+
+            if script == UcdScript::Inherited {
+                if ScriptLanguage::strict_scripts().contains(&self.prev_char_script) {
+                    // todo: maybe check such chars in these scripts, if any
+                    continue;
+                }
+                script = self.prev_char_script;
+            }
 
             let langs = script_char_to_slangs(script, ch);
 
@@ -185,7 +199,16 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
                 // saving char
                 self.not_saved_word_end_index = idx + ch.len_utf8();
                 // lowercase
-                self.word_buf.push(ch.to_lowercase().next().unwrap());
+                let ch = if let Some(c) = ch.to_lowercase().next() {
+                    c
+                } else {
+                    #[cfg(debug_assertions)]
+                    unreachable!("No lowercase for {:?}", ch);
+                    #[allow(unreachable_code)]
+                    ch
+                };
+                self.word_buf.push(ch);
+
                 let langs_cnt = if script == UcdScript::Common {
                     &mut self.word_common_langs_cnt
                 } else {

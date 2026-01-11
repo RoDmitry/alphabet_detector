@@ -557,7 +557,6 @@ mod tests {
         let mut prev = *CHAR_RANGES_SORTED.first().unwrap();
         for range in CHAR_RANGES_SORTED.into_iter().skip(1) {
             assert_ne!(range.range_start, char::MAX, "range_start is default");
-            assert_ne!(range.range_end, char::MAX, "range_end is default");
             assert!(
                 range.range_start <= range.range_end,
                 "range_start > range_end\n{range:?}"

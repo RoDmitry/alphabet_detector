@@ -50,8 +50,11 @@ use rstest::*;
     case::chinese("中,文", ahashset!("中", "文")),
     case::chinese("和little", ahashset!("和", "little")),
     case(
-        "Thi̇s is one word", // This = THİS with lowered İ
+        "Thi\u{307}s is one word", // This = THİS with lowered İ
         ahashset!("this", "is", "one", "word")
+    ),
+    case(
+        "Tha\u{301}t is ok", ahashset!("thát", "is", "ok")
     ),
     case("Spanish Ñ two chars", ahashset!("spanish", "ñ", "two", "chars")),
     case("Spanish lowered ñ two chars", ahashset!("spanish", "lowered", "ñ", "two", "chars")),

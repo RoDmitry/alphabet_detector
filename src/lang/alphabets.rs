@@ -3,57 +3,58 @@ use super::{ScriptLanguage, UcdScript};
 use crate::ch_norm::test_chars;
 use alphabet_detector_macros::alphabet_match;
 
-pub(crate) fn char_compose_custom(ch: char, mark: char) -> char {
+/// uses unicode private area
+pub(crate) fn char_compose_custom(ch: char, mark: char) -> Option<char> {
     match mark {
         '\u{300}' | '\u{340}' => match ch {
-            'ẹ' | 'Ẹ' => '\u{f00b9}', // Ẹ̀ẹ̀
-            'm' | 'M' => '\u{f006d}', // M̀m̀
-            'ọ' | 'Ọ' => '\u{f00cd}', // Ọ̀ọ̀
-            _ => ch,
+            'ẹ' | 'Ẹ' => Some('\u{f00b9}'), // Ẹ̀ẹ̀
+            'm' | 'M' => Some('\u{f006d}'), // M̀m̀
+            'ọ' | 'Ọ' => Some('\u{f00cd}'), // Ọ̀ọ̀
+            _ => None,
         },
         '\u{301}' | '\u{341}' => match ch {
-            'ẹ' | 'Ẹ' => '\u{f01b9}', // Ẹ́ẹ́
-            'ọ' | 'Ọ' => '\u{f01cd}', // Ọ́ọ́
-            'ɛ' | 'Ɛ' => '\u{f015b}', // Ɛ́ɛ́
-            'ɔ' | 'Ɔ' => '\u{f0154}', // Ɔ́ɔ́
-            _ => ch,
+            'ẹ' | 'Ẹ' => Some('\u{f01b9}'), // Ẹ́ẹ́
+            'ọ' | 'Ọ' => Some('\u{f01cd}'), // Ọ́ọ́
+            'ɛ' | 'Ɛ' => Some('\u{f015b}'), // Ɛ́ɛ́
+            'ɔ' | 'Ɔ' => Some('\u{f0154}'), // Ɔ́ɔ́
+            _ => None,
         },
         '\u{302}' => match ch {
-            'ɛ' | 'Ɛ' => '\u{f025b}', // Ɛ̂ɛ̂
-            'ɔ' | 'Ɔ' => '\u{f0254}', // Ɔ̂ɔ̂
-            _ => ch,
+            'ɛ' | 'Ɛ' => Some('\u{f025b}'), // Ɛ̂ɛ̂
+            'ɔ' | 'Ɔ' => Some('\u{f0254}'), // Ɔ̂ɔ̂
+            _ => None,
         },
         '\u{303}' | '\u{342}' => match ch {
-            'g' | 'G' => '\u{f0367}', // G̃g̃
-            _ => ch,
+            'g' | 'G' => Some('\u{f0367}'), // G̃g̃
+            _ => None,
         },
         '\u{304}' => match ch {
             // 'ẹ' | 'Ẹ' => '\u{f04b9}', // Ẹ̄ẹ̄
             // 'm' | 'M' => '\u{f046d}', // M̄m̄
-            'n' | 'N' => '\u{f046e}', // N̄n̄
+            'n' | 'N' => Some('\u{f046e}'), // N̄n̄
             // 'ọ' | 'Ọ' => '\u{f04cd}', // Ọ̄ọ̄
-            _ => ch,
+            _ => None,
         },
         '\u{308}' => match ch {
-            'ɛ' | 'Ɛ' => '\u{f0890}', // Ɛ̈ɛ̈
-            'ɔ' | 'Ɔ' => '\u{f0854}', // Ɔ̈ɔ̈
-            _ => ch,
+            'ɛ' | 'Ɛ' => Some('\u{f0890}'), // Ɛ̈ɛ̈
+            'ɔ' | 'Ɔ' => Some('\u{f0854}'), // Ɔ̈ɔ̈
+            _ => None,
         },
         '\u{30c}' => match ch {
-            'ɛ' | 'Ɛ' => '\u{f0c5b}', // Ɛ̌ɛ̌
-            'ɔ' | 'Ɔ' => '\u{f0c54}', // Ɔ̌ɔ̌
-            _ => ch,
+            'ɛ' | 'Ɛ' => Some('\u{f0c5b}'), // Ɛ̌ɛ̌
+            'ɔ' | 'Ɔ' => Some('\u{f0c54}'), // Ɔ̌ɔ̌
+            _ => None,
         },
         '\u{331}' | '\u{320}' => match ch {
-            '\u{f0890}' => '\u{f3190}', // Ɛ̱̈ɛ̱̈
-            'a' | 'A' => '\u{f3161}',   // A̱a̱
-            'e' | 'E' => '\u{f3165}',   // E̱e̱
-            'i' | 'I' => '\u{f3169}',   // I̱i̱
-            'o' | 'O' => '\u{f316f}',   // O̱o̱
-            'ɔ' | 'Ɔ' => '\u{f3154}',   // Ɔ̱ɔ̱
-            _ => ch,
+            '\u{f0890}' => Some('\u{f3190}'), // Ɛ̱̈ɛ̱̈
+            'a' | 'A' => Some('\u{f3161}'),   // A̱a̱
+            'e' | 'E' => Some('\u{f3165}'),   // E̱e̱
+            'i' | 'I' => Some('\u{f3169}'),   // I̱i̱
+            'o' | 'O' => Some('\u{f316f}'),   // O̱o̱
+            'ɔ' | 'Ɔ' => Some('\u{f3154}'),   // Ɔ̱ɔ̱
+            _ => None,
         },
-        _ => ch,
+        _ => None,
     }
 }
 
@@ -76,6 +77,7 @@ pub(crate) const WORD_COMMON_FIRST_CHAR_NOT_SKIPPABLE: &[char] = &['¡', '¿'];
 //  ++ - also verified by a text frequency analysis (cli_alphabet_intersection);
 //  +++ - verified by a native-level speaker.
 /// Returns all `ScriptLanguage`s by `UcdScript` and `char`
+#[inline]
 pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLanguage] {
     use UcdScript::*;
     match script {

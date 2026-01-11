@@ -1000,6 +1000,13 @@ impl ScriptLanguage {
         script_char_to_slangs(script, ch)
     }
 
+    /// `ScriptLanguage`s `UcdScript`s which contain `Language::Unknown`,
+    /// which means that it's alphabets are strict.
+    #[inline]
+    pub const fn strict_scripts() -> &'static [UcdScript] {
+        &[UcdScript::Cyrillic, UcdScript::Latin]
+    }
+
     #[inline(always)]
     pub const fn transmute_from_usize(v: usize) -> Self {
         debug_assert!(v < Self::COUNT);
@@ -1045,4 +1052,19 @@ pub fn slang_arr_default<T: Default + Copy>() -> ScriptLanguageArr<T> {
 #[inline]
 pub fn slang_arr_default_nc<T: Default>() -> ScriptLanguageArr<T> {
     ::core::array::from_fn(|_| Default::default())
+}
+
+#[test]
+fn test_strict_scripts() {
+    let mut unknowns: ahash::AHashSet<_> =
+        ScriptLanguage::strict_scripts().iter().copied().collect();
+
+    for s in crate::Script::iter() {
+        let has_unknown = ScriptLanguage::from_parts((Language::Unknown, s)).is_some();
+        if has_unknown && !unknowns.remove(&UcdScript::from(s)) {
+            panic!("Missing {:?}", s);
+        }
+    }
+
+    assert!(unknowns.is_empty(), "Extra {:?}", unknowns);
 }

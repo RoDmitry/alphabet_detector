@@ -24,6 +24,7 @@ use rstest::*;
     case(Japanese, "自動販売機"),
     case(Japanese, "関西国際空港"),
     case(Kazakh, "шұрайлы"),
+    case(Lao, "\u{e82}\u{ec8}\u{ec9}"),
     case(Macedonian, "ќерка"),
     case(Macedonian, "припаѓа"),
     case(Polish, "wystąpią"),
@@ -142,6 +143,7 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Danish, "indebærer"),
     case(Danish, "måned"),
     case(English, "house"),
+    case(English, "indi\u{307}vi\u{307}si\u{307}bi\u{307}li\u{307}ty"),
     case(Esperanto, "apenaŭ"),
     case(Esperanto, "intermiksiĝis"),
     case(Estonian, "päralt"),
@@ -241,5 +243,27 @@ fn test_word_multiple_langs(expected_language: ScriptLanguage, word: &str) {
         expected_language,
         word,
         languages
+    );
+}
+
+#[rstest(
+    unexpected_language,
+    word,
+    case(UnknownLatin, "indi\u{307}vi\u{307}si\u{307}bi\u{307}li\u{307}ty")
+)]
+fn test_word_not_langs(unexpected_language: ScriptLanguage, word: &str) {
+    let found_words: Vec<_> = words::from_ch_ind::<String>(word.char_indices()).collect();
+    if found_words.len() > 1 {
+        panic!(
+            "{:?} Not a word '{}' got {:?}",
+            unexpected_language, word, found_words
+        );
+    }
+
+    assert!(
+        found_words[0].langs_cnt[unexpected_language as usize] == 0,
+        "{:?} word '{}'",
+        unexpected_language,
+        word
     );
 }

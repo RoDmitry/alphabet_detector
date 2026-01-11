@@ -89,9 +89,16 @@ fn main() {
             let mut found_chars: AHashMap<char, usize> = Default::default();
             let mut not_found_chars: ScriptLanguageArr<AHashMap<char, usize>> =
                 slang_arr_default_nc();
-            for CharData { script, ch, .. } in ch_norm::from_ch_ind(ch_iter) {
+            let mut prev_char_script = UcdScript::Common;
+            for CharData { mut script, ch, .. } in ch_norm::from_ch_ind(ch_iter) {
                 lang_chars.remove(&ch.to_lowercase().next().unwrap());
                 lang_chars.remove(&ch.to_uppercase().next().unwrap());
+
+                if script == UcdScript::Inherited {
+                    script = prev_char_script;
+                } else {
+                    prev_char_script = script;
+                }
 
                 let langs = script_char_to_slangs(script, ch);
                 let mut has_lang = false;
