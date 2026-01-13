@@ -327,7 +327,7 @@ pub enum ScriptLanguage {
     #[slang(script = Arabic)]
     ArabicEgyptian, // 119
     #[slang(script = Arabic)]
-    PersianWestern, // 83
+    PersianFarsi, // 83
     #[slang(script = Arabic)]
     ArabicNorthLevantine, // 60 with SouthLevantine
     #[slang(script = Arabic)]
@@ -372,6 +372,8 @@ pub enum ScriptLanguage {
     AcehneseJawi, // 2.8 2010
     #[slang(script = Arabic, lang = Dogri)]
     DogriPersoArabic, // 2.6
+    #[slang(script = Arabic, lang = Math)]
+    MathArabic,
     // #[slang(script = Arabic, lang = Unknown)]
     // UnknownArabic,
 
@@ -991,7 +993,7 @@ impl ScriptLanguage {
     #[inline]
     pub fn all_with_script(script: UcdScript) -> &'static [Self] {
         let ch = match script {
-            // UcdScript::Arabic => 'ل',
+            // UcdScript::Arabic => 'ل', // except ScriptLanguage::MathArabic
             UcdScript::Cyrillic => 'А',
             // UcdScript::Devanagari => 'ठ',
             UcdScript::Latin => 'A',
@@ -1004,7 +1006,7 @@ impl ScriptLanguage {
     /// which means that it's alphabets are strict.
     #[inline]
     pub const fn strict_scripts() -> &'static [UcdScript] {
-        &[UcdScript::Cyrillic, UcdScript::Latin]
+        &[/* UcdScript::Arabic, */ UcdScript::Cyrillic, UcdScript::Latin]
     }
 
     #[inline(always)]

@@ -48,7 +48,8 @@ fn test_correct_map_to_script() {
         let ucd = UcdScript::from(script);
         assert!(
             ScriptLanguage::all_with_script(ucd).contains(&slang)
-                || script_char_to_slangs(ucd, char::default()).contains(&slang),
+                || script_char_to_slangs(ucd, char::default()).contains(&slang) // Language::Unknown
+                || script_char_to_slangs(ucd, '۱').contains(&slang), // ScriptLanguage::MathArabic
             "ScriptLanguage {slang:?} wrong script: {script:?}",
         );
     }

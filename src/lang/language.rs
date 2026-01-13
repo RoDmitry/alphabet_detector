@@ -431,6 +431,8 @@ pub enum Language {
     /// Macro, unique script
     #[language(short = "mwr")]
     Marwari,
+    #[language(short = "math")]
+    Math,
     #[language(short = "dmf")]
     Medefaidrin,
     #[language(short = "mni")]
@@ -525,7 +527,7 @@ pub enum Language {
     PersianDari,
     /// Iranian
     #[language(short = "pes", old_short = ["fas", "per"], shortest = "fa")]
-    PersianWestern,
+    PersianFarsi,
     #[language(short = "phn")]
     Phoenician,
     #[language(short = "pol", shortest = "pl")]

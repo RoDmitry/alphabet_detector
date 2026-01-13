@@ -89,10 +89,17 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
         let chars_other = value_to_keys
             .iter()
             .filter(|(_, k)| k.len() >= keys_all.len())
-            .map(|(c, _)| quote! { #c });
+            .map(|(&c, _)| c)
+            .collect::<Vec<_>>();
+
+        let others = if chars_other.is_empty() {
+            quote! {}
+        } else {
+            quote! { #(#chars_other)|* => &[#(#keys_all),*], }
+        };
 
         quote! {
-            #(#chars_other)|* => &[#(#keys_all),*],
+            #others
             _ => &[#l]
         }
     } else {

@@ -5,14 +5,14 @@ use strum::EnumCount;
 fn count_alphabets() {
     assert_eq!(
         ScriptLanguage::COUNT,
-        415 + 2,
+        416 + 2,
         "Change alphabets count in docs"
     );
 }
 
 #[test]
 fn count_languages() {
-    assert_eq!(Language::COUNT, 339 + 1, "Change languages count in docs");
+    assert_eq!(Language::COUNT, 340 + 1, "Change languages count in docs");
 }
 
 #[test]

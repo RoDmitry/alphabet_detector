@@ -1,6 +1,7 @@
 use alphabet_detector::{
     script_char_to_slangs, slang_arr_default, ucd::BY_NAME, Language, ScriptLanguage, UcdScript,
 };
+// use icu_normalizer::properties::CanonicalCompositionBorrowed;
 use strum::EnumCount;
 
 #[test]
@@ -16,20 +17,47 @@ fn test_empty() {
 }
 
 #[test]
-fn test_doubles() {
+fn test_each_char() {
     let mut langs;
+    // let decomp_nfd = icu_normalizer::DecomposingNormalizerBorrowed::new_nfd();
+    // let composer = CanonicalCompositionBorrowed::new();
     for &(script, ranges) in BY_NAME {
         if script == UcdScript::Inherited {
             continue;
         }
-        for range in ranges {
-            for ch in range.0..=range.1 {
-                langs = slang_arr_default::<usize>();
+        for ch in ranges.iter().flat_map(|range| range.0..=range.1) {
+            let ch_langs = script_char_to_slangs(script, ch);
+            if ch_langs.len() == 1
+                && Language::from(*ch_langs.first().unwrap()) == Language::Unknown
+            {
+                continue;
+            }
+            if ch_langs.is_empty() && script != UcdScript::Common {
+                panic!("Empty langs in {:?} for char: {}", script, ch);
+            }
 
-                let ch_langs = script_char_to_slangs(script, ch);
-                if ch_langs.is_empty() && script != UcdScript::Common {
-                    panic!("Empty langs in {:?} for char: {}", script, ch);
+            /* if script != UcdScript::Arabic {
+                let mut decomp = decomp_nfd.normalize_iter([ch].into_iter());
+                let decomp_ch = decomp.next().unwrap();
+                if decomp_ch != ch {
+                    let decomp_ch_langs = script_char_to_slangs(script, decomp_ch);
+                    if decomp_ch_langs != ch_langs {
+                        let diff = ch_langs
+                            .iter()
+                            .filter(|l| !decomp_ch_langs.contains(l))
+                            .collect::<Vec<_>>();
+                        if !diff.is_empty() {
+                            println!("{:?}", ch_langs);
+                            println!("{:?}", decomp_ch_langs);
+                            panic!("{:?} ({:?}) must also be in {:?}", decomp_ch, ch, diff);
+                        }
+                    }
                 }
+            } */
+
+            // test_doubles
+            {
+                langs = slang_arr_default::<usize>();
                 for &lang in ch_langs {
                     langs[lang as usize] += 1;
                 }
@@ -48,6 +76,29 @@ fn test_doubles() {
                     );
                 }
             }
+
+            /* if script == UcdScript::Arabic {
+                for ch2 in ranges.iter().flat_map(|range| range.0..=range.1) {
+                    if let Some(ch_new) = composer.compose(ch, ch2) {
+                        let ch_langs_new = script_char_to_slangs(script, ch_new);
+                        if !ch_langs_new.is_empty() {
+                            let ch_langs2 = script_char_to_slangs(script, ch2);
+                            let mut langs = ch_langs
+                                .iter()
+                                .filter(|l| !ch_langs_new.contains(l) && ch_langs2.contains(l));
+
+                            if let Some(first_lang) = langs.next() {
+                                panic!(
+                                    "{:?} must be in {:?},{:?}",
+                                    ch_new,
+                                    first_lang,
+                                    langs.collect::<Vec<_>>()
+                                );
+                            }
+                        }
+                    }
+                }
+            } */
         }
     }
 }
@@ -72,7 +123,7 @@ fn test_alphabets() {
         .enumerate()
         .filter(|(_, scrs)| scrs.is_empty())
         .map(|(l, _)| ScriptLanguage::transmute_from_usize(l))
-        .filter(|&sl| Language::from(sl) != Language::Unknown)
+        .filter(|&sl| ![Language::Unknown, Language::Math].contains(&Language::from(sl)))
         .collect();
 
     if !slangs_used.is_empty() {

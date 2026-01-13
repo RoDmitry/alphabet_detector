@@ -43,7 +43,8 @@ test_chars = []
 [dependencies]
 ahash = "0.8"
 alphabet_detector_macros = { path = "macros", version = "0.10" }
-array_buf = { path = "../array_buf", version = "0.1" }
+array_buf = "0.1"
+# array_buf = { path = "../array_buf", version = "0.1" }
 concat_const = "0.2"
 debug_unsafe = "0.1"
 icu_normalizer = "2.0.0-beta2"

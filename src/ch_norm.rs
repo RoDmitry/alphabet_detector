@@ -1,32 +1,38 @@
 use crate::lang::{char_compose_custom, UcdScript};
 use array_buf::ArrayDequePlain;
-use icu_normalizer::properties::CanonicalCompositionBorrowed;
+use icu_normalizer::{properties::CanonicalCompositionBorrowed, DecomposingNormalizerBorrowed};
 use unicode_normalization::char::canonical_combining_class;
 
 #[cfg(all(debug_assertions, feature = "test_chars"))]
 pub(crate) fn test_chars(script: UcdScript, chars: &[char]) {
-    let decomp_nfd = icu_normalizer::DecomposingNormalizerBorrowed::new_nfd();
+    let decomp_nfd = DecomposingNormalizerBorrowed::new_nfd();
     let composer = CanonicalCompositionBorrowed::new();
+    // let composer_nfkc = icu_normalizer::ComposingNormalizerBorrowed::new_nfkc();
     for &ch in chars {
         let ch_script = UcdScript::find(ch);
         if ch_script == UcdScript::Inherited {
-            panic!("Warn: Inherited chars are skipped for strict (contain `Language::Unknown`) scripts in words.rs");
+            if crate::ScriptLanguage::strict_scripts().contains(&script) {
+                panic!("Inherited chars are skipped in words.rs for strict (contain `Language::Unknown`) scripts");
+            }
+            continue;
         }
         assert_eq!(ch_script, script, "char '{ch}'");
 
-        let ch_str = ch.to_string();
-        let decomp = decomp_nfd.normalize(&ch_str);
-        let mut decomp_chars = decomp.chars();
-        let mut recomp_ch = decomp_chars.next().unwrap();
-        for c in decomp_chars {
+        /* let recomp: Vec<char> = composer_nfkc.normalize_iter([ch].into_iter()).collect();
+        if *recomp.first().unwrap() != ch {
+            panic!("Not normal script: {script:?}, char: {ch:?}, normal: {recomp:?}");
+        } */
+
+        if ('\u{FB50}'..='\u{FDFF}').contains(&ch) || ('\u{FE70}'..='\u{FEFF}').contains(&ch) {
+            panic!("Must not contain Arabic Presentation Forms: char: {ch:?}");
+        }
+
+        let mut decomp = decomp_nfd.normalize_iter([ch].into_iter());
+        let mut recomp_ch = decomp.next().unwrap();
+        for c in decomp {
             recomp_ch = composer.compose(recomp_ch, c).unwrap();
         }
-        assert_eq!(
-            recomp_ch,
-            ch,
-            "script: {script:?}, char: '{ch}', decomp '{:?}'",
-            decomp.chars()
-        );
+        assert_eq!(recomp_ch, ch, "script: {script:?}, char: '{ch}'");
     }
 }
 
@@ -43,8 +49,10 @@ fn char_compose(
     }
 }
 
-/// decompose ligatures
+/// Decompose ligatures.
 /// https://en.wikipedia.org/wiki/Alphabetic_Presentation_Forms
+///
+/// nfkc/nfkd is not suitable for this crate.
 #[inline(always)]
 fn char_decompose(ch: char) -> (char, Option<char>, Option<char>) {
     match ch {
@@ -71,6 +79,7 @@ pub struct CharNormalizingIterator<I: Iterator<Item = CharData>> {
     /// Chars are not normalized, raw.
     /// Bounded, so it would not be possible to eat all of the memory.
     buf: ArrayDequePlain<CharData, 32>,
+    decomposer: DecomposingNormalizerBorrowed<'static>,
     composer: CanonicalCompositionBorrowed<'static>,
 }
 
@@ -101,6 +110,7 @@ pub fn from_ch_ind(
     CharNormalizingIterator {
         iter,
         buf,
+        decomposer: DecomposingNormalizerBorrowed::new_nfkd(),
         composer: CanonicalCompositionBorrowed::new(),
     }
 }
@@ -155,6 +165,46 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
                 ch = '\'';
             } else if ['‐', '‑'].contains(&ch) {
                 ch = '-';
+            } else if ch == '\u{6e1}' {
+                ch = '\u{652}'; // Arabic Sukūn
+            } else if ('\u{FB50}'..='\u{FDFF}').contains(&ch)
+                || ('\u{FE70}'..='\u{FEFF}').contains(&ch)
+            {
+                // decomposes Arabic Presentation Forms A && B
+                if self.buf.len() < 2 {
+                    let mut decomp = self.decomposer.normalize_iter([ch].into_iter());
+                    if let Some(c) = decomp.next() {
+                        if UcdScript::find(c) == script {
+                            ch = c;
+
+                            if let Some(c2) = decomp.next() {
+                                let last_loaded_char = self.buf.first().copied();
+                                self.buf.clear();
+
+                                for ci in [c2].into_iter().chain(decomp) {
+                                    let cd = CharData {
+                                        script: UcdScript::find(ci),
+                                        ccc: canonical_combining_class(ci),
+                                        idx,
+                                        ch: ci,
+                                    };
+                                    self.buf.push_last(cd).unwrap();
+                                }
+
+                                if let Some(cd) = last_loaded_char {
+                                    self.buf.push_last(cd).unwrap();
+                                }
+                                unsafe { ::core::hint::assert_unchecked(!self.buf.is_empty()) };
+                            }
+                        }
+                    } else {
+                        #[cfg(debug_assertions)]
+                        unreachable!();
+                    }
+                } else {
+                    #[cfg(debug_assertions)]
+                    unreachable!();
+                }
             }
 
             if self.buf.is_empty() {
@@ -168,13 +218,8 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
                 }
             }
 
-            // composing `ch` with next char of `UcdScript::Inherited`
-            if self
-                .buf
-                .first()
-                .filter(|c| c.script == UcdScript::Inherited)
-                .is_some()
-            {
+            // reorder chars, or compose `UcdScript::Inherited`
+            if self.buf.first().filter(|c| c.ccc > 0).is_some() {
                 let mut last_loaded_char = None;
                 if self.buf.len() == 1 {
                     self.buf.linearize_one();
@@ -196,9 +241,11 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
                     }
                     debug_assert!(last_loaded_char.is_some() || self.iter.next().is_none());
 
+                    // reorder chars by ccc
                     unsafe { self.buf.as_mut_slice() }.sort_by(|a, b| a.ccc.cmp(&b.ccc));
                 }
 
+                // composing `ch` with next char of `UcdScript::Inherited`
                 while let Some(CharData {
                     script: UcdScript::Inherited,
                     ccc: cc,

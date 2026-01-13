@@ -65,7 +65,7 @@ const TO_COMPOSE: &str = "ầûöűầûöűầûöűầûöu
 
 fn benchmark_compose(c: &mut Criterion) {
     let mut group1 = c.benchmark_group("Char compose");
-    group1.bench_function("run", |bencher| {
+    group1.bench_function("ch_norm", |bencher| {
         bencher.iter(|| {
             let chars = ch_norm::from_ch_ind(TO_COMPOSE.char_indices());
             for ch in chars {
