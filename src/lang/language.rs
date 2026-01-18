@@ -50,7 +50,7 @@ pub enum Language {
     AncientSouthArabian,
     #[language(short = "akb")]
     Angkola,
-    #[language(short = "arb", shortest = "ar")]
+    #[language(short = "arb", old_short = "ara", shortest = "ar")]
     Arabic,
     #[language(short = "arz")]
     ArabicEgyptian,
@@ -145,6 +145,8 @@ pub enum Language {
     Bulgarian,
     #[language(short = "mya", old_short = "bur", shortest = "my")]
     Burmese,
+    #[language(short = "bxr", old_short = "bua")]
+    Buryat,
     #[language(short = "xcr")]
     Carian,
     #[language(short = "cat", shortest = "ca")]
@@ -302,6 +304,8 @@ pub enum Language {
     Inuktitut,
     #[language(short = "gle", shortest = "ga")]
     Irish,
+    #[language(short = "tts")]
+    Isan,
     #[language(short = "ita", shortest = "it")]
     Italian,
     #[language(short = "jpn", shortest = "ja")]
@@ -322,6 +326,8 @@ pub enum Language {
     Kannada,
     #[language(short = "knc", shortest = "kr")]
     KanuriCentral,
+    #[language(short = "ksw", old_short = "kar")]
+    KarenSgaw,
     #[language(short = "btx")]
     Karo,
     #[language(short = "kas", shortest = "ks")]
@@ -336,6 +342,8 @@ pub enum Language {
     Khitan,
     #[language(short = "khm", shortest = "km")]
     Khmer,
+    #[language(short = "kxm")]
+    KhmerNorthern,
     #[language(short = "ktu")]
     KikongoKituba,
     #[language(short = "kik", shortest = "ki")]
@@ -384,9 +392,6 @@ pub enum Language {
     Lisu,
     #[language(short = "lit", shortest = "lt")]
     Lithuanian,
-    /// Group
-    #[language(short = "lolo")]
-    Loloish,
     #[language(short = "lmo")]
     Lombard,
     #[language(short = "lua")]
@@ -453,8 +458,12 @@ pub enum Language {
     MinoanLinearA,
     #[language(short = "lus")]
     Mizo,
-    #[language(short = "khk", shortest = "mn")]
-    MongolianHalh,
+    #[language(short = "mnw")]
+    Mon,
+    #[language(short = "bxu")]
+    MongolianBuryat,
+    #[language(short = "khk", old_short = "mon", shortest = "mn")]
+    MongolianKhalkha,
     #[language(short = "mos")]
     Mossi,
     #[language(short = "mro")]
@@ -479,10 +488,16 @@ pub enum Language {
     NorwegianNynorsk,
     #[language(short = "nus")]
     Nuer,
+    #[language(short = "iii", shortest = "ii")]
+    Nuosu,
     #[language(short = "nya", shortest = "ny")]
     Nyanja,
     #[language(short = "oci", shortest = "oc")]
     Occitan,
+    #[language(short = "ory", old_short = "ori", shortest = "or")]
+    Odia,
+    #[language(short = "xal", old_short = "xwo")]
+    Oirat,
     /// Macro, unique script
     #[language(short = "oji")]
     Ojibwe,
@@ -500,8 +515,6 @@ pub enum Language {
     OldTurkic,
     #[language(short = "oui")]
     OldUyghur,
-    #[language(short = "ory", shortest = "or")]
-    OriyaOdia,
     #[language(short = "gax", shortest = "om")]
     OromoSouthern,
     #[language(short = "gaz", shortest = "om")]
@@ -551,6 +564,8 @@ pub enum Language {
     Rundi,
     #[language(short = "rus", shortest = "ru")]
     Russian,
+    #[language(short = "spv")]
+    Sambalpuri,
     #[language(short = "sme", shortest = "se")]
     SamiNorthern,
     #[language(short = "smo", shortest = "sm")]

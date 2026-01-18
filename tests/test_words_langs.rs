@@ -87,7 +87,6 @@ use rstest::*;
     case(PunjabiEastern, "ਮੋਟਰਸਾਈਕਲਾਂ"),
     case(Tamil, "துன்பங்களை"),
     case(Telugu, "కృష్ణదేవరాయలు"),
-    case(Thai, "ในทางหลวงหมายเลข"),
 )]
 fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     let found_words: Vec<_> = words::from_ch_ind::<String>(word.char_indices()).collect();
@@ -184,8 +183,8 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Macedonian, "ректасцензија"),
     case(Macedonian, "џамиите"),
     case(Marathi, "मिळते"),
-    case(MongolianHalh, "дөхөж"),
-    case(MongolianHalh, "үндсэн"),
+    case(MongolianKhalkha, "дөхөж"),
+    case(MongolianKhalkha, "үндсэн"),
     case(Polish, "budowę"),
     case(Polish, "groźne"),
     case(Polish, "kradzieżami"),
@@ -205,6 +204,7 @@ fn test_word_uniq(expected_language: ScriptLanguage, word: &str) {
     case(Slovak, "rozohňuje"),
     case(Spanish, "¿que?"),
     case(Spanish, "años"),
+    case(Thai, "ในทางหลวงหมายเลข"),
     case(Ukrainian, "пристрої"),
     case(UnknownLatin, "ºC"),
     case(Vietnamese, "chỉnh"),

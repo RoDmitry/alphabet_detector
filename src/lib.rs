@@ -1,6 +1,6 @@
 //! # Natural language alphabet detection library
 //!
-//! ## Detects 416 alphabets of 340 languages in 174 scripts
+//! ## Detects 426 alphabets of 348 languages in 174 scripts
 //!
 //! One language can be written in multiple scripts, so it will be detected as a different [`ScriptLanguage`](enum.ScriptLanguage.html) (language + script).
 //!

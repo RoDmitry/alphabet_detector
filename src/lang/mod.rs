@@ -102,3 +102,5 @@ pub use language::*;
 pub use script::*;
 pub use script_language::*;
 pub use ucd::UcdScript;
+
+pub use strum::{EnumCount, IntoEnumIterator};

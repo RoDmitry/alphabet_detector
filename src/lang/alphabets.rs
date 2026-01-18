@@ -115,7 +115,8 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'ا', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط',
                     'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي', 'ء', 'ى', 'ئ', 'أ',
                     'ة', 'إ', 'ؤ', 'آ', '\u{64b}', '\u{64c}', '\u{64d}', '\u{64e}', '\u{64f}',
-                    '\u{650}', '\u{651}', '\u{652}', '\u{670}',
+                    '\u{650}', '\u{651}', '\u{652}',
+                    '\u{670}',
                     // foreign words translit 'ڤ', 'چ'
                 ]
             ),
@@ -581,6 +582,16 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
+                ScriptLanguage::Buryat, //+
+                [
+                    'А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Д', 'д', 'Е', 'е', 'Ё', 'ё', 'Ж', 'ж',
+                    'З', 'з', 'И', 'и', 'Й', 'й', 'К', 'к', 'Л', 'л', 'М', 'м', 'Н', 'н', 'О', 'о',
+                    'Ө', 'ө', 'П', 'п', 'Р', 'р', 'С', 'с', 'Т', 'т', 'У', 'у', 'Ү', 'ү', 'Ф', 'ф',
+                    'Х', 'х', 'Һ', 'һ', 'Ц', 'ц', 'Ч', 'ч', 'Ш', 'ш', 'Щ', 'щ', 'Ъ', 'ъ', 'Ы', 'ы',
+                    'Ь', 'ь', 'Э', 'э', 'Ю', 'ю', 'Я', 'я',
+                ]
+            ),
+            (
                 ScriptLanguage::Chechen, //+
                 [
                     'А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Д', 'д', 'Е', 'е', 'Ё', 'ё', 'Ж', 'ж',
@@ -652,7 +663,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                 ]
             ),
             (
-                ScriptLanguage::MongolianHalh,
+                ScriptLanguage::MongolianKhalkha,
                 [
                     'А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Д', 'д', 'Е', 'е', 'Ё', 'ё', 'Ж', 'ж',
                     'З', 'з', 'И', 'и', 'Й', 'й', 'К', 'к', 'Л', 'л', 'М', 'м', 'Н', 'н', 'О', 'о',
@@ -1440,7 +1451,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         KayahLi => &[ScriptLanguage::KayahEastern, ScriptLanguage::KayahWestern],
         Kharoshthi => &[ScriptLanguage::Gandhari],
         KhitanSmallScript => &[ScriptLanguage::Khitan],
-        Khmer => &[ScriptLanguage::Khmer],
+        Khmer => &[ScriptLanguage::Khmer, ScriptLanguage::KhmerNorthern],
         Khojki => &[ScriptLanguage::KutchiKhojki, ScriptLanguage::SindhiKhojki],
         Khudawadi => &[ScriptLanguage::SindhiKhudawadi],
         KiratRai => &[ScriptLanguage::Bantawa],
@@ -2844,17 +2855,25 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         MeroiticHieroglyphs => &[ScriptLanguage::MeroiticHieroglyphs],
         Miao => &[ScriptLanguage::HmongMiao],
         Modi => &[ScriptLanguage::MarathiModi],
-        Mongolian => &[ScriptLanguage::MongolianHalhMongolian],
+        Mongolian => &[
+            ScriptLanguage::MongolianBuryat,
+            ScriptLanguage::MongolianKhalkhaMongolian,
+            ScriptLanguage::OiratMongolian,
+        ],
         Mro => &[ScriptLanguage::Mro],
         Multani => &[ScriptLanguage::SaraikiMultani],
         NagMundari => &[ScriptLanguage::Mundari],
-        Myanmar => &[ScriptLanguage::Burmese, ScriptLanguage::Shan],
+        Myanmar => &[
+            ScriptLanguage::Burmese,
+            ScriptLanguage::KarenSgaw,
+            ScriptLanguage::Mon,
+            ScriptLanguage::Shan,
+        ],
         Nabataean => &[ScriptLanguage::AramaicNabataean],
         Nandinagari => &[ScriptLanguage::SanskritNandinagari],
-        // maybe add more?
         Newa => &[ScriptLanguage::Newar],
         NewTaiLue => &[ScriptLanguage::TaiLueNew],
-        Nko => &[ScriptLanguage::Manding],
+        Nko => &[ScriptLanguage::BambaraNko, ScriptLanguage::Manding],
         Nushu => &[ScriptLanguage::ChineseTuhua],
         NyiakengPuachueHmong => &[ScriptLanguage::HmongNyiakengPuachue],
         Ogham => &[ScriptLanguage::OldIrishOgham],
@@ -2876,17 +2895,16 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         OldTurkic => &[ScriptLanguage::OldTurkic],
         OldUyghur => &[ScriptLanguage::OldUyghur],
         OlOnal => &[ScriptLanguage::Bhumij],
-        Oriya => &[ScriptLanguage::OriyaOdia],
+        Oriya => &[ScriptLanguage::Odia, ScriptLanguage::Sambalpuri],
         Osage => &[ScriptLanguage::Osage],
         Osmanya => &[ScriptLanguage::SomaliOsmanya],
         PahawhHmong => &[ScriptLanguage::HmongPahawh],
         Palmyrene => &[ScriptLanguage::AramaicPalmyrene],
         PauCinHau => &[ScriptLanguage::Tedim],
         PhagsPa => &[
-            ScriptLanguage::MongolianHalhPhagsPa,
+            ScriptLanguage::MongolianKhalkhaPhagsPa,
             ScriptLanguage::TibetanPhagsPa,
         ],
-        // maybe add more?
         Phoenician => &[ScriptLanguage::Phoenician],
         PsalterPahlavi => &[ScriptLanguage::MiddlePersianPahlaviPsalter],
         Rejang => &[ScriptLanguage::RejangRejang],
@@ -2908,7 +2926,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Sogdian => &[ScriptLanguage::Sogdian],
         SoraSompeng => &[ScriptLanguage::Sora],
         Soyombo => &[
-            ScriptLanguage::MongolianHalhSoyombo,
+            ScriptLanguage::MongolianKhalkhaSoyombo,
             ScriptLanguage::SanskritSoyombo,
             ScriptLanguage::TibetanSoyombo,
         ],
@@ -2921,7 +2939,7 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         TaiLe => &[ScriptLanguage::TaiNuea],
         TaiTham => &[
             ScriptLanguage::LaoTaiTham,
-            ScriptLanguage::NorthernThai,
+            ScriptLanguage::NorthernThaiTaiTham,
             ScriptLanguage::TaiLue,
         ],
         TaiViet => &[ScriptLanguage::TaiDam, ScriptLanguage::TaiDon],
@@ -2937,7 +2955,11 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Telugu => &[ScriptLanguage::Telugu],
         TolongSiki => &[ScriptLanguage::KurukhTolongSiki],
         Thaana => &[ScriptLanguage::Dhivehi],
-        Thai => &[ScriptLanguage::Thai],
+        Thai => &[
+            ScriptLanguage::Isan,
+            ScriptLanguage::NorthernThai,
+            ScriptLanguage::Thai,
+        ],
         Tibetan => &[ScriptLanguage::Dzongkha, ScriptLanguage::Tibetan],
         Tifinagh => &[ScriptLanguage::TamazightCentralAtlas],
         /* alphabet_match!([
@@ -2976,9 +2998,9 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
         Wancho => &[ScriptLanguage::WanchoWancho],
         WarangCiti => &[ScriptLanguage::HoWarangCiti],
         Yezidi => &[ScriptLanguage::KurdishNorthernYezidi],
-        Yi => &[ScriptLanguage::Loloish],
+        Yi => &[ScriptLanguage::Nuosu],
         ZanabazarSquare => &[
-            ScriptLanguage::MongolianHalhZanabazarSquare,
+            ScriptLanguage::MongolianKhalkhaZanabazarSquare,
             ScriptLanguage::SanskritZanabazarSquare,
             ScriptLanguage::TibetanZanabazarSquare,
         ],

@@ -105,7 +105,7 @@ pub enum ScriptLanguage {
     #[slang(script = Latin)]
     LubaKasai, // 15
     #[slang(script = Latin)]
-    Bambara, // 14 2012
+    Bambara, // 14.2 2012
     #[slang(script = Latin)]
     Sesotho, // 13.5 old
     #[slang(script = Latin)]
@@ -427,7 +427,7 @@ pub enum ScriptLanguage {
     #[slang(script = Cyrillic)]
     Kyrgyz, // 5.2 2009
     #[slang(script = Cyrillic)]
-    MongolianHalh, // 5
+    MongolianKhalkha, // 5
     #[slang(script = Cyrillic)]
     Belarusian, // 5
     #[slang(script = Cyrillic)]
@@ -444,6 +444,8 @@ pub enum ScriptLanguage {
     Ossetian, // 0.5
     #[slang(script = Cyrillic)]
     MariEastern, // 0.25
+    #[slang(script = Cyrillic)]
+    Buryat, // 0.22 2010
     #[slang(script = Cyrillic)]
     Abkhaz, // 0.2
     #[slang(script = Cyrillic)]
@@ -462,6 +464,14 @@ pub enum ScriptLanguage {
     MeiteiBengali, // 3
     #[slang(script = Bengali)]
     BishnupriyaManipuri, // 0.12
+
+    // Thai
+    #[slang(script = Thai)]
+    Thai, // 71 2024
+    #[slang(script = Thai)]
+    Isan, // 22 2013
+    #[slang(script = Thai)]
+    NorthernThai, // 6 2015
 
     // Kannada
     #[slang(script = Kannada)]
@@ -482,20 +492,42 @@ pub enum ScriptLanguage {
     Burmese, // 43 2007
     #[slang(script = Myanmar)]
     Shan, // 4.7 2017
+    #[slang(script = Myanmar)]
+    KarenSgaw, // 2.2 2017
+    #[slang(script = Myanmar)]
+    Mon, // 1.1 2014
+
+    // Oriya
+    #[slang(script = Oriya)]
+    Odia, // 37.6 2019
+    #[slang(script = Oriya)]
+    Sambalpuri, // 2.63 2011
+
+    // Khmer
+    #[slang(script = Khmer)]
+    Khmer, // 21 2024
+    #[slang(script = Khmer)]
+    KhmerNorthern, // 1.4 2006
+
+    // Nko
+    #[slang(script = Nko)]
+    Manding, // 9.1 2021
+    #[slang(script = Nko, lang = Bambara)]
+    BambaraNko, // 14.2 2012, but not official script
+
+    // TaiTham
+    #[slang(script = TaiTham, lang = NorthernThai)]
+    NorthernThaiTaiTham, // 6 2015
+    #[slang(script = TaiTham, lang = Lao)]
+    LaoTaiTham, // 4.5 2015
+    #[slang(script = TaiTham)]
+    TaiLue, // 0.55 2013
 
     // Hebrew
     #[slang(script = Hebrew)]
     Hebrew, // 8.3 2018
     #[slang(script = Hebrew)]
     YiddishEastern,
-
-    // TaiTham
-    #[slang(script = TaiTham)]
-    NorthernThai, // 6 2015
-    #[slang(script = TaiTham, lang = Lao)]
-    LaoTaiTham, // 4.5 2015
-    #[slang(script = TaiTham)]
-    TaiLue, // 0.55 2013
 
     // Buginese
     #[slang(script = Buginese, lang = Buginese)]
@@ -551,6 +583,14 @@ pub enum ScriptLanguage {
     Ojibwe, // 0.05 2016
     #[slang(script = CanadianAboriginal)]
     Inuktitut, // 0.042
+
+    // Mongolian
+    #[slang(script = Mongolian, lang = MongolianKhalkha)]
+    MongolianKhalkhaMongolian, // 2.9 2020
+    #[slang(script = Mongolian, lang = Oirat)]
+    OiratMongolian, // 0.37 2010
+    #[slang(script = Mongolian)]
+    MongolianBuryat, // 0.02
 
     // KayahLi
     #[slang(script = KayahLi)]
@@ -671,8 +711,8 @@ pub enum ScriptLanguage {
 
     // PhagsPa
     /// Historical
-    #[slang(script = PhagsPa, lang = MongolianHalh)]
-    MongolianHalhPhagsPa,
+    #[slang(script = PhagsPa, lang = MongolianKhalkha)]
+    MongolianKhalkhaPhagsPa,
     /// Historical
     #[slang(script = PhagsPa, lang = Tibetan)]
     TibetanPhagsPa,
@@ -695,15 +735,15 @@ pub enum ScriptLanguage {
     #[slang(script = Soyombo, lang = Tibetan)]
     TibetanSoyombo,
     /// Historical
-    #[slang(script = Soyombo, lang = MongolianHalh)]
-    MongolianHalhSoyombo,
+    #[slang(script = Soyombo, lang = MongolianKhalkha)]
+    MongolianKhalkhaSoyombo,
     #[slang(script = Soyombo, lang = Sanskrit)]
     SanskritSoyombo,
 
     // ZanabazarSquare
     /// Historical
-    #[slang(script = ZanabazarSquare, lang = MongolianHalh)]
-    MongolianHalhZanabazarSquare,
+    #[slang(script = ZanabazarSquare, lang = MongolianKhalkha)]
+    MongolianKhalkhaZanabazarSquare,
     /// Historical
     #[slang(script = ZanabazarSquare, lang = Tibetan)]
     TibetanZanabazarSquare,
@@ -825,8 +865,6 @@ pub enum ScriptLanguage {
     JavaneseJavanese,
     #[slang(script = KhitanSmallScript)]
     Khitan,
-    #[slang(script = Khmer)]
-    Khmer,
     #[slang(script = Yezidi, lang = KurdishNorthern)]
     KurdishNorthernYezidi,
     #[slang(script = TolongSiki, lang = Kurukh)]
@@ -839,8 +877,6 @@ pub enum ScriptLanguage {
     Limbu,
     #[slang(script = Lisu)]
     Lisu,
-    #[slang(script = Yi)]
-    Loloish,
     #[slang(script = AnatolianHieroglyphs)]
     LuwianHieroglyphic,
     #[slang(script = Lycian)]
@@ -854,8 +890,6 @@ pub enum ScriptLanguage {
     MakassareseMakasar,
     #[slang(script = Malayalam)]
     Malayalam,
-    #[slang(script = Nko)]
-    Manding,
     #[slang(script = Modi, lang = Marathi)]
     MarathiModi,
     #[slang(script = Medefaidrin)]
@@ -876,8 +910,6 @@ pub enum ScriptLanguage {
     Minoan,
     #[slang(script = LinearA)]
     MinoanLinearA,
-    #[slang(script = Mongolian, lang = MongolianHalh)]
-    MongolianHalhMongolian,
     #[slang(script = Mro)]
     Mro,
     #[slang(script = NagMundari)]
@@ -886,6 +918,8 @@ pub enum ScriptLanguage {
     MycenaeanGreek,
     #[slang(script = Newa)]
     Newar,
+    #[slang(script = Yi)]
+    Nuosu,
     #[slang(script = Ogham, lang = OldIrish)]
     OldIrishOgham,
     #[slang(script = OldPersian)]
@@ -894,8 +928,6 @@ pub enum ScriptLanguage {
     OldTurkic,
     #[slang(script = OldUyghur)]
     OldUyghur,
-    #[slang(script = Oriya)]
-    OriyaOdia,
     #[slang(script = Osage)]
     Osage,
     #[slang(script = InscriptionalParthian)]
@@ -961,8 +993,6 @@ pub enum ScriptLanguage {
     Tedim,
     #[slang(script = Telugu)]
     Telugu,
-    #[slang(script = Thai)]
-    Thai,
     #[slang(script = Toto)]
     Toto,
     #[slang(script = Ugaritic)]
@@ -1006,7 +1036,11 @@ impl ScriptLanguage {
     /// which means that it's alphabets are strict.
     #[inline]
     pub const fn strict_scripts() -> &'static [UcdScript] {
-        &[/* UcdScript::Arabic, */ UcdScript::Cyrillic, UcdScript::Latin]
+        &[
+            // UcdScript::Arabic,
+            UcdScript::Cyrillic,
+            UcdScript::Latin,
+        ]
     }
 
     #[inline(always)]
