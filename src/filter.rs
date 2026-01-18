@@ -17,7 +17,7 @@ pub fn filter_max(
             .into_iter()
             .enumerate()
             .filter(move |(_, cnt)| *cnt == lang_count_max)
-            .map(|(l, _)| ScriptLanguage::transmute_from_usize(l)),
+            .map(|(l, _)| unsafe { ScriptLanguage::transmute_from_usize(l) }),
         lang_count_max,
     )
 }
@@ -38,7 +38,7 @@ pub fn filter_with_margin<const PERCENT: u32>(
             .into_iter()
             .enumerate()
             .filter(move |(_, cnt)| *cnt > langs_count_margin)
-            .map(|(l, cnt)| (ScriptLanguage::transmute_from_usize(l), cnt)),
+            .map(|(l, cnt)| (unsafe { ScriptLanguage::transmute_from_usize(l) }, cnt)),
         langs_count_margin,
     )
 }

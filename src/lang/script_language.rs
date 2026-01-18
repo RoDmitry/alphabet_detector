@@ -1043,8 +1043,11 @@ impl ScriptLanguage {
         ]
     }
 
+    /// # Safety
+    ///
+    /// Must be a valid value of `ScriptLanguage`.
     #[inline(always)]
-    pub const fn transmute_from_usize(v: usize) -> Self {
+    pub const unsafe fn transmute_from_usize(v: usize) -> Self {
         debug_assert!(v < Self::COUNT);
         unsafe { ::core::mem::transmute::<usize, Self>(v) }
     }
@@ -1053,7 +1056,7 @@ impl ScriptLanguage {
         let mut hash = 0;
         let mut i = 0;
         while i < Self::COUNT {
-            let mut lang_code = Self::transmute_from_usize(i).into_code() as u64;
+            let mut lang_code = unsafe { Self::transmute_from_usize(i) }.into_code() as u64;
             lang_code = lang_code.rotate_left(i as u32);
             hash ^= lang_code;
             i += 1;

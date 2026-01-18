@@ -66,7 +66,7 @@ fn test_each_char() {
                     .into_iter()
                     .enumerate()
                     .filter(|(_, cnt)| *cnt > 1)
-                    .map(|(l, _)| ScriptLanguage::transmute_from_usize(l))
+                    .map(|(l, _)| unsafe { ScriptLanguage::transmute_from_usize(l) })
                     .collect();
 
                 if !langs_used.is_empty() {
@@ -122,7 +122,7 @@ fn test_alphabets() {
         .iter()
         .enumerate()
         .filter(|(_, scrs)| scrs.is_empty())
-        .map(|(l, _)| ScriptLanguage::transmute_from_usize(l))
+        .map(|(l, _)| unsafe { ScriptLanguage::transmute_from_usize(l) })
         .filter(|&sl| ![Language::Unknown, Language::Math].contains(&Language::from(sl)))
         .collect();
 
@@ -134,7 +134,7 @@ fn test_alphabets() {
         .iter()
         .enumerate()
         .filter(|(_, scrs)| scrs.len() > 1)
-        .map(|(sl, _)| ScriptLanguage::transmute_from_usize(sl))
+        .map(|(sl, _)| unsafe { ScriptLanguage::transmute_from_usize(sl) })
         .filter(|sl| ![ScriptLanguage::Japanese, ScriptLanguage::Korean].contains(sl))
         .collect();
 
