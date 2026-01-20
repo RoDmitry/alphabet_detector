@@ -170,7 +170,7 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
             } else if ('\u{FB50}'..='\u{FDFF}').contains(&ch)
                 || ('\u{FE70}'..='\u{FEFF}').contains(&ch)
             {
-                // decomposes Arabic Presentation Forms A && B
+                // decomposes Arabic Presentation Forms A & B
                 if self.buf.len() < 2 {
                     let mut decomp = self.decomposer.normalize_iter([ch].into_iter());
                     if let Some(c) = decomp.next() {
@@ -188,11 +188,17 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
                                         idx,
                                         ch: ci,
                                     };
-                                    self.buf.push_last(cd).unwrap();
+                                    if let Err(_e) = self.buf.push_last(cd) {
+                                        #[cfg(debug_assertions)]
+                                        panic!("Ch norm {}", _e);
+                                    }
                                 }
 
                                 if let Some(cd) = last_loaded_char {
-                                    self.buf.push_last(cd).unwrap();
+                                    if let Err(_e) = self.buf.push_last(cd) {
+                                        #[cfg(debug_assertions)]
+                                        panic!("Ch norm {}", _e);
+                                    }
                                 }
                                 unsafe { ::core::hint::assert_unchecked(!self.buf.is_empty()) };
                             }
@@ -218,7 +224,7 @@ impl<I: Iterator<Item = CharData>> Iterator for CharNormalizingIterator<I> {
                 }
             }
 
-            // reorder chars, or compose `UcdScript::Inherited`
+            // reorder chars, compose `UcdScript::Inherited`
             if self.buf.first().filter(|c| c.ccc > 0).is_some() {
                 let mut last_loaded_char = None;
                 if self.buf.len() == 1 {
