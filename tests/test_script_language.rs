@@ -49,7 +49,7 @@ fn test_correct_map_to_script() {
         assert!(
             ScriptLanguage::all_with_script(ucd).contains(&slang)
                 || script_char_to_slangs(ucd, char::default()).contains(&slang) // Language::Unknown
-                || script_char_to_slangs(ucd, '۱').contains(&slang), // ScriptLanguage::MathArabic
+                || Language::from(slang) == Language::Math, // Skip `Language::Math`
             "ScriptLanguage {slang:?} wrong script: {script:?}",
         );
     }

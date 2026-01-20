@@ -134,9 +134,6 @@ pub enum Language {
     BishnupriyaManipuri,
     #[language(short = "bos", shortest = "bs")]
     Bosnian,
-    /// Group, any language adapted to Braille
-    #[language(short = "brai")]
-    Braille,
     #[language(short = "bug")]
     Buginese,
     #[language(short = "bku")]
@@ -703,8 +700,8 @@ pub enum Language {
     Umbrian,
     #[language(short = "umb")]
     Umbundu,
-    /// Unknown languages based on alphabets
-    #[language(short = "unkn")]
+    /// Undetermined language based on alphabets
+    #[language(short = "und")]
     Unknown,
     #[language(short = "urd", shortest = "ur")]
     Urdu,

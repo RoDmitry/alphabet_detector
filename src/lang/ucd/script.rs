@@ -375,6 +375,12 @@ impl UcdScript {
         // Some unused `Common` ranges in `ucd` are commented out, so it defaults to `Common`.
         .unwrap_or(Self::Common) */
     }
+
+    /// `UcdScript`s which skip all `UcdScript::Inherited` chars.
+    #[inline]
+    pub const fn scripts_skip_inherited() -> &'static [Self] {
+        &[Self::Cyrillic, Self::Latin]
+    }
 }
 
 /* pub(crate) fn find_script(ch: char) -> Option<Script> {

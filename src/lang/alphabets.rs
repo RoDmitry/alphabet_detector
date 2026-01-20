@@ -267,7 +267,8 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     '۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', //
                     // Extra
                     '٫', '٬', '٪',
-                ]
+                ],
+                true, // Strict (no other chars)
             ),
             (
                 ScriptLanguage::PashtoSouthern, //+?
@@ -366,17 +367,28 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
             ScriptLanguage::Simalungun,
             ScriptLanguage::TobaBatak,
         ],
-        Bengali => &[
-            ScriptLanguage::Assamese,
-            ScriptLanguage::Bengali,
-            ScriptLanguage::BishnupriyaManipuri,
-            ScriptLanguage::MeiteiBengali,
-        ],
+        Bengali => alphabet_match!([
+            (ScriptLanguage::Assamese, []),
+            (ScriptLanguage::Bengali, []),
+            (ScriptLanguage::BishnupriyaManipuri, []),
+            (
+                ScriptLanguage::MathBengali, //+
+                ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'],
+                true, // Strict (no other chars)
+            ),
+            (ScriptLanguage::MeiteiBengali, []),
+        ]),
         BeriaErfe => &[ScriptLanguage::ZaghawaBeriaErfe],
         Bhaiksuki => &[ScriptLanguage::SanskritBhaiksuki],
         Bopomofo => &[ScriptLanguage::ChineseMandarinBopomofo],
         Brahmi => &[ScriptLanguage::SanskritBrahmi, ScriptLanguage::Prakrit],
-        Braille => &[ScriptLanguage::Braille],
+        Braille => alphabet_match!([
+            (
+                ScriptLanguage::MathBraille, //+
+                ['⠚', '⠁', '⠃', '⠉', '⠙', '⠑', '⠋', '⠛', '⠓', '⠊']
+            ),
+            ScriptLanguage::UnknownBraille,
+        ]),
         Buginese => &[
             ScriptLanguage::BugineseBuginese,
             ScriptLanguage::MakassareseBuginese,
@@ -817,6 +829,11 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प',
                     'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'ळ',
                 ],
+            ),
+            (
+                ScriptLanguage::MathDevanagari, //+
+                ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'],
+                true, // Strict (no other chars)
             ),
             (
                 ScriptLanguage::Nepali,
@@ -1268,6 +1285,15 @@ pub fn script_char_to_slangs(script: UcdScript, ch: char) -> &'static [ScriptLan
                     '麼', '瞇', '隻', '顚',
                 ]
             ),
+            /* ( // needs words separation
+                ScriptLanguage::MathHan,
+                [
+                    https://en.wikipedia.org/wiki/Chinese_numerals#Financial_numerals
+                    '〇', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '百', '千',
+                    // https://en.wikipedia.org/wiki/Korean_numerals#Substitution_for_disambiguation
+                    '壹', '貳', '參', '肆', '伍', '陸', '柒', '捌', '玖', '拾', '佰', '仟', '阡',
+                ]
+            ), */
             (
                 // Kanji, also uses all Traditional Chinese characters
                 ScriptLanguage::Japanese,

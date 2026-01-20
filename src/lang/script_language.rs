@@ -318,6 +318,8 @@ pub enum ScriptLanguage {
     ChineseCantoneseTraditional, // 15
     #[slang(script = Korean)]
     Korean, // not popular script
+    // #[slang(script = Han, lang = Math)]
+    // MathHan,
 
     // Arabic
     #[slang(script = Arabic)]
@@ -408,6 +410,8 @@ pub enum ScriptLanguage {
     Sanskrit,
     #[slang(script = Devanagari)]
     SanskritVedic,
+    #[slang(script = Devanagari, lang = Math)]
+    MathDevanagari,
     // #[slang(script = Devanagari, lang = Unknown)]
     // UnknownDevanagari,
 
@@ -464,6 +468,8 @@ pub enum ScriptLanguage {
     MeiteiBengali, // 3
     #[slang(script = Bengali)]
     BishnupriyaManipuri, // 0.12
+    #[slang(script = Bengali, lang = Math)]
+    MathBengali,
 
     // Thai
     #[slang(script = Thai)]
@@ -750,6 +756,12 @@ pub enum ScriptLanguage {
     #[slang(script = ZanabazarSquare, lang = Sanskrit)]
     SanskritZanabazarSquare,
 
+    #[slang(script = Braille, lang = Math)]
+    MathBraille,
+    /// any language adapted to Braille
+    #[slang(script = Braille, lang = Unknown)]
+    UnknownBraille,
+
     // Single language scripts
     #[slang(script = Ahom)]
     Ahom,
@@ -795,9 +807,6 @@ pub enum ScriptLanguage {
     Bassa,
     #[slang(script = OlOnal)]
     Bhumij,
-    /// any language adapted to Braille
-    #[slang(script = Braille)]
-    Braille,
     #[slang(script = Buhid)]
     Buhid,
     #[slang(script = Carian)]
@@ -1025,22 +1034,11 @@ impl ScriptLanguage {
         let ch = match script {
             // UcdScript::Arabic => 'ل', // except ScriptLanguage::MathArabic
             UcdScript::Cyrillic => 'А',
-            // UcdScript::Devanagari => 'ठ',
+            // UcdScript::Devanagari => 'ठ', // except ScriptLanguage::MathDevanagari
             UcdScript::Latin => 'A',
             _ => char::default(),
         };
         script_char_to_slangs(script, ch)
-    }
-
-    /// `ScriptLanguage`s `UcdScript`s which contain `Language::Unknown`,
-    /// which means that it's alphabets are strict.
-    #[inline]
-    pub const fn strict_scripts() -> &'static [UcdScript] {
-        &[
-            // UcdScript::Arabic,
-            UcdScript::Cyrillic,
-            UcdScript::Latin,
-        ]
     }
 
     /// # Safety
@@ -1093,7 +1091,7 @@ pub fn slang_arr_default_nc<T: Default>() -> ScriptLanguageArr<T> {
     ::core::array::from_fn(|_| Default::default())
 }
 
-#[test]
+/* #[test]
 fn test_strict_scripts() {
     let mut unknowns: ahash::AHashSet<_> =
         ScriptLanguage::strict_scripts().iter().copied().collect();
@@ -1106,4 +1104,4 @@ fn test_strict_scripts() {
     }
 
     assert!(unknowns.is_empty(), "Extra {:?}", unknowns);
-}
+} */

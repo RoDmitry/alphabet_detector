@@ -15,7 +15,10 @@ pub(super) fn alphabet_match_inner(input: ExprArray) -> syn::Result<proc_macro2:
             Expr::Tuple(ExprTuple { elems, .. }) => {
                 // We assume the key can be any expression, so we just clone it
                 let key = &elems[0];
-                keys_all.push(key.clone());
+                // if !strict (or skips other chars for that key)
+                if elems.get(2).is_none() {
+                    keys_all.push(key.clone());
+                }
 
                 // Handle the array of values associated with the key
                 match &elems[1] {

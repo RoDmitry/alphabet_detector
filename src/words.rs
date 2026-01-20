@@ -142,8 +142,7 @@ impl<I: Iterator<Item = CharData>, B: WordBuf> Iterator for WordIterator<I, B> {
             };
 
             if script == UcdScript::Inherited {
-                if ScriptLanguage::strict_scripts().contains(&self.prev_char_script) {
-                    // todo: maybe check such chars in these scripts, if any
+                if UcdScript::scripts_skip_inherited().contains(&self.prev_char_script) {
                     continue;
                 }
                 script = self.prev_char_script;

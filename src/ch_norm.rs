@@ -11,8 +11,8 @@ pub(crate) fn test_chars(script: UcdScript, chars: &[char]) {
     for &ch in chars {
         let ch_script = UcdScript::find(ch);
         if ch_script == UcdScript::Inherited {
-            if crate::ScriptLanguage::strict_scripts().contains(&script) {
-                panic!("Inherited chars are skipped in words.rs for strict (contain `Language::Unknown`) scripts");
+            if UcdScript::scripts_skip_inherited().contains(&script) {
+                panic!("Inherited chars are skipped for script {:?}", script);
             }
             continue;
         }
