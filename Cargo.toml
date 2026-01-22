@@ -1,6 +1,6 @@
 [package]
 name = "alphabet_detector"
-version = "0.11.1"
+version = "0.12.0"
 authors = { workspace = true }
 description = "Natural language alphabet detection library"
 documentation = "https://docs.rs/alphabet_detector/"
@@ -42,7 +42,7 @@ test_chars = []
 
 [dependencies]
 ahash = "0.8"
-alphabet_detector_macros = { path = "macros", version = "0.10" }
+alphabet_detector_macros = { path = "macros", version = "0.12" }
 array_buf = "0.1"
 # array_buf = { path = "../array_buf", version = "0.1" }
 concat_const = "0.2"
